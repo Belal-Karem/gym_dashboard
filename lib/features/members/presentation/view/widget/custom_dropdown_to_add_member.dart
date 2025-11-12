@@ -15,11 +15,11 @@ class _CustomDropdownToAddMemberState extends State<CustomDropdownToAddMember> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 120,
+      width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white.withAlpha(20)),
         color: Color(0xff1D1E22),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(4),
       ),
       child: DropdownButton(
         dropdownColor: Color(0xff1D1E22),
