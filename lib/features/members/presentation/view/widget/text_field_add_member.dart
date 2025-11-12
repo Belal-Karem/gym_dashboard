@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextFieldAddMember extends StatelessWidget {
-  const TextFieldAddMember({super.key, required this.hintText});
-
-  final String hintText;
+  const TextFieldAddMember({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,12 +10,14 @@ class TextFieldAddMember extends StatelessWidget {
       child: TextField(
         cursorColor: Colors.white,
         decoration: InputDecoration(
-          hintText: hintText,
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: BorderSide(color: Colors.white.withAlpha(100)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white.withAlpha(20)),
           ),
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: BorderSide(color: Colors.white.withAlpha(120)),
           ),
         ),
       ),
