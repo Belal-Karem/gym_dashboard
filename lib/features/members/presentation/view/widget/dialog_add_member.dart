@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:power_gym/core/utils/app_style.dart';
-import 'package:power_gym/core/utils/constants.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/elevated_button_to_dialog.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
+import 'package:power_gym/features/members/presentation/view/select_sup_view.dart';
 import 'package:power_gym/features/members/presentation/view/widget/custom_dropdown_to_add_member.dart';
 import 'package:power_gym/features/members/presentation/view/widget/text_field_add_member.dart';
 
@@ -47,9 +47,26 @@ class DialogAddMember extends StatelessWidget {
             Divider(height: 30),
             Row(
               children: [
-                ElevatedButtonWidget(text: 'save', onPressed: () {}),
+                ElevatedButtonWidget(
+                  text: 'save',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return SelectSupView();
+                        },
+                      ),
+                    );
+                  },
+                ),
                 SizedBox(width: 10),
-                ElevatedButtonToDialog(text: 'Cancel'),
+                ElevatedButtonToDialog(
+                  text: 'Cancel',
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ],
             ),
           ],
