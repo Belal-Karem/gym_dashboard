@@ -16,7 +16,7 @@ class PlanBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Payment',
+            'الاشتراكات الخاصة',
             style: TextStyle(
               color: Colors.white,
               fontSize: 26,
@@ -40,22 +40,28 @@ class PlanBody extends StatelessWidget {
                     0: FlexColumnWidth(1.2),
                     1: FlexColumnWidth(1),
                     2: FlexColumnWidth(1),
-                    3: FlexColumnWidth(1.2),
+                    3: FlexColumnWidth(1),
+                    4: FlexColumnWidth(1),
+                    5: FlexColumnWidth(1.2),
                   },
                   children: [
                     TableHelper.buildHeaderRow([
-                      TableHeaderCellWidget('Nema'),
-                      TableHeaderCellWidget('price'),
-                      TableHeaderCellWidget('Duration'),
-                      TableHeaderCellWidget('sessions'),
+                      TableHeaderCellWidget('الاسم'),
+                      TableHeaderCellWidget('المدرب'),
+                      TableHeaderCellWidget('السعر'),
+                      TableHeaderCellWidget('المده'),
+                      TableHeaderCellWidget('الجلسات'),
+                      TableHeaderCellWidget('الحضور'),
                     ]),
 
                     TableHelper.buildDataRow(
                       cells: [
                         TableCellWidget('Ali'),
-                        TableCellWidget('30'),
+                        TableCellWidget('Ahmed'),
+                        TableCellWidget('800'),
                         TableCellWidget('month'),
                         TableCellWidget('8'),
+                        TableCellWidget('4'),
                       ],
                     ),
                   ],
@@ -64,7 +70,7 @@ class PlanBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 30),
-          ElevatedButtonWidget(text: 'Add Payment'),
+          ElevatedButtonWidget(text: 'اضافه اشتراك'),
           const SizedBox(height: 30),
         ],
       ),

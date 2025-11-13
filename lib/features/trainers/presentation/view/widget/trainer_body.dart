@@ -19,7 +19,7 @@ class TrainerBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Trainers',
+            'المدربين',
             style: TextStyle(
               color: Colors.white,
               fontSize: 26,
@@ -61,7 +61,7 @@ class TrainerBody extends StatelessWidget {
                         TableCellWidget('01126062449'),
                         // TableCellWidget('500 EGP'),
                         TableCellWidget(
-                          isActive ? 'Active' : 'Not Active',
+                          isActive ? 'نشط' : 'غير نشط',
                           style: isActive
                               ? TextStyle(
                                   color: Colors.green,

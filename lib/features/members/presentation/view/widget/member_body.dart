@@ -17,7 +17,7 @@ class MemberBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('المدفوعات', style: AppStyle.stylebold26),
+          Text('أعضاء', style: AppStyle.stylebold26),
           TopSectionOfMembers(),
           SizedBox(height: 15),
           Expanded(
@@ -36,25 +36,28 @@ class MemberBody extends StatelessWidget {
                     1: FlexColumnWidth(1),
                     2: FlexColumnWidth(1),
                     3: FlexColumnWidth(1),
-                    4: FlexColumnWidth(1.2),
+                    4: FlexColumnWidth(1),
+                    5: FlexColumnWidth(1.2),
                   },
                   children: [
                     TableHelper.buildHeaderRow([
+                      TableHeaderCellWidget('id'),
                       TableHeaderCellWidget('الاسم'),
-                      TableHeaderCellWidget('الخطه'),
+                      TableHeaderCellWidget('الشتراك'),
+                      TableHeaderCellWidget('تاريخ البدء'),
+                      TableHeaderCellWidget('تاريخ الانتهاء'),
                       TableHeaderCellWidget('الحاله'),
-                      TableHeaderCellWidget('التاريخ'),
-                      TableHeaderCellWidget('طريق الدفع'),
                     ]),
 
                     TableHelper.buildDataRow(
                       cells: [
-                        TableCellWidget('Ali'),
-                        TableCellWidget('monthly'),
-                        TableCellWidget('500'),
+                        TableCellWidget('5'),
+                        TableCellWidget('Belal'),
+                        TableCellWidget('3 أشهر'),
+                        TableCellWidget('01/01/2023'),
                         TableCellWidget('01/03/2023'),
                         TableCellWidget(
-                          'cash',
+                          'نشط',
                           style: const TextStyle(
                             color: Colors.green,
                             fontWeight: FontWeight.bold,
@@ -69,7 +72,7 @@ class MemberBody extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           ElevatedButtonWidget(
-            text: 'اضافة مصاريف',
+            text: 'إضافة عضو',
             onPressed: () {
               showDialog(
                 context: context,

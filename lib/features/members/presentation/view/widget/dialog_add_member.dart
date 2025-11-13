@@ -20,35 +20,46 @@ class DialogAddMember extends StatelessWidget {
           shrinkWrap: true,
           children: [
             const _FieldLabelAndInput(
-              label: 'Name',
+              label: 'الاسم',
+              child: TextFieldAddMember(),
+            ),
+
+            const _FieldLabelAndInput(
+              label: 'الهاتف',
               child: TextFieldAddMember(),
             ),
             const _FieldLabelAndInput(
-              label: 'Email',
-              child: TextFieldAddMember(),
-            ),
-            const _FieldLabelAndInput(
-              label: 'Phone',
+              label: 'ملحوظات',
               child: TextFieldAddMember(),
             ),
             const SizedBox(height: 10),
             const _DoubleFieldRow(
-              leftLabel: 'Join Date',
+              leftLabel: 'تاريخ الانضمام',
               leftChild: TextFieldAddMember(),
-              rightLabel: 'Gender',
-              rightChild: CustomDropdownToAddMember(),
+              rightLabel: 'النوع',
+              rightChild: CustomDropdownToAddMember(
+                items: [
+                  DropdownMenuItem(value: '1', child: Text('ذكر')),
+                  DropdownMenuItem(value: '2', child: Text('أنثى')),
+                ],
+              ),
             ),
             const _DoubleFieldRow(
-              leftLabel: 'Subscription',
+              leftLabel: 'تاريخ البدء',
               leftChild: TextFieldAddMember(),
-              rightLabel: 'Trainer',
-              rightChild: CustomDropdownToAddMember(),
+              rightLabel: 'المده',
+              rightChild: CustomDropdownToAddMember(
+                items: [
+                  DropdownMenuItem(value: '1', child: Text('month')),
+                  DropdownMenuItem(value: '2', child: Text('3 monthe')),
+                ],
+              ),
             ),
             Divider(height: 30),
             Row(
               children: [
                 ElevatedButtonWidget(
-                  text: 'save',
+                  text: 'حغظ',
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -62,7 +73,7 @@ class DialogAddMember extends StatelessWidget {
                 ),
                 SizedBox(width: 10),
                 ElevatedButtonToDialog(
-                  text: 'Cancel',
+                  text: 'يلغي',
                   onPressed: () {
                     Navigator.pop(context);
                   },

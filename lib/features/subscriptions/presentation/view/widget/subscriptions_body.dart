@@ -48,18 +48,18 @@ class SubscriptionsBody extends StatelessWidget {
                       TableHeaderCellWidget('اسم الخطه'),
                       TableHeaderCellWidget('المده'),
                       TableHeaderCellWidget('السعر'),
-                      TableHeaderCellWidget('الاشتراك'),
+                      TableHeaderCellWidget('المشتركين'),
                       TableHeaderCellWidget('الحاله'),
                     ]),
 
                     TableHelper.buildDataRow(
                       cells: [
-                        TableCellWidget('One Month'),
-                        TableCellWidget('30 Days'),
+                        TableCellWidget('شهر واحد'),
+                        TableCellWidget('30 يوم'),
                         TableCellWidget('500 EGP'),
                         TableCellWidget('35'),
                         TableCellWidget(
-                          'Active',
+                          'نشط',
                           style: const TextStyle(
                             color: Colors.green,
                             fontWeight: FontWeight.bold,

@@ -39,10 +39,10 @@ class PaymentBody extends StatelessWidget {
                   },
                   children: [
                     TableHelper.buildHeaderRow([
-                      TableHeaderCellWidget('الاسم'),
+                      TableHeaderCellWidget('الاسم/النوع'),
                       TableHeaderCellWidget('الخطه'),
-                      TableHeaderCellWidget('الحاله'),
-                      TableHeaderCellWidget('التاريخ'),
+                      TableHeaderCellWidget('المدفوع'),
+                      TableHeaderCellWidget('تاريخ الدفع'),
                       TableHeaderCellWidget('طريق الدفع'),
                     ]),
 
@@ -51,6 +51,22 @@ class PaymentBody extends StatelessWidget {
                         TableCellWidget('Ali'),
                         TableCellWidget('monthly'),
                         TableCellWidget('500'),
+                        TableCellWidget('01/03/2023'),
+                        TableCellWidget(
+                          'cash',
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableHelper.buildDataRow(
+                      color: Colors.red.withAlpha(20),
+                      cells: [
+                        TableCellWidget('كهربا'),
+                        TableCellWidget('_'),
+                        TableCellWidget('800'),
                         TableCellWidget('01/03/2023'),
                         TableCellWidget(
                           'cash',

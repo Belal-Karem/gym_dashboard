@@ -83,8 +83,12 @@ class TableHelper {
     );
   }
 
-  static TableRow buildDataRow({required List<Widget> cells}) =>
-      TableRow(children: cells);
+  static TableRow buildDataRow({required List<Widget> cells, Color? color}) {
+    return TableRow(
+      decoration: BoxDecoration(color: color ?? Colors.transparent),
+      children: cells,
+    );
+  }
 
   static TableRow buildHeaderRow(List<Widget> titles) {
     return TableRow(children: titles);

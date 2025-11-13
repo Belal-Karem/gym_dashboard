@@ -9,8 +9,14 @@ class ListTileSup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(showDialogDataMemberInfoModel.title),
-      trailing: Text(showDialogDataMemberInfoModel.trailing),
+      title: Text(
+        showDialogDataMemberInfoModel.title,
+        style: TextStyle(fontSize: 20),
+      ),
+      trailing: Text(
+        showDialogDataMemberInfoModel.trailing,
+        style: TextStyle(fontSize: 20, color: Colors.white.withAlpha(100)),
+      ),
     );
   }
 }
