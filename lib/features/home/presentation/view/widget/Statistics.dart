@@ -25,6 +25,7 @@ class Statistics extends StatelessWidget {
         Expanded(
           child: CustomContainerStatistics(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   '5',

@@ -37,7 +37,9 @@ class MemberBody extends StatelessWidget {
                     2: FlexColumnWidth(1),
                     3: FlexColumnWidth(1),
                     4: FlexColumnWidth(1),
-                    5: FlexColumnWidth(1.2),
+                    5: FlexColumnWidth(1),
+                    6: FlexColumnWidth(1),
+                    7: FlexColumnWidth(1.2),
                   },
                   children: [
                     TableHelper.buildHeaderRow([
@@ -46,6 +48,8 @@ class MemberBody extends StatelessWidget {
                       TableHeaderCellWidget('الشتراك'),
                       TableHeaderCellWidget('تاريخ البدء'),
                       TableHeaderCellWidget('تاريخ الانتهاء'),
+                      TableHeaderCellWidget('الحضور'),
+                      TableHeaderCellWidget('الغياب'),
                       TableHeaderCellWidget('الحاله'),
                     ]),
 
@@ -56,6 +60,8 @@ class MemberBody extends StatelessWidget {
                         TableCellWidget('3 أشهر'),
                         TableCellWidget('01/01/2023'),
                         TableCellWidget('01/03/2023'),
+                        TableCellWidget('30'),
+                        TableCellWidget('60'),
                         TableCellWidget(
                           'نشط',
                           style: const TextStyle(

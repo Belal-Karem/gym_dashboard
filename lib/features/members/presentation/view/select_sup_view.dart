@@ -67,7 +67,7 @@ class _SelectSupBodyState extends State<SelectSupBody> {
                   crossAxisCount: 3,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
-                  childAspectRatio: 1.2,
+                  childAspectRatio: 1,
                 ),
                 itemCount: 3,
                 itemBuilder: (context, index) {

@@ -36,7 +36,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
             ListTitleMemberInfo(
               showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                 title: 'جنس',
-                trailing: 'ذكر',
+                trailing: 'النوع',
               ),
             ),
             ListTitleMemberInfo(
@@ -49,6 +49,18 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
               showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                 title: 'خطة الاشتراكات',
                 trailing: '3 أشهر',
+              ),
+            ),
+            ListTitleMemberInfo(
+              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                title: 'الحضور',
+                trailing: '30',
+              ),
+            ),
+            ListTitleMemberInfo(
+              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                title: 'الغياب',
+                trailing: '60',
               ),
             ),
             ListTitleMemberInfo(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:power_gym/core/widget/custom_container_statistics.dart';
+import 'package:power_gym/core/widget/members_statistics_card.dart';
 
 class MemberOfMenAndWomen extends StatelessWidget {
   const MemberOfMenAndWomen({super.key});
@@ -10,32 +10,19 @@ class MemberOfMenAndWomen extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: CustomContainerStatistics(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '120',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
-                  ),
-                  Text('أعضاء', style: TextStyle(fontSize: 15)),
-                ],
-              ),
-            ),
+            child: MembersStatisticsCard(number: '120', text: 'الرجال'),
           ),
-
           Expanded(
-            child: CustomContainerStatistics(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '120',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
-                  ),
-                  Text('أعضاء', style: TextStyle(fontSize: 15)),
-                ],
-              ),
+            child: MembersStatisticsCard(number: '100', text: 'النساء'),
+          ),
+          Expanded(
+            child: MembersStatisticsCard(number: '220', text: 'النشط'),
+          ),
+          Expanded(
+            child: MembersStatisticsCard(
+              number: '50',
+              text: 'منتهي',
+              textStyle: TextStyle(fontSize: 15, color: Colors.red),
             ),
           ),
         ],

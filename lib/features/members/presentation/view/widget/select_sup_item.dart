@@ -60,6 +60,12 @@ class SelectSupItem extends StatelessWidget {
           ),
           ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+              title: 'تجميد',
+              trailing: '10',
+            ),
+          ),
+          ListTileSup(
+            showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'سعر',
               trailing: '1300',
             ),
