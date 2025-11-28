@@ -16,6 +16,9 @@ class MemberOfMenAndWomen extends StatelessWidget {
             child: MembersStatisticsCard(number: '100', text: 'النساء'),
           ),
           Expanded(
+            child: MembersStatisticsCard(number: '50', text: 'اطفال'),
+          ),
+          Expanded(
             child: MembersStatisticsCard(number: '220', text: 'النشط'),
           ),
           Expanded(

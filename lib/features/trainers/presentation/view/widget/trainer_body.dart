@@ -52,7 +52,7 @@ class TrainerBody extends StatelessWidget {
                       TableHeaderCellWidget('الهاتف'),
                       // TableHeaderCellWidget('Price'),
                       TableHeaderCellWidget('الحاله'),
-                      TableHeaderCellWidget('العملاء'),
+                      TableHeaderCellWidget('Pt'),
                     ]),
 
                     TableHelper.buildDataRow(

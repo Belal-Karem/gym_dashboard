@@ -11,7 +11,16 @@ class TopSectionOfSubscriptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(flex: 1, child: CustomDropdownButtonWidget()),
+        Expanded(
+          flex: 1,
+          child: CustomDropdownButtonWidget(
+            items: [
+              DropdownMenuItem(value: 'A', child: Text('Active')),
+              DropdownMenuItem(value: 'B', child: Text('Expired')),
+              DropdownMenuItem(value: 'C', child: Text('Expir')),
+            ],
+          ),
+        ),
         SizedBox(width: 12),
         Text('Status', style: AppStyle.style20),
         SizedBox(width: 28),

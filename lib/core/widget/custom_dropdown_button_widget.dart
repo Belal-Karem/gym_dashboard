@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:power_gym/core/utils/constants.dart';
 
 class CustomDropdownButtonWidget extends StatefulWidget {
-  const CustomDropdownButtonWidget({super.key});
+  const CustomDropdownButtonWidget({
+    super.key,
+    required this.items,
+    this.initialValue,
+  });
 
+  final List<DropdownMenuItem<String>> items;
+  final String? initialValue;
   @override
   State<CustomDropdownButtonWidget> createState() =>
       _CustomDropdownButtonWidgetState();
@@ -11,7 +17,13 @@ class CustomDropdownButtonWidget extends StatefulWidget {
 
 class _CustomDropdownButtonWidgetState
     extends State<CustomDropdownButtonWidget> {
-  String? selectedValue = 'A';
+  String? selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.initialValue ?? widget.items.first.value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +40,7 @@ class _CustomDropdownButtonWidgetState
         padding: EdgeInsets.only(right: 20),
         style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18),
         value: selectedValue,
-        items: const [
-          DropdownMenuItem(value: 'A', child: Text('Active')),
-          DropdownMenuItem(value: 'B', child: Text('Expired')),
-          DropdownMenuItem(value: 'C', child: Text('Expir')),
-        ],
+        items: widget.items,
         onChanged: (value) {
           selectedValue = value;
           setState(() {});

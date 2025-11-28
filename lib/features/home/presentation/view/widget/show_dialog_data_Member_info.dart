@@ -17,90 +17,118 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.all(15),
-        child: Column(
-          children: [
-            Text('معلومات العضو', style: AppStyle.style20W500),
-            SizedBox(height: 20),
-            ListTitleMemberInfo(
-              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                title: 'اسم',
-                trailing: 'أحمد',
-              ),
-            ),
-            ListTitleMemberInfo(
-              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                title: 'هاتف',
-                trailing: '123456789',
-              ),
-            ),
-            ListTitleMemberInfo(
-              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                title: 'جنس',
-                trailing: 'النوع',
-              ),
-            ),
-            ListTitleMemberInfo(
-              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                title: 'تاريخ الانضمام',
-                trailing: '15/01/2023',
-              ),
-            ),
-            ListTitleMemberInfo(
-              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                title: 'خطة الاشتراكات',
-                trailing: '3 أشهر',
-              ),
-            ),
-            ListTitleMemberInfo(
-              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                title: 'الحضور',
-                trailing: '30',
-              ),
-            ),
-            ListTitleMemberInfo(
-              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                title: 'الغياب',
-                trailing: '60',
-              ),
-            ),
-            ListTitleMemberInfo(
-              leadingAndTrailingTextStyle: TextStyle(
-                fontSize: 20,
-                color: const Color.fromARGB(255, 13, 223, 20),
-              ),
-              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                title: 'حالة',
-                trailing: 'نشط',
-              ),
-            ),
-            ListTitleMemberInfo(
-              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                title: 'مدرب',
-                trailing: 'أحمد علي',
-              ),
-            ),
-            ListTitleMemberInfo(
-              showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                title: 'ملحوظات',
-                trailing: '_',
-              ),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedBouttonMemberInfo(
-                  text: 'تعديل العضو',
-                  onPressed: () {},
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text('معلومات العضو', style: AppStyle.style20W500),
+              SizedBox(height: 20),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'اسم',
+                  trailing: 'أحمد',
                 ),
-                ElevatedBouttonMemberInfo(
-                  text: 'يقبل',
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+              ),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'هاتف',
+                  trailing: '123456789',
                 ),
-              ],
-            ),
-          ],
+              ),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'النوع',
+                  trailing: 'راجل',
+                ),
+              ),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'تاريخ الانضمام',
+                  trailing: '15/01/2023',
+                ),
+              ),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'تاريخ النتهاء',
+                  trailing: '15/01/2023',
+                ),
+              ),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'خطة الاشتراكات',
+                  trailing: '3 أشهر',
+                ),
+              ),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'الحضور',
+                  trailing: '30',
+                ),
+              ),
+
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'الغياب',
+                  trailing: '60',
+                ),
+              ),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'دعوه',
+                  trailing: '3',
+                ),
+              ),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'تجميد',
+                  trailing: '10',
+                ),
+              ),
+              ListTitleMemberInfo(
+                leadingAndTrailingTextStyle: TextStyle(
+                  fontSize: 20,
+                  color: const Color.fromARGB(255, 13, 223, 20),
+                ),
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'حالة',
+                  trailing: 'نشط',
+                ),
+              ),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'مدرب',
+                  trailing: 'أحمد علي',
+                ),
+              ),
+              ListTitleMemberInfo(
+                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+                  title: 'ملحوظات',
+                  trailing: '_',
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedBouttonMemberInfo(
+                    text: 'تعديل العضو',
+                    onPressed: () {},
+                  ),
+                  ElevatedBouttonMemberInfo(
+                    text: 'يقبل',
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ElevatedBouttonMemberInfo(text: 'تجميد', onPressed: () {}),
+                  ElevatedBouttonMemberInfo(
+                    text: 'دعوه',
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

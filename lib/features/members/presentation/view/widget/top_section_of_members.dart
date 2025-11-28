@@ -11,10 +11,19 @@ class TopSectionOfMembers extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(flex: 1, child: CustomDropdownButtonWidget()),
-        SizedBox(width: 12),
-        Text('Status', style: AppStyle.style20),
-        SizedBox(width: 28),
+        const Expanded(
+          flex: 1,
+          child: CustomDropdownButtonWidget(
+            items: [
+              DropdownMenuItem(value: 'A', child: Text('Active')),
+              DropdownMenuItem(value: 'B', child: Text('Expired')),
+              DropdownMenuItem(value: 'C', child: Text('Expir')),
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+        const Text('Status', style: AppStyle.style20),
+        const SizedBox(width: 28),
         Expanded(
           flex: 2,
           child: Container(
@@ -22,7 +31,7 @@ class TopSectionOfMembers extends StatelessWidget {
               color: kprimaryColor,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: CustomSearchWidget(),
+            child: const CustomSearchWidget(),
           ),
         ),
       ],
