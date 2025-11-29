@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "148291436448",
+    "project_id": "power-house-gym-4fe99",
+    "storage_bucket": "power-house-gym-4fe99.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148291436448:android:f4cd70ff22147990d1eec5",
+        "android_client_info": {
+          "package_name": "com.example.power_gym"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4rhe6ptYCTEMaW4Qzmr2UGvIww49KTbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
