@@ -15,13 +15,13 @@ class MemberModel {
   });
   factory MemberModel.fromjson(jsondata) {
     return MemberModel(
-      id: jsondata[kid],
-      name: jsondata[kname],
-      phone: jsondata[kPhone],
-      startdata: jsondata[kStartdate],
-      enddata: jsondata[kenddate],
-      absence: jsondata[kabsence],
-      attendance: jsondata[kattendance],
+      id: jsondata[kid] ?? '',
+      name: jsondata[kname] ?? '',
+      phone: jsondata[kPhone] ?? '',
+      startdata: jsondata[kStartdate] ?? '',
+      enddata: jsondata[kenddate] ?? '',
+      absence: jsondata[kabsence] ?? '0',
+      attendance: jsondata[kattendance] ?? '0',
     );
   }
 }

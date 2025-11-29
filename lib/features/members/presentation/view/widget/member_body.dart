@@ -18,7 +18,7 @@ class MemberBody extends StatelessWidget {
           const Text('أعضاء', style: AppStyle.stylebold26),
           const TopSectionOfMembers(),
           const SizedBox(height: 15),
-          const Expanded(child: MembersDataTable()),
+          Expanded(child: MembersDataTable()),
           const SizedBox(height: 30),
           ElevatedButtonWidget(
             text: 'إضافة عضو',
