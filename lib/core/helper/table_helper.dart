@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/core/widget/table_cell_widget.dart';
 
 class TableHelper {
   static DataRow buildRowsubScriptions({
@@ -83,10 +84,26 @@ class TableHelper {
     );
   }
 
-  static TableRow buildDataRow({required List<Widget> cells, Color? color}) {
+  static TableRow buildDataRow({
+    required List<Widget> cells,
+    Color? color,
+    Function(List<Widget> cells)? onTap,
+  }) {
+    final wrappedCells = onTap == null
+        ? cells
+        : cells
+              .map(
+                (cell) => GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () => onTap(cells),
+                  child: cell,
+                ),
+              )
+              .toList();
+
     return TableRow(
       decoration: BoxDecoration(color: color ?? Colors.transparent),
-      children: cells,
+      children: wrappedCells,
     );
   }
 
