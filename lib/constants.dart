@@ -6,3 +6,5 @@ const kattendance = 'attendance';
 const kabsence = 'absence';
 const kStartdate = 'Start date';
 const kenddate = 'End date';
+
+const kSubCollections = 'plan';

@@ -3,6 +3,8 @@ import 'package:dartz/dartz.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/data/models/repo/member_repo.dart';
+import '../../../../../core/errors/failure.dart';
+import '../../../../../core/errors/firebase_error_mapper.dart';
 
 class MemberRepoImpl implements MemberRepo {
   final CollectionReference membersRef = FirebaseFirestore.instance.collection(
@@ -23,7 +25,7 @@ class MemberRepoImpl implements MemberRepo {
 
       return Right(stream);
     } catch (e) {
-      return Left(Failure(e.toString()));
+      return Left(handleFirebaseException(e));
     }
   }
 
@@ -33,7 +35,7 @@ class MemberRepoImpl implements MemberRepo {
       await membersRef.doc(member.id).set(member.toJson());
       return const Right(unit);
     } catch (e) {
-      return Left(Failure(e.toString()));
+      return Left(handleFirebaseException(e));
     }
   }
 
@@ -46,7 +48,7 @@ class MemberRepoImpl implements MemberRepo {
       await membersRef.doc(id).update(data);
       return const Right(unit);
     } catch (e) {
-      return Left(Failure(e.toString()));
+      return Left(handleFirebaseException(e));
     }
   }
 
@@ -56,7 +58,7 @@ class MemberRepoImpl implements MemberRepo {
       await membersRef.doc(id).delete();
       return const Right(unit);
     } catch (e) {
-      return Left(Failure(e.toString()));
+      return Left(handleFirebaseException(e));
     }
   }
 }
