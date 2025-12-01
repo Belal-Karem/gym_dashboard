@@ -16,7 +16,7 @@ class MemberRepoImpl implements MemberRepo {
         return snapshot.docs.map((doc) {
           return MemberModel.fromJson(
             doc.data() as Map<String, dynamic>,
-            doc.id, // ← مهم: Document ID
+            doc.id,
           );
         }).toList();
       });
