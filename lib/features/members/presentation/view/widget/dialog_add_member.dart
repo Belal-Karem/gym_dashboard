@@ -48,7 +48,7 @@ class DialogAddMember extends StatelessWidget {
             ),
             DoubleFieldRow(
               leftLabel: 'تاريخ البدء',
-              leftChild: TextFieldAddMember(),
+              leftChild: const TextFieldAddMember(),
               rightLabel: '',
               rightChild: ElevatedButtonWidget(
                 text: 'المده',
@@ -57,14 +57,14 @@ class DialogAddMember extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return SelectSupView();
+                        return const SelectSupView();
                       },
                     ),
                   );
                 },
               ),
             ),
-            Divider(height: 30),
+            const Divider(height: 30),
             Row(
               children: [
                 ElevatedButtonWidget(
@@ -73,7 +73,7 @@ class DialogAddMember extends StatelessWidget {
                     Navigator.pop(context);
                   },
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 ElevatedButtonToDialog(
                   text: 'يلغي',
                   onPressed: () {

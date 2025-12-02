@@ -6,7 +6,7 @@ class TextFieldAddMember extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Color(0xff1D1E22)),
+      decoration: const BoxDecoration(color: Color(0xff1D1E22)),
       child: TextField(
         cursorColor: Colors.white,
         decoration: InputDecoration(

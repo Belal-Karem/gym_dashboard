@@ -33,38 +33,38 @@ class SelectSupItem extends StatelessWidget {
                   : Container(),
             ],
           ),
-          Divider(color: Colors.black),
-          ListTileSup(
+          const Divider(color: Colors.black),
+          const ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'مدة',
               trailing: '90 يومًا',
             ),
           ),
-          ListTileSup(
+          const ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'تاريخ البدء',
               trailing: '12 نوفمبر 2024',
             ),
           ),
-          ListTileSup(
+          const ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'تاريخ الانتهاء',
               trailing: '10 فبراير 2025',
             ),
           ),
-          ListTileSup(
+          const ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'دعوة',
               trailing: '8',
             ),
           ),
-          ListTileSup(
+          const ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'تجميد',
               trailing: '10',
             ),
           ),
-          ListTileSup(
+          const ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'سعر',
               trailing: '1300',

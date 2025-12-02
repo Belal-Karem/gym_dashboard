@@ -15,7 +15,7 @@ class SelectSupView extends StatelessWidget {
               Text('Power House Gym', style: TextStyle(fontSize: 20)),
             ],
           ),
-          SelectSupBody(),
+          const SelectSupBody(),
         ],
       ),
     );

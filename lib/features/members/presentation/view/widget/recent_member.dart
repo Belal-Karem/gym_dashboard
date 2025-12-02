@@ -17,7 +17,7 @@ class RecentMember extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 15),
-            child: Text(
+            child: const Text(
               'معلومات الأعضاء',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
@@ -37,7 +37,7 @@ class RecentMember extends StatelessWidget {
                 3: FlexColumnWidth(1.2),
               },
               children: [
-                TableHelper.buildHeaderRow([
+                TableHelper.buildHeaderRow(const [
                   TableHeaderCellWidget('id'),
                   TableHeaderCellWidget('الاسم'),
                   TableHeaderCellWidget('الايام'),

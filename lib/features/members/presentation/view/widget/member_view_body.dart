@@ -7,11 +7,11 @@ class MemberViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return const Expanded(
       child: Row(
         children: [
-          Expanded(flex: 1, child: const CustomDrawer()),
-          Expanded(flex: 3, child: const MemberBody()),
+          Expanded(flex: 1, child: CustomDrawer()),
+          Expanded(flex: 3, child: MemberBody()),
         ],
       ),
     );

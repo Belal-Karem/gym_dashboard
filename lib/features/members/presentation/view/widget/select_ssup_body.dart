@@ -23,18 +23,18 @@ class _SelectSupBodyState extends State<SelectSupBody> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'اختر الاشتراك لـ "أحمد علي"',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
                 ),
-                Spacer(),
+                const Spacer(),
                 ElevatedButtonWidget(
                   text: 'حفظ',
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 ElevatedButtonToDialog(
                   text: 'يلغي',
                   onPressed: () {
@@ -43,7 +43,7 @@ class _SelectSupBodyState extends State<SelectSupBody> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
