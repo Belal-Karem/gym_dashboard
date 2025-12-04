@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:power_gym/core/widget/table_cell_widget.dart';
 
 class TableHelper {
   static DataRow buildRowsubScriptions({
@@ -87,24 +86,32 @@ class TableHelper {
   static TableRow buildDataRow({
     required List<Widget> cells,
     Color? color,
+    Color hoverColor = const Color(0xff35363A),
     Function(List<Widget> cells)? onTap,
   }) {
-    final wrappedCells = onTap == null
-        ? cells
-        : cells
-              .map(
-                (cell) => GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () => onTap(cells),
-                  child: cell,
-                ),
-              )
-              .toList();
+    final hover = ValueNotifier(false);
 
-    return TableRow(
-      decoration: BoxDecoration(color: color ?? Colors.transparent),
-      children: wrappedCells,
-    );
+    final wrappedCells = cells.map((cell) {
+      return ValueListenableBuilder<bool>(
+        valueListenable: hover,
+        builder: (context, isHovering, _) {
+          return MouseRegion(
+            onEnter: (_) => hover.value = true,
+            onExit: (_) => hover.value = false,
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => onTap?.call(cells),
+              child: Container(
+                color: isHovering ? hoverColor : color ?? Colors.transparent,
+                child: cell,
+              ),
+            ),
+          );
+        },
+      );
+    }).toList();
+
+    return TableRow(children: wrappedCells);
   }
 
   static TableRow buildHeaderRow(List<Widget> titles) {

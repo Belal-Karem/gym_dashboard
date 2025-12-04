@@ -26,7 +26,7 @@ class MemberBody extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return const Dialog(child: DialogAddMember());
+                  return Dialog(child: DialogAddMember());
                 },
               );
             },

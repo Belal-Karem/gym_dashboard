@@ -53,7 +53,7 @@ class MembersDataTable extends StatelessWidget {
                 },
 
                 cells: [
-                  TableCellWidget(member.memberid),
+                  TableCellWidget(member.id),
                   TableCellWidget(member.name),
                   TableCellWidget(member.phone),
                   TableCellWidget(member.startdata),
@@ -74,6 +74,5 @@ class MembersDataTable extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

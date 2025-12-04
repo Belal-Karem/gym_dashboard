@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:power_gym/features/members/presentation/view/widget/select_ssup_body.dart';
+import 'package:power_gym/features/members/presentation/view/widget/select_sup_body.dart';
 
 class SelectSupView extends StatelessWidget {
   const SelectSupView({super.key});

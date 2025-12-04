@@ -1,6 +1,7 @@
+import 'package:power_gym/constants.dart';
+
 class MemberModel {
   final String id;
-  final String memberid;
   final String name;
   final String phone;
   final String startdata;
@@ -8,9 +9,12 @@ class MemberModel {
   final String attendance;
   final String absence;
   final String status;
+  final String note;
+  final String gender;
 
   MemberModel({
-    required this.memberid,
+    required this.gender,
+    required this.note,
     required this.id,
     required this.name,
     required this.phone,
@@ -30,20 +34,23 @@ class MemberModel {
       'attendance': attendance,
       'absence': absence,
       'status': status,
+      'note': note,
+      'gender': gender,
     };
   }
 
   factory MemberModel.fromJson(Map<String, dynamic> map, String docId) {
     return MemberModel(
       id: docId,
-      name: map['name'] ?? '',
-      phone: map['phone'] ?? '',
-      startdata: map['startdata'] ?? '',
-      enddata: map['enddata'] ?? '',
-      attendance: map['attendance'] ?? '',
-      absence: map['absence'] ?? '',
+      name: map[kname] ?? '',
+      phone: map[kPhone] ?? '',
+      startdata: map[kStartdate] ?? '',
+      enddata: map[kenddate] ?? '',
+      attendance: map[kattendance] ?? '',
+      absence: map[kabsence] ?? '',
       status: map['status'] ?? '',
-      memberid: map['id'],
+      note: map[knote] ?? '',
+      gender: map[kgender] ?? '',
     );
   }
 
@@ -57,6 +64,8 @@ class MemberModel {
     String? attendance,
     String? absence,
     String? status,
+    String? gender,
+    String? note,
   }) {
     return MemberModel(
       id: id ?? this.id,
@@ -67,7 +76,8 @@ class MemberModel {
       attendance: attendance ?? this.attendance,
       absence: absence ?? this.absence,
       status: status ?? this.status,
-      memberid: memberid ?? this.memberid,
+      note: note ?? this.note,
+      gender: gender ?? this.gender,
     );
   }
 }
