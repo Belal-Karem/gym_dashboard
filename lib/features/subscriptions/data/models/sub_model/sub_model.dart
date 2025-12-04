@@ -1,3 +1,5 @@
+import 'package:power_gym/constants.dart';
+
 class SubModel {
   final String id;
   final String duration;
@@ -6,13 +8,14 @@ class SubModel {
   final String status;
   final String price;
   final String maxAttendance;
+  final String type;
 
   SubModel({
     required this.id,
     required this.duration,
     required this.freeze,
     required this.invitation,
-
+    required this.type,
     required this.status,
     required this.price,
     required this.maxAttendance,
@@ -27,28 +30,28 @@ class SubModel {
       'status': status,
       'price': price,
       'maxAttendance': maxAttendance,
+      'type': type,
     };
   }
 
   factory SubModel.fromJson(Map<String, dynamic> map, String docId) {
     return SubModel(
       id: docId,
-      duration: map['duration'] ?? '',
-      freeze: map['freeze'] ?? '',
-      invitation: map['invitation'] ?? '',
-      status: map['status'] ?? '',
-      price: (map['price'] ?? 0).toDouble(),
-      maxAttendance: map['maxAttendance'] ?? 0,
+      duration: map[kduration] ?? '',
+      freeze: map[kfreeze] ?? '',
+      invitation: map[kinvitation] ?? '',
+      status: map[kstatus] ?? '',
+      price: map[kprice] ?? '',
+      maxAttendance: map[kmaxAttendance] ?? '',
+      type: map[ktype] ?? '',
     );
   }
 
   SubModel copyWith({
     String? id,
     String? duration,
-    String? enddate,
     String? freeze,
     String? invitation,
-    String? startdate,
     String? type,
     String? status,
     String? price,
@@ -62,6 +65,7 @@ class SubModel {
       status: status ?? this.status,
       price: price ?? this.price,
       maxAttendance: maxAttendance ?? this.maxAttendance,
+      type: type ?? this.type,
     );
   }
 }

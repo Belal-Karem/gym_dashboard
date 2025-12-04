@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 
-class FieldLabelAndInput extends StatelessWidget {
-  const FieldLabelAndInput({
+class FieldLabelAndInputAddWidget extends StatelessWidget {
+  const FieldLabelAndInputAddWidget({
     super.key,
     required this.label,
     required this.child,

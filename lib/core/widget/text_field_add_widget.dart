@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TextFieldAddMember extends StatelessWidget {
-  const TextFieldAddMember({super.key, required this.controller});
+class TextFieldAddWidget extends StatelessWidget {
+  const TextFieldAddWidget({super.key, required this.controller});
 
   final TextEditingController controller;
   @override

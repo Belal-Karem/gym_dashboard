@@ -10,3 +10,10 @@ const knote = 'note';
 const kgender = 'gender';
 
 const kSubCollections = 'plan';
+const kduration = 'duration';
+const kfreeze = 'freeze';
+const kinvitation = 'invitation';
+const kmaxAttendance = 'maxAttendance';
+const kprice = 'price';
+const kstatus = 'status';
+const ktype = 'type';
