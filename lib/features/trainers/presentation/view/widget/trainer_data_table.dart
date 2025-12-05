@@ -43,7 +43,18 @@ class TrainerDataTable extends StatelessWidget {
                   TableCellWidget(trainer.name),
                   TableCellWidget(trainer.phone),
                   // TableCellWidget('500 EGP'),
-                  TableCellWidget(trainer.status),
+                  TableCellWidget(
+                    trainer.status,
+                    style: trainer.status == 'نشط'
+                        ? TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          )
+                        : TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

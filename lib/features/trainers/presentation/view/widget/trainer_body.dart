@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
+import 'package:power_gym/features/trainers/presentation/view/widget/dialog_add_trainer.dart';
 import 'package:power_gym/features/trainers/presentation/view/widget/top_section_of_trainer.dart';
 import 'package:power_gym/features/trainers/presentation/view/widget/trainer_data.dart';
 
@@ -25,7 +26,17 @@ class TrainerBody extends StatelessWidget {
           SizedBox(height: 15),
           Expanded(child: TrainerData()),
           const SizedBox(height: 30),
-          ElevatedButtonWidget(text: 'اضافه مدرب', onPressed: () {}),
+          ElevatedButtonWidget(
+            text: 'اضافه مدرب',
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(child: DialogAddTrainer());
+                },
+              );
+            },
+          ),
           const SizedBox(height: 30),
         ],
       ),

@@ -29,10 +29,21 @@ class TrainerRepoImpl implements TrainerRepo {
     }
   }
 
+  // @override
+  // Future<Either<Failure, Unit>> addTrainer(TrainerModel trainer) async {
+  //   try {
+  //     await trainerRef.doc(trainer.id).set(trainer.toJson());
+  //     return const Right(unit);
+  //   } catch (e) {
+  //     return Left(handleFirebaseException(e));
+  //   }
+  // }
   @override
-  Future<Either<Failure, Unit>> addTrainer(TrainerModel member) async {
+  Future<Either<Failure, Unit>> addTrainer(TrainerModel trainer) async {
     try {
-      await trainerRef.doc(member.id).set(member.toJson());
+      final docRef = trainerRef.doc();
+      await docRef.set(trainer.copyWith(id: docRef.id).toJson());
+
       return const Right(unit);
     } catch (e) {
       return Left(handleFirebaseException(e));
