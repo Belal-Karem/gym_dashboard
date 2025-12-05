@@ -45,10 +45,15 @@ class SubscriptionsDataTaple extends StatelessWidget {
                   TableCellWidget('35'),
                   TableCellWidget(
                     subs.status,
-                    style: const TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: subs.status == 'نشط'
+                        ? TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          )
+                        : TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
                   ),
                 ],
               ),

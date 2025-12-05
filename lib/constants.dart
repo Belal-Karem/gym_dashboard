@@ -17,3 +17,6 @@ const kmaxAttendance = 'maxAttendance';
 const kprice = 'price';
 const kstatus = 'status';
 const ktype = 'type';
+
+const ktrainerCollections = 'trainers';
+const kptNumber = 'ptNumber';

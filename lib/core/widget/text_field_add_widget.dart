@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
 class TextFieldAddWidget extends StatelessWidget {
-  const TextFieldAddWidget({super.key, required this.controller});
+  const TextFieldAddWidget({
+    super.key,
+    required this.controller,
+    this.validator,
+  });
 
   final TextEditingController controller;
+  final String? Function(String?)? validator;
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(color: Color(0xff1D1E22)),
-      child: TextField(
+      child: TextFormField(
+        validator: validator ?? defaultRequiredValidator,
         controller: controller,
         cursorColor: Colors.white,
         decoration: InputDecoration(
@@ -24,5 +30,10 @@ class TextFieldAddWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String? defaultRequiredValidator(String? value) {
+    if (value == null || value.trim().isEmpty) return 'الرجاء ملء البيانات ';
+    return null;
   }
 }

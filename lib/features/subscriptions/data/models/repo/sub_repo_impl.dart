@@ -26,10 +26,21 @@ class SubRepoImpl implements SubRepo {
     }
   }
 
-  @override
+  // @override
+  // Future<Either<Failure, Unit>> addSub(SubModel sub) async {
+  //   try {
+  //     await subsRef.doc(sub.id).set(sub.toJson());
+  //     return const Right(unit);
+  //   } catch (e) {
+  //     return Left(handleFirebaseException(e));
+  //   }
+  // }
+
   Future<Either<Failure, Unit>> addSub(SubModel sub) async {
     try {
-      await subsRef.doc(sub.id).set(sub.toJson());
+      final docRef = subsRef.doc();
+      await docRef.set(sub.copyWith(id: docRef.id).toJson());
+
       return const Right(unit);
     } catch (e) {
       return Left(handleFirebaseException(e));

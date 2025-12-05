@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 
-class CustomDropdownToAddMember extends StatefulWidget {
-  const CustomDropdownToAddMember({
+class CustomDropdownWidget extends StatefulWidget {
+  const CustomDropdownWidget({
     super.key,
     required this.items,
     this.initialValue,
@@ -14,11 +14,10 @@ class CustomDropdownToAddMember extends StatefulWidget {
   final void Function(String?)? onChanged;
 
   @override
-  State<CustomDropdownToAddMember> createState() =>
-      _CustomDropdownToAddMemberState();
+  State<CustomDropdownWidget> createState() => _CustomDropdownWidgetState();
 }
 
-class _CustomDropdownToAddMemberState extends State<CustomDropdownToAddMember> {
+class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
   String? selectedValue;
 
   @override
