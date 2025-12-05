@@ -7,6 +7,7 @@ import 'package:power_gym/core/utils/app_router.dart';
 import 'package:power_gym/core/utils/service_locator.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_cubit.dart';
+import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
 import 'package:power_gym/firebase_options.dart';
 import 'package:power_gym/generated/l10n.dart';
 import 'package:window_size/window_size.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<MembersCubit>(create: (_) => sl<MembersCubit>()),
         BlocProvider<SubCubit>(create: (_) => sl<SubCubit>()),
+        BlocProvider<TrainerCubit>(create: (_) => sl<TrainerCubit>()),
       ],
       child: MaterialApp.router(
         locale: Locale('ar'),

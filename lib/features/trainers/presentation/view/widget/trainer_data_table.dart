@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
+import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
 import 'package:power_gym/features/trainers/presentation/view/widget/view_client.dart';
 
 class TrainerDataTable extends StatelessWidget {
-  const TrainerDataTable({super.key});
+  const TrainerDataTable({super.key, required this.trainer});
+  final List<TrainerModel> trainer;
 
   @override
   Widget build(BuildContext context) {
@@ -35,47 +37,49 @@ class TrainerDataTable extends StatelessWidget {
               TableHeaderCellWidget('Pt'),
             ]),
 
-            TableHelper.buildDataRow(
-              cells: [
-                TableCellWidget('Belal'),
-                TableCellWidget('01126062449'),
-                // TableCellWidget('500 EGP'),
-                TableCellWidget('نشط'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TableCellWidget('35'),
-                    SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child:
-                                    ViewClient(), // هنا بيظهر الـ Widget فعلاً
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 7,
+            ...trainer.map(
+              (trainer) => TableHelper.buildDataRow(
+                cells: [
+                  TableCellWidget(trainer.name),
+                  TableCellWidget(trainer.phone),
+                  // TableCellWidget('500 EGP'),
+                  TableCellWidget(trainer.status),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TableCellWidget(trainer.ptNumber),
+                      SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child:
+                                      ViewClient(), // هنا بيظهر الـ Widget فعلاً
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 7,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color(0xff17181D),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text('مشاهده'),
                         ),
-                        decoration: BoxDecoration(
-                          color: Color(0xff17181D),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text('مشاهده'),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
