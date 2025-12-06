@@ -20,3 +20,9 @@ const ktype = 'type';
 
 const ktrainerCollections = 'trainers';
 const kptNumber = 'ptNumber';
+
+const kpaymentCollections = 'payment';
+const kpaid = 'paid';
+const kpaymentDate = 'payment date';
+const kpaymentMethod = 'payment method';
+const kplan = 'plan';

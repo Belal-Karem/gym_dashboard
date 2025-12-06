@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/features/members/presentation/view/widget/list_tile_sup.dart';
+import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
 import 'package:power_gym/model/show_dialog_data_member_Info_model.dart';
 
 class SelectSupItem extends StatelessWidget {
-  const SelectSupItem({super.key, required this.isActive});
+  const SelectSupItem({super.key, required this.isActive, required this.subs});
 
   final bool isActive;
+  final SubModel subs;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class SelectSupItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text('3 أشهر', style: TextStyle(fontSize: 30)),
+              Text(subs.type, style: TextStyle(fontSize: 30)),
               Spacer(),
               isActive
                   ? Container(
@@ -34,40 +36,28 @@ class SelectSupItem extends StatelessWidget {
             ],
           ),
           const Divider(color: Colors.black),
-          const ListTileSup(
+          ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'مدة',
-              trailing: '90 يومًا',
+              trailing: subs.duration,
             ),
           ),
-          const ListTileSup(
-            showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-              title: 'تاريخ البدء',
-              trailing: '12 نوفمبر 2024',
-            ),
-          ),
-          const ListTileSup(
-            showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-              title: 'تاريخ الانتهاء',
-              trailing: '10 فبراير 2025',
-            ),
-          ),
-          const ListTileSup(
+          ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'دعوة',
-              trailing: '8',
+              trailing: subs.invitation,
             ),
           ),
-          const ListTileSup(
+          ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'تجميد',
-              trailing: '10',
+              trailing: subs.freeze,
             ),
           ),
-          const ListTileSup(
+          ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'سعر',
-              trailing: '1300',
+              trailing: subs.price,
             ),
           ),
         ],

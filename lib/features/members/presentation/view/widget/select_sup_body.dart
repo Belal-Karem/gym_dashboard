@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:power_gym/core/widget/elevated_button_to_dialog.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
 import 'package:power_gym/features/members/presentation/view/widget/select_sup_item.dart';
+import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
 
 class SelectSupBody extends StatefulWidget {
-  const SelectSupBody({super.key});
+  const SelectSupBody({super.key, required this.subs});
+
+  final List<SubModel> subs;
 
   @override
   State<SelectSupBody> createState() => _SelectSupBodyState();
@@ -24,7 +27,7 @@ class _SelectSupBodyState extends State<SelectSupBody> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'اختر الاشتراك لـ "أحمد علي"',
+                  'اختار الشتراك',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
                 ),
                 const Spacer(),
@@ -52,7 +55,7 @@ class _SelectSupBodyState extends State<SelectSupBody> {
                   mainAxisSpacing: 15,
                   childAspectRatio: 1,
                 ),
-                itemCount: 3,
+                itemCount: widget.subs.length,
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
@@ -62,6 +65,7 @@ class _SelectSupBodyState extends State<SelectSupBody> {
                       });
                     },
                     child: SelectSupItem(
+                      subs: widget.subs[index],
                       isActive: value == index ? true : false,
                     ),
                   );
