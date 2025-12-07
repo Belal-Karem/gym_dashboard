@@ -1,4 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo_impl.dart';
+import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/repo/member_repo_impl.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/members_count_cubit.dart';
@@ -34,5 +37,13 @@ void setupLocator() {
   // Cubit
   sl.registerFactory<TrainerCubit>(
     () => TrainerCubit(sl<TrainerRepoImpl>())..loadTrainer(),
+  );
+
+  sl.registerLazySingleton<MemberSubscriptionsRepo>(
+    () => MemberSubscriptionsRepoImpl(),
+  );
+
+  sl.registerFactory<SubscriptionsCubit>(
+    () => SubscriptionsCubit(sl<MemberSubscriptionsRepo>()),
   );
 }

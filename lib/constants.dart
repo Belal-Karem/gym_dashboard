@@ -26,3 +26,5 @@ const kpaid = 'paid';
 const kpaymentDate = 'payment date';
 const kpaymentMethod = 'payment method';
 const kplan = 'plan';
+
+const kmembersubscriptionsCollections = 'member_subscriptions';
