@@ -53,7 +53,7 @@ class MembersDataTable extends StatelessWidget {
                 },
 
                 cells: [
-                  TableCellWidget(member.id),
+                  TableCellWidget(member.memberId),
                   TableCellWidget(member.name),
                   TableCellWidget(member.phone),
                   TableCellWidget(member.startdata),
@@ -61,11 +61,16 @@ class MembersDataTable extends StatelessWidget {
                   TableCellWidget(member.attendance),
                   TableCellWidget(member.absence),
                   TableCellWidget(
-                    'نشط',
-                    style: const TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    member.status,
+                    style: member.status == 'نشط'
+                        ? TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          )
+                        : TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
                   ),
                 ],
               ),

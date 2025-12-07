@@ -9,7 +9,7 @@ class MembersStatisticsCard extends StatelessWidget {
     this.textStyle,
   });
 
-  final String number;
+  final int number;
   final String text;
   final TextStyle? textStyle;
 
@@ -20,7 +20,7 @@ class MembersStatisticsCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            number,
+            number.toString(),
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
           ),
           Text(text, style: textStyle ?? TextStyle(fontSize: 15)),

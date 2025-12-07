@@ -54,7 +54,28 @@ class SelectSupItem extends StatelessWidget {
               trailing: subs.freeze,
             ),
           ),
+
           ListTileSup(
+            showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+              title: 'حاله',
+              trailing: subs.status,
+            ),
+            styleTrailing: subs.status == 'نشط'
+                ? TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  )
+                : TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+          ),
+          const Divider(color: Colors.grey),
+          ListTileSup(
+            styleTitle: TextStyle(fontSize: 30, color: Colors.white),
+            styleTrailing: TextStyle(fontSize: 30, color: Colors.white),
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'سعر',
               trailing: subs.price,

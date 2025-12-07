@@ -1,11 +1,11 @@
 const kMemberCollections = 'member';
-const kmemberid = 'id';
+const kmemberid = 'memberId';
 const kname = 'name';
 const kPhone = 'phone';
 const kattendance = 'attendance';
 const kabsence = 'absence';
-const kStartdate = 'Start date';
-const kenddate = 'End date';
+const kStartdate = 'startdata';
+const kenddate = 'enddata';
 const knote = 'note';
 const kgender = 'gender';
 

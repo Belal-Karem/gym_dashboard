@@ -25,7 +25,7 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
   final noteController = TextEditingController();
   final startDataController = TextEditingController();
   final newDataController = TextEditingController();
-  String? selectedGender;
+  String? selectedGender = 'ذكر';
   String? selectedType;
   GlobalKey<FormState> formKey = GlobalKey();
 
@@ -106,15 +106,16 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         final member = MemberModel(
+                          memberId: '', // سيتم تغييره تلقائي في repo
                           note: '',
-                          id: '',
+                          id: '', // doc ID سيتم توليده تلقائي
                           name: nameController.text,
                           phone: phoneController.text,
                           startdata: startDataController.text,
                           enddata: '30',
                           attendance: '',
-                          absence: '',
-                          status: 'active',
+                          absence: newDataController.text,
+                          status: 'نشط',
                           gender: selectedGender.toString(),
                         );
 

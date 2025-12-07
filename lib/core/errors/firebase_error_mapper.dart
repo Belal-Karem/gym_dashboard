@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:power_gym/core/errors/failure.dart';
 
 Failure handleFirebaseException(e) {
+  print('=============${e.toString()}');
   if (e is FirebaseException) {
     return FirebaseFailure(
       e.message ?? "حدث خطأ في Firebase",

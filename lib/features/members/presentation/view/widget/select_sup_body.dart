@@ -14,10 +14,12 @@ class SelectSupBody extends StatefulWidget {
 }
 
 class _SelectSupBodyState extends State<SelectSupBody> {
-  int value = 0;
+  int value = -1;
 
   @override
   Widget build(BuildContext context) {
+    final sortedSubs = List<SubModel>.from(widget.subs)
+      ..sort((a, b) => a.duration.compareTo(b.duration));
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -53,19 +55,21 @@ class _SelectSupBodyState extends State<SelectSupBody> {
                   crossAxisCount: 3,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
-                  childAspectRatio: 1,
+                  childAspectRatio: 1.3,
                 ),
-                itemCount: widget.subs.length,
+                itemCount: sortedSubs.length,
                 itemBuilder: (context, index) {
+                  final sub = sortedSubs[index];
                   return InkWell(
                     onTap: () {
+                      if (sub.status != 'نشط') return;
                       if (!mounted) return;
                       setState(() {
                         value = index;
                       });
                     },
                     child: SelectSupItem(
-                      subs: widget.subs[index],
+                      subs: sub,
                       isActive: value == index ? true : false,
                     ),
                   );

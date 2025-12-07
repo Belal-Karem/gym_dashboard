@@ -2,6 +2,7 @@ import 'package:power_gym/constants.dart';
 
 class MemberModel {
   final String id;
+  final String memberId;
   final String name;
   final String phone;
   final String startdata;
@@ -13,6 +14,7 @@ class MemberModel {
   final String gender;
 
   MemberModel({
+    required this.memberId,
     required this.gender,
     required this.note,
     required this.id,
@@ -36,6 +38,7 @@ class MemberModel {
       'status': status,
       'note': note,
       'gender': gender,
+      'memberId': memberId,
     };
   }
 
@@ -51,12 +54,12 @@ class MemberModel {
       status: map['status'] ?? '',
       note: map[knote] ?? '',
       gender: map[kgender] ?? '',
+      memberId: map[kmemberid] ?? '',
     );
   }
-
   MemberModel copyWith({
     String? id,
-    String? memberid,
+    String? memberId, // صححنا الاسم
     String? name,
     String? phone,
     String? startdata,
@@ -78,6 +81,7 @@ class MemberModel {
       status: status ?? this.status,
       note: note ?? this.note,
       gender: gender ?? this.gender,
+      memberId: memberId ?? this.memberId,
     );
   }
 }

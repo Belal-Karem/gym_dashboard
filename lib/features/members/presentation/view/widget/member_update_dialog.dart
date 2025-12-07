@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/core/utils/constants.dart';
+import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
+import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
+import 'package:power_gym/core/widget/text_field_add_widget.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 
@@ -19,7 +23,8 @@ class _MemberDialogState extends State<MemberDialog> {
   late TextEditingController endController;
   late TextEditingController attendanceController;
   late TextEditingController absenceController;
-  late TextEditingController statusController;
+  String? selectedStautu;
+  String? selectedGender;
 
   @override
   void initState() {
@@ -32,7 +37,8 @@ class _MemberDialogState extends State<MemberDialog> {
       text: widget.member.attendance,
     );
     absenceController = TextEditingController(text: widget.member.absence);
-    statusController = TextEditingController(text: widget.member.status);
+    selectedStautu = widget.member.status;
+    selectedGender = widget.member.gender;
   }
 
   @override
@@ -43,7 +49,6 @@ class _MemberDialogState extends State<MemberDialog> {
     endController.dispose();
     attendanceController.dispose();
     absenceController.dispose();
-    statusController.dispose();
     super.dispose();
   }
 
@@ -55,7 +60,8 @@ class _MemberDialogState extends State<MemberDialog> {
       enddata: endController.text,
       attendance: attendanceController.text,
       absence: absenceController.text,
-      status: statusController.text,
+      status: selectedStautu ?? widget.member.status,
+      gender: selectedGender ?? widget.member.gender,
     );
 
     BlocProvider.of<MembersCubit>(
@@ -72,38 +78,58 @@ class _MemberDialogState extends State<MemberDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: kprimaryColor,
       title: const Text('تعديل بيانات العضو'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: 'الاسم'),
+            FieldLabelAndInputAddWidget(
+              label: 'الاسم',
+              child: TextFieldAddWidget(controller: nameController),
             ),
-            TextField(
-              controller: phoneController,
-              decoration: const InputDecoration(labelText: 'الهاتف'),
+            FieldLabelAndInputAddWidget(
+              label: 'الهاتف',
+              child: TextFieldAddWidget(controller: phoneController),
             ),
-            TextField(
-              controller: startController,
-              decoration: const InputDecoration(labelText: 'تاريخ البدء'),
+            FieldLabelAndInputAddWidget(
+              label: 'تاريخ البدء',
+              child: TextFieldAddWidget(controller: startController),
             ),
-            TextField(
-              controller: endController,
-              decoration: const InputDecoration(labelText: 'تاريخ الانتهاء'),
+            FieldLabelAndInputAddWidget(
+              label: 'تاريخ الانتهاء',
+              child: TextFieldAddWidget(controller: endController),
             ),
-            TextField(
-              controller: attendanceController,
-              decoration: const InputDecoration(labelText: 'الحضور'),
+            FieldLabelAndInputAddWidget(
+              label: 'الغياب',
+              child: TextFieldAddWidget(controller: absenceController),
             ),
-            TextField(
-              controller: absenceController,
-              decoration: const InputDecoration(labelText: 'الغياب'),
+            FieldLabelAndInputAddWidget(
+              label: 'الحالة',
+              child: CustomDropdownWidget(
+                items: [
+                  DropdownMenuItem(value: 'نشط', child: Text('نشط')),
+                  DropdownMenuItem(value: 'متوقف', child: Text('متوقف')),
+                ],
+                initialValue: selectedStautu,
+                onChanged: (value) {
+                  setState(() => selectedStautu = value);
+                },
+              ),
             ),
-            TextField(
-              controller: statusController,
-              decoration: const InputDecoration(labelText: 'الحالة'),
+            FieldLabelAndInputAddWidget(
+              label: 'النوع',
+              child: CustomDropdownWidget(
+                items: [
+                  DropdownMenuItem(value: 'ذكر', child: Text('ذكر')),
+                  DropdownMenuItem(value: 'أنثى', child: Text('أنثى')),
+                  DropdownMenuItem(value: 'طفل', child: Text('طفل')),
+                ],
+                initialValue: selectedGender,
+                onChanged: (value) {
+                  setState(() => selectedGender = value);
+                },
+              ),
             ),
           ],
         ),
