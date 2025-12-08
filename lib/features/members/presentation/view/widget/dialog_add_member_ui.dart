@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/core/validators/validators.dart';
 import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
-import 'package:power_gym/core/widget/custom_error_widget.dart';
-import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
-import 'package:power_gym/features/members/presentation/view/select_sup_view.dart';
+import 'package:power_gym/features/members/presentation/manger/controllers/add_member_controller.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/elevated_button_to_dialog.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
 import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
-import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 
 class DialogAddMemberUi extends StatefulWidget {
   const DialogAddMemberUi({super.key});
@@ -20,19 +17,18 @@ class DialogAddMemberUi extends StatefulWidget {
 }
 
 class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
-  final nameController = TextEditingController();
-  final phoneController = TextEditingController();
-  final noteController = TextEditingController();
-  final startDataController = TextEditingController();
-  final newDataController = TextEditingController();
-  String? selectedGender = 'ذكر';
-  String? selectedType;
-  GlobalKey<FormState> formKey = GlobalKey();
+  final controller = AddMemberController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
+      key: controller.formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: CustomContainerStatistics(
         padding: 0,
@@ -43,30 +39,27 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
             children: [
               FieldLabelAndInputAddWidget(
                 label: 'الاسم',
-                child: TextFieldAddWidget(controller: nameController),
+                child: TextFieldAddWidget(controller: controller.name),
               ),
 
               FieldLabelAndInputAddWidget(
                 label: 'الهاتف',
                 child: TextFieldAddWidget(
-                  controller: phoneController,
-                  validator: (value) {
-                    if (value!.trim().length != 11) {
-                      return 'رقم الموبايل يجب أن يكون 11 رقمًا';
-                    } else if (!RegExp(r'^[0-9]+$').hasMatch(value.trim())) {
-                      return 'رقم الموبايل يجب أن يحتوي أرقام فقط';
-                    }
-                  },
+                  controller: controller.phone,
+                  validator: phoneValidator,
                 ),
               ),
+
               FieldLabelAndInputAddWidget(
                 label: 'ملحوظات',
-                child: TextFieldAddWidget(controller: noteController),
+                child: TextFieldAddWidget(controller: controller.note),
               ),
+
               const SizedBox(height: 10),
+
               DoubleFieldRowAddWidget(
                 leftLabel: 'تاريخ الانضمام',
-                leftChild: TextFieldAddWidget(controller: newDataController),
+                leftChild: TextFieldAddWidget(controller: controller.joinDate),
                 rightLabel: 'النوع',
                 rightChild: CustomDropdownWidget(
                   items: [
@@ -74,65 +67,38 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
                     DropdownMenuItem(value: 'أنثى', child: Text('أنثى')),
                     DropdownMenuItem(value: 'طفل', child: Text('طفل')),
                   ],
-                  initialValue: selectedGender,
-                  onChanged: (value) {
-                    setState(() => selectedGender = value);
-                  },
+                  initialValue: controller.gender,
+                  onChanged: controller.setGender,
                 ),
               ),
+
               DoubleFieldRowAddWidget(
                 leftLabel: 'تاريخ البدء',
-                leftChild: TextFieldAddWidget(controller: startDataController),
+                leftChild: TextFieldAddWidget(controller: controller.startDate),
                 rightLabel: '',
-                rightChild: ElevatedButtonWidget(
-                  text: 'المده',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const SelectSupView();
-                        },
-                      ),
-                    );
-                  },
+                rightChild: CustomDropdownWidget(
+                  items: [
+                    DropdownMenuItem(value: 'active', child: Text('active')),
+                    DropdownMenuItem(value: 'expired', child: Text('expired')),
+                    DropdownMenuItem(value: 'frozen', child: Text('frozen')),
+                  ],
+                  initialValue: controller.status,
+                  onChanged: controller.setStatus,
                 ),
               ),
+
               const Divider(height: 30),
+
               Row(
                 children: [
                   ElevatedButtonWidget(
-                    text: 'حغظ',
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        final member = MemberModel(
-                          memberId: '', // سيتم تغييره تلقائي في repo
-                          note: '',
-                          id: '', // doc ID سيتم توليده تلقائي
-                          name: nameController.text,
-                          phone: phoneController.text,
-                          startdata: startDataController.text,
-                          enddata: '30',
-                          attendance: '',
-                          absence: newDataController.text,
-                          status: 'نشط',
-                          gender: selectedGender.toString(),
-                        );
-
-                        context.read<MembersCubit>().addMember(member);
-                      } else {
-                        CustomErrorWidget(
-                          errMessage: 'يرجى تصحيح الأخطاء الموجودة في النموذج',
-                        );
-                      }
-                    },
+                    text: 'حفظ',
+                    onPressed: () => controller.onSave(context),
                   ),
                   const SizedBox(width: 10),
                   ElevatedButtonToDialog(
                     text: 'يلغي',
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
@@ -143,3 +109,29 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
     );
   }
 }
+
+
+
+ // onPressed: () {
+                    //   if (formKey.currentState!.validate()) {
+                    //     final member = MemberModel(
+                    //       memberId: '', // سيتم تغييره تلقائي في repo
+                    //       note: '',
+                    //       id: '', // doc ID سيتم توليده تلقائي
+                    //       name: nameController.text,
+                    //       phone: phoneController.text,
+                    //       startdata: startDataController.text,
+                    //       enddata: '30',
+                    //       attendance: '',
+                    //       absence: newDataController.text,
+                    //       status: selectedType.toString(),
+                    //       gender: selectedGender.toString(),
+                    //     );
+
+                    //     context.read<MembersCubit>().addMember(member);
+                    //   } else {
+                    //     CustomErrorWidget(
+                    //       errMessage: 'يرجى تصحيح الأخطاء الموجودة في النموذج',
+                    //     );
+                    //   }
+                    // },

@@ -54,6 +54,21 @@ class MemberRepoImpl implements MemberRepo {
   }
 
   @override
+  Future<Either<Failure, String>> addMemberAndReturnId(
+    MemberModel member,
+  ) async {
+    try {
+      int newMemberId = await getNextMemberId();
+      final newMember = member.copyWith(memberId: newMemberId.toString());
+
+      final docRef = await membersRef.add(newMember.toJson());
+      return Right(docRef.id); // هنا بنرجع الـ Firebase doc ID
+    } catch (e) {
+      return Left(handleFirebaseException(e));
+    }
+  }
+
+  @override
   Future<Either<Failure, Unit>> updateMember(
     String id,
     Map<String, dynamic> data,

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:power_gym/core/utils/app_router.dart';
 import 'package:power_gym/core/utils/service_locator.dart';
+import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_cubit.dart';
 import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<MembersCubit>(create: (_) => sl<MembersCubit>()),
         BlocProvider<SubCubit>(create: (_) => sl<SubCubit>()),
         BlocProvider<TrainerCubit>(create: (_) => sl<TrainerCubit>()),
+        BlocProvider<SubscriptionsCubit>(
+          create: (_) => sl<SubscriptionsCubit>(),
+        ),
       ],
       child: MaterialApp.router(
         locale: Locale('ar'),

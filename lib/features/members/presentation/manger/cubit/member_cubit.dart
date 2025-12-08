@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
+import 'package:power_gym/core/errors/failure.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/data/models/repo/member_repo.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_state.dart';
@@ -59,6 +61,15 @@ class MembersCubit extends Cubit<MembersState> {
       (failure) => emit(DeleteMemberError(failure.message)),
       (_) => emit(DeleteMemberSuccess()),
     );
+  }
+
+  Future<Either<Failure, String>> addMemberAndReturnId(
+    MemberModel member,
+  ) async {
+    emit(AddMemberLoading());
+    final result = await repo.addMemberAndReturnId(member);
+
+    return result;
   }
 
   @override

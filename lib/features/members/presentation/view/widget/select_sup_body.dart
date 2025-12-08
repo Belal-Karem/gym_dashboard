@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/core/widget/custom_error_widget.dart';
 import 'package:power_gym/core/widget/elevated_button_to_dialog.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
 import 'package:power_gym/features/members/presentation/view/widget/select_sup_item.dart';
@@ -36,7 +37,16 @@ class _SelectSupBodyState extends State<SelectSupBody> {
                 ElevatedButtonWidget(
                   text: 'حفظ',
                   onPressed: () {
-                    Navigator.pop(context);
+                    if (value == -1) {
+                      CustomErrorWidget(
+                        errMessage: "يرجى اختيار الاشتراك أولاً",
+                      );
+                      return;
+                    }
+
+                    final selectedSub =
+                        widget.subs[value]; // الاشتراك اللي اختاره المستخدم
+                    Navigator.pop(context, selectedSub); // ارجاع الاشتراك
                   },
                 ),
                 const SizedBox(width: 10),
@@ -55,7 +65,7 @@ class _SelectSupBodyState extends State<SelectSupBody> {
                   crossAxisCount: 3,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
-                  childAspectRatio: 1.3,
+                  childAspectRatio: 1.1,
                 ),
                 itemCount: sortedSubs.length,
                 itemBuilder: (context, index) {
