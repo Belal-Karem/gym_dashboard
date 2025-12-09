@@ -78,9 +78,12 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
                 rightLabel: '',
                 rightChild: CustomDropdownWidget(
                   items: [
-                    DropdownMenuItem(value: 'active', child: Text('active')),
-                    DropdownMenuItem(value: 'expired', child: Text('expired')),
-                    DropdownMenuItem(value: 'frozen', child: Text('frozen')),
+                    DropdownMenuItem(value: 'نشط', child: Text('نشط')),
+                    DropdownMenuItem(value: 'متوقف', child: Text('متوقف')),
+                    DropdownMenuItem(
+                      value: 'توقف مؤقت',
+                      child: Text('توقف مؤقت'),
+                    ),
                   ],
                   initialValue: controller.status,
                   onChanged: controller.setStatus,

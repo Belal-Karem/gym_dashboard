@@ -4,15 +4,17 @@ class PaymentModel {
   final String id;
   final String type;
   final String paid;
-  final String paymentData;
   final String paymentMethod;
   final String plan;
+  final String date;
+  final String memberId;
 
   PaymentModel({
+    required this.memberId,
+    required this.date,
     required this.id,
     required this.type,
     required this.paid,
-    required this.paymentData,
     required this.paymentMethod,
     required this.plan,
   });
@@ -22,19 +24,20 @@ class PaymentModel {
       'id': id,
       ktype: type,
       kpaid: paid,
-      kpaymentDate: paymentData,
       kpaymentMethod: paymentMethod,
       kplan: plan,
+      kdate: date,
+      kmemberid: memberId,
     };
   }
 
   factory PaymentModel.fromJson(Map<String, dynamic> map, String docId) {
     return PaymentModel(
       id: docId,
-
+      memberId: map[kmemberid] ?? '',
+      date: map[kdate] ?? '',
       type: map[ktype] ?? '',
       paid: map[kpaid] ?? '',
-      paymentData: map[kpaymentDate] ?? '',
       paymentMethod: map[kpaymentMethod] ?? '',
       plan: map[kplan] ?? '',
     );
@@ -47,10 +50,13 @@ class PaymentModel {
     String? paymentMethod,
     String? paid,
     String? plan,
+    String? date,
+    String? memberId,
   }) {
     return PaymentModel(
       id: id ?? this.id,
-      paymentData: paymentDate ?? this.paymentData,
+      memberId: memberId ?? this.memberId,
+      date: date ?? this.date,
       paymentMethod: paymentMethod ?? this.paymentMethod,
       paid: paid ?? this.paid,
       plan: plan ?? this.plan,

@@ -6,28 +6,23 @@ import 'package:power_gym/core/widget/custom_error_widget.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/elevated_button_to_dialog.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
-import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
-import 'package:power_gym/features/payment/data/models/model/cubit/payment_cubit.dart';
+import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/payment/data/models/model/payment_model.dart';
-import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_cubit.dart';
 
-class DialogAddSubscriptionsUi extends StatefulWidget {
-  const DialogAddSubscriptionsUi({super.key});
+class DialogAddPaymentUi extends StatefulWidget {
+  const DialogAddPaymentUi({super.key});
 
   @override
-  State<DialogAddSubscriptionsUi> createState() =>
-      _DialogAddSubscriptionsUiState();
+  State<DialogAddPaymentUi> createState() => _DialogAddPaymentUiState();
 }
 
-class _DialogAddSubscriptionsUiState extends State<DialogAddSubscriptionsUi> {
+class _DialogAddPaymentUiState extends State<DialogAddPaymentUi> {
   final typeController = TextEditingController();
   final paidController = TextEditingController();
   final paymentDataController = TextEditingController();
-  final priceController = TextEditingController();
   final maxAttendanceController = TextEditingController();
-  // final priceController = TextEditingController();
-  String? paymentMethod = 'نقدي';
+  String? paymentMethod;
   GlobalKey<FormState> formKey = GlobalKey();
 
   @override
@@ -44,15 +39,15 @@ class _DialogAddSubscriptionsUiState extends State<DialogAddSubscriptionsUi> {
               DoubleFieldRowAddWidget(
                 leftLabel: 'نوع المدفوع',
                 leftChild: TextFieldAddWidget(controller: typeController),
-                rightLabel: 'عدد الايام',
-                rightChild: TextFieldAddWidget(controller: priceController),
+                rightLabel: 'السعر',
+                rightChild: TextFieldAddWidget(controller: paidController),
               ),
               DoubleFieldRowAddWidget(
                 leftLabel: 'وقت الدفع',
                 leftChild: TextFieldAddWidget(
                   controller: paymentDataController,
                 ),
-                rightLabel: 'دعوه',
+                rightLabel: 'طريقة الدفع',
                 rightChild: CustomDropdownWidget(
                   items: [
                     DropdownMenuItem(value: 'نقدي', child: Text('نقدي')),
@@ -80,10 +75,11 @@ class _DialogAddSubscriptionsUiState extends State<DialogAddSubscriptionsUi> {
                         final addPayment = PaymentModel(
                           id: '',
                           type: typeController.text,
-                          paid: '',
-                          paymentData: paymentDataController.text,
+                          paid: paidController.text,
                           paymentMethod: paymentMethod.toString(),
-                          plan: 'month',
+                          plan: '_',
+                          memberId: '',
+                          date: DateTime.now().toIso8601String(),
                         );
                         context.read<PaymentCubit>().addPayment(addPayment);
                       } else {

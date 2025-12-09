@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/core/helper/date_helper.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
@@ -30,18 +31,19 @@ class MembersDataTable extends StatelessWidget {
             4: FlexColumnWidth(1),
             5: FlexColumnWidth(1),
             6: FlexColumnWidth(1),
-            7: FlexColumnWidth(1.2),
+            7: FlexColumnWidth(1),
+            8: FlexColumnWidth(1.2),
           },
           children: [
             TableHelper.buildHeaderRow(const [
               TableHeaderCellWidget('id'),
               TableHeaderCellWidget('الاسم'),
-              TableHeaderCellWidget('الشتراك'),
+              TableHeaderCellWidget('الهاتف'),
               TableHeaderCellWidget('تاريخ البدء'),
               TableHeaderCellWidget('تاريخ الانتهاء'),
+              TableHeaderCellWidget('الأيام المتبقية'),
               TableHeaderCellWidget('الحضور'),
-              TableHeaderCellWidget('الغياب'),
-              TableHeaderCellWidget('الحاله'),
+              TableHeaderCellWidget('الحالة'),
             ]),
             ...members.map(
               (member) => TableHelper.buildDataRow(
@@ -51,23 +53,22 @@ class MembersDataTable extends StatelessWidget {
                     builder: (_) => MemberDialog(member: member),
                   );
                 },
-
                 cells: [
                   TableCellWidget(member.memberId),
                   TableCellWidget(member.name),
                   TableCellWidget(member.phone),
                   TableCellWidget(member.startdata),
-                  TableCellWidget(member.enddata),
+                  TableCellWidget(DateHelper.formatPaymentDate(member.endDate)),
+                  TableCellWidget(member.remainingDays),
                   TableCellWidget(member.attendance),
-                  TableCellWidget(member.absence),
                   TableCellWidget(
                     member.status,
                     style: member.status == 'نشط'
-                        ? TextStyle(
+                        ? const TextStyle(
                             color: Colors.green,
                             fontWeight: FontWeight.bold,
                           )
-                        : TextStyle(
+                        : const TextStyle(
                             color: Colors.red,
                             fontWeight: FontWeight.bold,
                           ),

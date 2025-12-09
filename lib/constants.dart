@@ -8,6 +8,8 @@ const kStartdate = 'startdata';
 const kenddate = 'enddata';
 const knote = 'note';
 const kgender = 'gender';
+const kdate = 'date';
+const kaffiliationdate = 'affiliationdate';
 
 const kSubCollections = 'plan';
 const kduration = 'duration';

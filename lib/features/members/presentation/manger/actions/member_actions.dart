@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/helper/date_helper.dart';
-import 'package:power_gym/core/widget/custom_error_widget.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
@@ -9,7 +8,7 @@ import 'package:power_gym/features/members/presentation/manger/cubit/member_cubi
 import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
 
 class MemberActions {
-  static Future<void> saveMemberAndSubscription({
+  static Future<String?> saveMemberAndSubscription({
     required BuildContext context,
     required MemberModel member,
     required SubModel selectedSub,
@@ -17,42 +16,68 @@ class MemberActions {
     final membersCubit = context.read<MembersCubit>();
     final subscriptionsCubit = context.read<SubscriptionsCubit>();
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
-    );
+    String? memberIdToReturn;
 
-    final result = await membersCubit.addMemberAndReturnId(member);
+    try {
+      // عرض Loading
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(child: CircularProgressIndicator()),
+      );
 
-    await result.fold(
-      (failure) {
-        Navigator.pop(context);
-        CustomErrorWidget(errMessage: failure.message);
-      },
-      (memberId) async {
-        final sub = MemberSubscriptionModel(
-          memberId: memberId,
-          subId: selectedSub.id,
-          startDate: member.startdata,
-          endDate: DateHelper.calculateEndDate(
+      final result = await membersCubit.addMemberAndReturnId(member);
+
+      await result.fold(
+        (failure) {
+          Navigator.pop(context); // غلق الـ dialog
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(failure.message)));
+        },
+        (memberId) async {
+          memberIdToReturn = memberId;
+
+          // حساب تاريخ الانتهاء وعدد الأيام المتبقية
+          final endDate = DateHelper.calculateEndDate(
             member.startdata,
             selectedSub.duration,
-          ),
-          status: "active",
-        );
+          );
+          final remainingDays = DateHelper.calculateDaysRemaining(endDate);
 
-        await subscriptionsCubit.addSubscription(sub);
+          // تحديث العضو في القاعدة
+          await membersCubit.updateMember(memberId, {
+            'endDate': endDate,
+            'remainingDays': remainingDays.toString(),
+          });
 
-        Navigator.pop(context);
-        Navigator.pop(context);
+          // إنشاء الاشتراك
+          final sub = MemberSubscriptionModel(
+            memberId: memberId,
+            subId: selectedSub.id,
+            startDate: member.startdata,
+            endDate: endDate,
+            status: "active",
+            remainingDays: remainingDays,
+          );
 
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('تم الحفظ بنجاح')));
+          await subscriptionsCubit.addSubscription(sub);
 
-        membersCubit.loadMembers();
-      },
-    );
+          Navigator.pop(context); // غلق الـ dialog
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('تم الحفظ بنجاح')));
+
+          membersCubit.loadMembers();
+        },
+      );
+    } catch (e) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('حدث خطأ غير متوقع: $e')));
+    }
+
+    return memberIdToReturn;
   }
 }

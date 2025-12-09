@@ -22,8 +22,7 @@ class _MemberDialogState extends State<MemberDialog> {
   late TextEditingController startController;
   late TextEditingController endController;
   late TextEditingController attendanceController;
-  late TextEditingController absenceController;
-  String? selectedStautu;
+  String? selectedStatus;
   String? selectedGender;
 
   @override
@@ -32,12 +31,11 @@ class _MemberDialogState extends State<MemberDialog> {
     nameController = TextEditingController(text: widget.member.name);
     phoneController = TextEditingController(text: widget.member.phone);
     startController = TextEditingController(text: widget.member.startdata);
-    endController = TextEditingController(text: widget.member.enddata);
+    endController = TextEditingController(text: widget.member.endDate);
     attendanceController = TextEditingController(
       text: widget.member.attendance,
     );
-    absenceController = TextEditingController(text: widget.member.absence);
-    selectedStautu = widget.member.status;
+    selectedStatus = widget.member.status;
     selectedGender = widget.member.gender;
   }
 
@@ -48,7 +46,6 @@ class _MemberDialogState extends State<MemberDialog> {
     startController.dispose();
     endController.dispose();
     attendanceController.dispose();
-    absenceController.dispose();
     super.dispose();
   }
 
@@ -59,8 +56,7 @@ class _MemberDialogState extends State<MemberDialog> {
       startdata: startController.text,
       enddata: endController.text,
       attendance: attendanceController.text,
-      absence: absenceController.text,
-      status: selectedStautu ?? widget.member.status,
+      status: selectedStatus ?? widget.member.status,
       gender: selectedGender ?? widget.member.gender,
     );
 
@@ -101,26 +97,31 @@ class _MemberDialogState extends State<MemberDialog> {
               child: TextFieldAddWidget(controller: endController),
             ),
             FieldLabelAndInputAddWidget(
-              label: 'الغياب',
-              child: TextFieldAddWidget(controller: absenceController),
+              label: 'الحضور',
+              child: TextFieldAddWidget(controller: attendanceController),
             ),
+            FieldLabelAndInputAddWidget(label: 'الغياب', child: Text('')),
             FieldLabelAndInputAddWidget(
               label: 'الحالة',
               child: CustomDropdownWidget(
-                items: [
+                items: const [
                   DropdownMenuItem(value: 'نشط', child: Text('نشط')),
                   DropdownMenuItem(value: 'متوقف', child: Text('متوقف')),
+                  DropdownMenuItem(
+                    value: 'توقف مؤقت',
+                    child: Text('توقف مؤقت'),
+                  ),
                 ],
-                initialValue: selectedStautu,
+                initialValue: selectedStatus,
                 onChanged: (value) {
-                  setState(() => selectedStautu = value);
+                  setState(() => selectedStatus = value);
                 },
               ),
             ),
             FieldLabelAndInputAddWidget(
               label: 'النوع',
               child: CustomDropdownWidget(
-                items: [
+                items: const [
                   DropdownMenuItem(value: 'ذكر', child: Text('ذكر')),
                   DropdownMenuItem(value: 'أنثى', child: Text('أنثى')),
                   DropdownMenuItem(value: 'طفل', child: Text('طفل')),
