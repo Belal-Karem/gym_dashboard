@@ -7,7 +7,9 @@ class CustomDropdownWidget extends StatefulWidget {
     required this.items,
     this.initialValue,
     this.onChanged,
+    this.validator,
   });
+  final String? Function(String?)? validator;
 
   final List<DropdownMenuItem<String>> items;
   final String? initialValue;
@@ -35,11 +37,11 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
         color: const Color(0xff1D1E22),
         borderRadius: BorderRadius.circular(4),
       ),
-      child: DropdownButton<String>(
+      child: DropdownButtonFormField<String>(
         dropdownColor: const Color(0xff1D1E22),
         borderRadius: BorderRadius.circular(12),
         icon: const Icon(Icons.keyboard_arrow_down),
-        underline: const SizedBox(),
+        // underline: const SizedBox(),
         padding: const EdgeInsets.only(right: 20),
         style: AppStyle.style20W500,
         value: selectedValue,
@@ -50,7 +52,13 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
             widget.onChanged!(value);
           }
         },
+        validator: widget.validator ?? defaultRequiredValidator,
       ),
     );
+  }
+
+  String? defaultRequiredValidator(String? value) {
+    if (value == null || value.trim().isEmpty) return 'الرجاء ملء البيانات ';
+    return null;
   }
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:power_gym/core/validators/validators.dart';
-import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
-import 'package:power_gym/features/members/presentation/manger/controllers/add_member_controller.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
+import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/elevated_button_to_dialog.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
 import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
+import 'package:power_gym/features/members/presentation/manger/controllers/add_member_controller.dart';
 
 class DialogAddMemberUi extends StatefulWidget {
   const DialogAddMemberUi({super.key});
@@ -109,29 +109,3 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
     );
   }
 }
-
-
-
- // onPressed: () {
-                    //   if (formKey.currentState!.validate()) {
-                    //     final member = MemberModel(
-                    //       memberId: '', // سيتم تغييره تلقائي في repo
-                    //       note: '',
-                    //       id: '', // doc ID سيتم توليده تلقائي
-                    //       name: nameController.text,
-                    //       phone: phoneController.text,
-                    //       startdata: startDataController.text,
-                    //       enddata: '30',
-                    //       attendance: '',
-                    //       absence: newDataController.text,
-                    //       status: selectedType.toString(),
-                    //       gender: selectedGender.toString(),
-                    //     );
-
-                    //     context.read<MembersCubit>().addMember(member);
-                    //   } else {
-                    //     CustomErrorWidget(
-                    //       errMessage: 'يرجى تصحيح الأخطاء الموجودة في النموذج',
-                    //     );
-                    //   }
-                    // },
