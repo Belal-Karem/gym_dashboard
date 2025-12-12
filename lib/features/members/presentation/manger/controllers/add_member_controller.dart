@@ -13,17 +13,20 @@ class AddMemberController {
   final joinDate = TextEditingController();
 
   String gender = 'ذكر';
-  String status = 'active';
+  String status = 'نشط';
 
   final formKey = GlobalKey<FormState>();
 
-  void setGender(String? value) {
-    if (value != null) gender = value;
-  }
+  void setGender(value) => gender = value;
+  void setStatus(value) => status = value;
 
-  void setStatus(String? value) {
-    if (value != null) status = value;
-  }
+  // void setGender(String? value) {
+  //   if (value != null) gender = value;
+  // }
+
+  // void setStatus(String? value) {
+  //   if (value != null) status = value;
+  // }
 
   void dispose() {
     name.dispose();
@@ -66,8 +69,8 @@ class AddMemberController {
           note: note.text,
           status: status,
           attendance: '0',
-          endDate: '', // سيتم تحديثه في MemberActions
-          remainingDays: '0', // سيتم تحديثه في MemberActions
+          endDate: '',
+          remainingDays: '0',
           affiliationdate: DateTime.now().toIso8601String(),
         ),
         selectedSub: selectedSub,

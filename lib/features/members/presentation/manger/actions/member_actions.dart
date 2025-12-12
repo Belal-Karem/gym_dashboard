@@ -31,6 +31,8 @@ class MemberActions {
       await result.fold(
         (failure) {
           Navigator.pop(context); // غلق الـ dialog
+          Navigator.pop(context);
+          Navigator.pop(context);
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(failure.message)));
@@ -64,6 +66,8 @@ class MemberActions {
           await subscriptionsCubit.addSubscription(sub);
 
           Navigator.pop(context); // غلق الـ dialog
+          Navigator.pop(context);
+          Navigator.pop(context);
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('تم الحفظ بنجاح')));
