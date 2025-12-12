@@ -1,9 +1,11 @@
 import 'package:power_gym/constants.dart';
+import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
+import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
 
 class PlanModel {
   final String id;
-  final String memberid;
-  final String trainerid;
+  final MemberModel memberid;
+  final TrainerModel trainerid;
   final String session;
   final String status;
   final String price;
@@ -45,8 +47,8 @@ class PlanModel {
 
   PlanModel copyWith({
     String? id,
-    String? memberid,
-    String? trainerid,
+    MemberModel? memberid,
+    TrainerModel? trainerid,
     String? invitation,
     String? type,
     String? status,

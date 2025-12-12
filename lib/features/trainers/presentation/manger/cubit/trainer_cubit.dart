@@ -12,6 +12,9 @@ class TrainerCubit extends Cubit<TrainerState> {
 
   StreamSubscription? _trainerSubscription;
 
+  // 👉 اللي هتستخدمها في Dropdown
+  List<TrainerModel> trainersList = [];
+
   TrainerCubit(this.repo) : super(TrainerInitial());
 
   Future<void> loadTrainer() async {
@@ -21,8 +24,9 @@ class TrainerCubit extends Cubit<TrainerState> {
 
     result.fold((failure) => emit(TrainerError(failure.message)), (stream) {
       _trainerSubscription = stream.listen(
-        (trainer) {
-          emit(TrainerLoaded(trainer));
+        (trainerList) {
+          trainersList = trainerList; // ← حفظ البيانات هنا
+          emit(TrainerLoaded(trainerList));
         },
         onError: (error) {
           emit(TrainerError(error.toString()));
