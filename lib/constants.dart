@@ -30,7 +30,7 @@ const kpaymentMethod = 'payment method';
 const kplan = 'plan';
 
 const kmembersubscriptionsCollections = 'member_subscriptions';
-const kplanCollections = 'plan';
+const kplanCollections = 'planAndPackages';
 
 const ksession = 'session';
 const ktrainerid = 'trainerId';

@@ -8,6 +8,7 @@ import 'package:power_gym/core/utils/service_locator.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
+import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_cubit.dart';
 import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
 import 'package:power_gym/firebase_options.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
           create: (_) => sl<SubscriptionsCubit>(),
         ),
         BlocProvider<PaymentCubit>(create: (_) => sl<PaymentCubit>()),
+        BlocProvider<PlanCubit>(create: (_) => sl<PlanCubit>()),
       ],
       child: MaterialApp.router(
         locale: Locale('ar'),

@@ -5,9 +5,10 @@ import 'package:power_gym/features/member_subscriptions/presentation/manger/cubi
 import 'package:power_gym/features/members/data/models/repo/member_repo_impl.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/members_count_cubit.dart';
-import 'package:power_gym/features/payment/data/models/repo/payment_repo.dart';
 import 'package:power_gym/features/payment/data/models/repo/payment_repo_impl.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
+import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo_imlp.dart';
+import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
 import 'package:power_gym/features/subscriptions/data/models/repo/sub_repo_impl.dart';
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_cubit.dart';
 import 'package:power_gym/features/trainers/data/models/repo/trainer_repo_impl.dart';
@@ -52,5 +53,10 @@ void setupLocator() {
   sl.registerLazySingleton<PaymentRepoImpl>(() => PaymentRepoImpl());
   sl.registerFactory<PaymentCubit>(
     () => PaymentCubit(sl<PaymentRepoImpl>())..loadPayment(),
+  );
+
+  sl.registerLazySingleton<PlanRepoImpl>(() => PlanRepoImpl());
+  sl.registerFactory<PlanCubit>(
+    () => PlanCubit(sl<PlanRepoImpl>())..loadPlan(),
   );
 }
