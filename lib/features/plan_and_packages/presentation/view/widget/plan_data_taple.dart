@@ -41,7 +41,7 @@ class PlanDataTaple extends StatelessWidget {
             ...plan.map(
               (plan) => TableHelper.buildDataRow(
                 cells: [
-                  TableCellWidget(plan.memberid.name),
+                  TableCellWidget(plan.memberid),
                   TableCellWidget(plan.trainerid.name),
                   TableCellWidget(plan.price),
                   TableCellWidget('month'),

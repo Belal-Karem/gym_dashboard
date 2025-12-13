@@ -3,6 +3,7 @@ import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
 import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
+import 'package:power_gym/features/trainers/presentation/view/widget/trainer_update_dialog.dart';
 import 'package:power_gym/features/trainers/presentation/view/widget/view_client.dart';
 
 class TrainerDataTable extends StatelessWidget {
@@ -39,10 +40,15 @@ class TrainerDataTable extends StatelessWidget {
 
             ...trainer.map(
               (trainer) => TableHelper.buildDataRow(
+                onTap: (cells) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => TrainerUpdateDialog(trainer: trainer),
+                  );
+                },
                 cells: [
                   TableCellWidget(trainer.name),
                   TableCellWidget(trainer.phone),
-                  // TableCellWidget('500 EGP'),
                   TableCellWidget(
                     trainer.status,
                     style: trainer.status == 'نشط'

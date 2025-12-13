@@ -14,13 +14,11 @@ class TrainerData extends StatelessWidget {
         if (state is TrainerLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is TrainerLoaded) {
-          final trainer = state.trainer;
-          return TrainerDataTable(trainer: trainer);
+          return TrainerDataTable(trainer: state.trainer);
         } else if (state is TrainerError) {
           return CustomErrorWidget(errMessage: state.message);
-        } else {
-          return const SizedBox.shrink();
         }
+        return const SizedBox.shrink();
       },
     );
   }

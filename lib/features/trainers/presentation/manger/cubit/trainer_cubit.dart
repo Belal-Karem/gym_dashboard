@@ -9,10 +9,9 @@ part 'trainer_state.dart';
 
 class TrainerCubit extends Cubit<TrainerState> {
   final TrainerRepo repo;
-
   StreamSubscription? _trainerSubscription;
 
-  // 👉 اللي هتستخدمها في Dropdown
+  // لاستخدامها في Dropdown
   List<TrainerModel> trainersList = [];
 
   TrainerCubit(this.repo) : super(TrainerInitial());
@@ -23,10 +22,11 @@ class TrainerCubit extends Cubit<TrainerState> {
     final result = await repo.getAllTrainers();
 
     result.fold((failure) => emit(TrainerError(failure.message)), (stream) {
+      _trainerSubscription?.cancel();
       _trainerSubscription = stream.listen(
         (trainerList) {
-          trainersList = trainerList; // ← حفظ البيانات هنا
-          emit(TrainerLoaded(trainerList));
+          trainersList = trainerList;
+          emit(TrainerLoaded(trainerList)); // المصدر الوحيد للعرض
         },
         onError: (error) {
           emit(TrainerError(error.toString()));
@@ -36,35 +36,29 @@ class TrainerCubit extends Cubit<TrainerState> {
   }
 
   Future<void> addTrainer(TrainerModel trainer) async {
-    emit(AddTrainerLoading());
-
     final result = await repo.addTrainer(trainer);
 
     result.fold(
       (failure) => emit(AddTrainerError(failure.message)),
-      (_) => emit(AddTrainerSuccess()),
+      (_) {}, // 👈 متعملش emit، الـ Stream هيحدّث
     );
   }
 
   Future<void> updateTrainer(String id, Map<String, dynamic> data) async {
-    emit(UpdateTrainerLoading());
-
     final result = await repo.updateTrainer(id, data);
 
     result.fold(
       (failure) => emit(UpdateTrainerError(failure.message)),
-      (_) => emit(UpdateTrainerSuccess()),
+      (_) {}, // 👈 سيب الـ Stream
     );
   }
 
   Future<void> deleteTrainer(String id) async {
-    emit(DeleteTrainerLoading());
-
     final result = await repo.deleteTrainer(id);
 
     result.fold(
       (failure) => emit(DeleteTrainerError(failure.message)),
-      (_) => emit(DeleteTrainerSuccess()),
+      (_) {}, // 👈 سيب الـ Stream
     );
   }
 

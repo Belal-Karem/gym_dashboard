@@ -4,7 +4,7 @@ import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_mo
 
 class PlanModel {
   final String id;
-  final MemberModel memberid;
+  final String memberid;
   final TrainerModel trainerid;
   final String session;
   final String status;
@@ -47,7 +47,7 @@ class PlanModel {
 
   PlanModel copyWith({
     String? id,
-    MemberModel? memberid,
+    String? memberid,
     TrainerModel? trainerid,
     String? invitation,
     String? type,
