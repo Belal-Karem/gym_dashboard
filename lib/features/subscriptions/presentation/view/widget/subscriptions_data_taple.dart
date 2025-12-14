@@ -3,6 +3,7 @@ import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
 import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
+import 'package:power_gym/features/subscriptions/presentation/view/widget/subscriptions_update_dialog.dart';
 
 class SubscriptionsDataTaple extends StatelessWidget {
   const SubscriptionsDataTaple({super.key, required this.subs});
@@ -38,6 +39,12 @@ class SubscriptionsDataTaple extends StatelessWidget {
             ]),
             ...subs.map(
               (subs) => TableHelper.buildDataRow(
+                onTap: (cells) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => SubscriptionsUpdateDialog(subModel: subs),
+                  );
+                },
                 cells: [
                   TableCellWidget(subs.type),
                   TableCellWidget(subs.duration),
