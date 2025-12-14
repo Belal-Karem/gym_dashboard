@@ -3,8 +3,10 @@ import 'package:dartz/dartz.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/errors/failure.dart';
 import 'package:power_gym/core/errors/firebase_error_mapper.dart';
+import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/plan_model/plan_model.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo.dart';
+import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
 
 class PlanRepoImpl implements PlanRepo {
   final CollectionReference plansRef = FirebaseFirestore.instance.collection(
@@ -14,10 +16,44 @@ class PlanRepoImpl implements PlanRepo {
   @override
   Future<Either<Failure, Stream<List<PlanModel>>>> getAllPlan() async {
     try {
-      final stream = plansRef.snapshots().map((snapshot) {
-        return snapshot.docs.map((doc) {
-          return PlanModel.fromJson(doc.data() as Map<String, dynamic>, doc.id);
-        }).toList();
+      // استخدم asyncMap عشان نقدر نعمل await لجلب بيانات العضو والمدرب
+      final stream = plansRef.snapshots().asyncMap((snapshot) async {
+        List<PlanModel> plans = [];
+
+        for (var doc in snapshot.docs) {
+          final data = doc.data() as Map<String, dynamic>;
+
+          // جلب بيانات العضو
+          final memberDoc = await FirebaseFirestore.instance
+              .collection(kMemberCollections)
+              .doc(data[kmemberid])
+              .get();
+          if (!memberDoc.exists || memberDoc.data() == null) {
+            // هنا ممكن تعطي member افتراضي أو تتجاهل هذا Plan
+            continue; // تخطي هذا الـ plan
+          }
+
+          final member = MemberModel.fromJson(memberDoc.data()!, memberDoc.id);
+
+          // جلب بيانات المدرب
+          final trainerDoc = await FirebaseFirestore.instance
+              .collection(ktrainerCollections)
+              .doc(data[ktrainerid])
+              .get();
+          if (!trainerDoc.exists || trainerDoc.data() == null) {
+            continue; // تخطي هذا الـ plan
+          }
+
+          final trainer = TrainerModel.fromJson(
+            trainerDoc.data()!,
+            trainerDoc.id,
+          );
+
+          // إنشاء PlanModel كامل
+          plans.add(PlanModel.fromJson(data, doc.id, member, trainer));
+        }
+
+        return plans;
       });
 
       return Right(stream);

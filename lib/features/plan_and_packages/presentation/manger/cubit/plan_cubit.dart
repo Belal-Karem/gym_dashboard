@@ -21,8 +21,9 @@ class PlanCubit extends Cubit<PlanState> {
 
     result.fold((failure) => emit(PlanError(failure.message)), (stream) {
       _panSubscription = stream.listen(
-        (Plan) {
-          emit(PlanLoaded(Plan));
+        (plans) {
+          // plans: List<PlanModel>
+          emit(PlanLoaded(plans));
         },
         onError: (error) {
           emit(PlanError(error.toString()));

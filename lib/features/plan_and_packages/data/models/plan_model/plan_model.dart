@@ -4,8 +4,8 @@ import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_mo
 
 class PlanModel {
   final String id;
-  final String memberid;
-  final TrainerModel trainerid;
+  final MemberModel member;
+  final TrainerModel trainer;
   final String session;
   final String status;
   final String price;
@@ -13,8 +13,8 @@ class PlanModel {
 
   PlanModel({
     required this.id,
-    required this.memberid,
-    required this.trainerid,
+    required this.member,
+    required this.trainer,
     required this.session,
     required this.status,
     required this.price,
@@ -24,8 +24,8 @@ class PlanModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      kmemberid: memberid, //memberId'
-      ktrainerid: trainerid,
+      kmemberid: member.id, // مجرد ID
+      ktrainerid: trainer.id, // مجرد ID
       ksession: session,
       kstatus: status,
       kprice: price,
@@ -33,11 +33,16 @@ class PlanModel {
     };
   }
 
-  factory PlanModel.fromJson(Map<String, dynamic> map, String docId) {
+  factory PlanModel.fromJson(
+    Map<String, dynamic> map,
+    String docId,
+    MemberModel member,
+    TrainerModel trainer,
+  ) {
     return PlanModel(
       id: docId,
-      memberid: map[kmemberid] ?? '',
-      trainerid: map[ktrainerid] ?? '',
+      member: member,
+      trainer: trainer,
       session: map[ksession] ?? '',
       status: map[kstatus] ?? '',
       price: map[kprice] ?? '',
@@ -47,8 +52,8 @@ class PlanModel {
 
   PlanModel copyWith({
     String? id,
-    String? memberid,
-    TrainerModel? trainerid,
+    MemberModel? member,
+    TrainerModel? trainer,
     String? invitation,
     String? type,
     String? status,
@@ -57,8 +62,8 @@ class PlanModel {
   }) {
     return PlanModel(
       id: id ?? this.id,
-      memberid: memberid ?? this.memberid,
-      trainerid: trainerid ?? this.trainerid,
+      member: member ?? this.member,
+      trainer: trainer ?? this.trainer,
       session: invitation ?? this.session,
       status: status ?? this.status,
       price: price ?? this.price,
