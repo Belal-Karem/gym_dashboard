@@ -3,8 +3,8 @@ import 'package:power_gym/constants.dart';
 class SubModel {
   final String id;
   final String duration;
-  final String freeze;
-  final String invitation;
+  final int freeze;
+  final int invitation;
   final String status;
   final String price;
   final String maxAttendance;
@@ -50,8 +50,8 @@ class SubModel {
   SubModel copyWith({
     String? id,
     String? duration,
-    String? freeze,
-    String? invitation,
+    int? freeze,
+    int? invitation,
     String? type,
     String? status,
     String? price,

@@ -20,7 +20,18 @@ class MembersCubit extends Cubit<MembersState> {
 
     result.fold((failure) => emit(MembersError(failure.message)), (stream) {
       _membersSubscription = stream.listen(
-        (members) {
+        (members) async {
+          // 🔥 تحديث حالة العضو إذا انتهى الاشتراك
+          for (var member in members) {
+            final sub = member.subscription;
+            if (sub != null && sub.isExpired && member.status != 'منتهي') {
+              await repo.updateMember(member.id, {'status': 'منتهي'});
+              member = member.copyWith(
+                status: 'منتهي',
+              ); // لو محتاج للتحديث محلي
+            }
+          }
+
           emit(MembersLoaded(members));
         },
         onError: (error) {

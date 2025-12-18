@@ -39,19 +39,19 @@ class SelectSupItem extends StatelessWidget {
           ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'مدة',
-              trailing: subs.duration,
+              trailing: subs.duration.toString(),
             ),
           ),
           ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'دعوة',
-              trailing: subs.invitation,
+              trailing: subs.invitation.toString(),
             ),
           ),
           ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'تجميد',
-              trailing: subs.freeze,
+              trailing: subs.freeze.toString(),
             ),
           ),
 

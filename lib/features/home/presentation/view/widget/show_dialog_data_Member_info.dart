@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/core/utils/constants.dart';
+import 'package:power_gym/features/home/data/models/model/dash_board_model.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/attendance_cubit/attendance_cubit.dart';
 import 'package:power_gym/features/home/presentation/view/widget/list_title_member_info.dart';
+import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/model/show_dialog_data_member_Info_model.dart';
 
 class ShowDialogDataMemberInfo extends StatelessWidget {
-  const ShowDialogDataMemberInfo({super.key});
+  const ShowDialogDataMemberInfo({super.key, required this.member});
+  final MemberModel member;
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +30,19 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'اسم',
-                  trailing: 'أحمد',
+                  trailing: member.name,
                 ),
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'هاتف',
-                  trailing: '123456789',
+                  trailing: member.phone,
                 ),
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'النوع',
-                  trailing: 'راجل',
+                  trailing: member.gender,
                 ),
               ),
               ListTitleMemberInfo(
@@ -61,16 +66,10 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'الحضور',
-                  trailing: '30',
+                  trailing: '0',
                 ),
               ),
 
-              ListTitleMemberInfo(
-                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                  title: 'الغياب',
-                  trailing: '60',
-                ),
-              ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'دعوه',
@@ -90,7 +89,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                 ),
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'حالة',
-                  trailing: 'نشط',
+                  trailing: member.status,
                 ),
               ),
               ListTitleMemberInfo(
@@ -102,7 +101,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'ملحوظات',
-                  trailing: '_',
+                  trailing: member.note,
                 ),
               ),
               Row(
@@ -115,6 +114,10 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                   ElevatedBouttonMemberInfo(
                     text: 'يقبل',
                     onPressed: () {
+                      final dashboardMember = memberToDashboard(member);
+                      context.read<AttendanceCubit>().markPresent(
+                        dashboardMember,
+                      );
                       Navigator.pop(context);
                     },
                   ),
@@ -131,6 +134,22 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  DashBoardModel memberToDashboard(MemberModel m) {
+    return DashBoardModel(
+      id: m.id,
+      memberId: m.memberId,
+      name: m.name,
+      phone: m.phone,
+      startDate: m.startDate,
+      affiliationDate: m.joinDate,
+      attendance: m.attendance,
+      status: m.status,
+      note: m.note,
+      subscription: m.subscription,
+      joinDate: m.joinDate,
     );
   }
 }

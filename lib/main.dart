@@ -5,6 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:power_gym/core/utils/app_router.dart';
 import 'package:power_gym/core/utils/service_locator.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/attendance_cubit/attendance_cubit.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/members_count_for_dashboard_cubit/members_count_for_dashboard_cubit.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/today_attendance_cubit/today_attendance_cubit.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
@@ -44,6 +47,13 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<PaymentCubit>(create: (_) => sl<PaymentCubit>()),
         BlocProvider<PlanCubit>(create: (_) => sl<PlanCubit>()),
+        BlocProvider<MembersCountForDashboardCubit>(
+          create: (_) => sl<MembersCountForDashboardCubit>(),
+        ),
+        BlocProvider<AttendanceCubit>(create: (_) => sl<AttendanceCubit>()),
+        BlocProvider<TodayAttendanceCubit>(
+          create: (_) => sl<TodayAttendanceCubit>(),
+        ),
       ],
       child: MaterialApp.router(
         locale: Locale('ar'),

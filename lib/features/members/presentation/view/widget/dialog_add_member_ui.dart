@@ -57,11 +57,9 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
 
               const SizedBox(height: 10),
 
-              DoubleFieldRowAddWidget(
-                leftLabel: 'تاريخ الانضمام',
-                leftChild: TextFieldAddWidget(controller: controller.joinDate),
-                rightLabel: 'النوع',
-                rightChild: CustomDropdownWidget(
+              FieldLabelAndInputAddWidget(
+                label: 'النوع',
+                child: CustomDropdownWidget(
                   items: [
                     DropdownMenuItem(value: 'ذكر', child: Text('ذكر')),
                     DropdownMenuItem(value: 'أنثى', child: Text('أنثى')),

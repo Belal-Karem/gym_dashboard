@@ -8,33 +8,33 @@ import 'package:power_gym/features/members/data/models/member_model/member_model
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/plan_and_packages/presentation/view/widget/dialog_add_plan.dart';
 
-class MemberDialog extends StatefulWidget {
+class MemberUpdateDialog extends StatefulWidget {
   final MemberModel member;
 
-  const MemberDialog({super.key, required this.member});
+  const MemberUpdateDialog({super.key, required this.member});
 
   @override
-  State<MemberDialog> createState() => _MemberDialogState();
+  State<MemberUpdateDialog> createState() => _MemberUpdateDialogState();
 }
 
-class _MemberDialogState extends State<MemberDialog> {
+class _MemberUpdateDialogState extends State<MemberUpdateDialog> {
   late TextEditingController nameController;
   late TextEditingController phoneController;
-  late TextEditingController startController;
-  late TextEditingController endController;
+  // late TextEditingController startController;
+  // late TextEditingController endController;
   late TextEditingController attendanceController;
   String? selectedStatus;
   String? selectedGender;
+  int? attendanceValue = 0;
 
   @override
   void initState() {
     super.initState();
+    attendanceValue = int.tryParse(attendanceController.text) ?? 0;
     nameController = TextEditingController(text: widget.member.name);
     phoneController = TextEditingController(text: widget.member.phone);
-    startController = TextEditingController(text: widget.member.startdata);
-    endController = TextEditingController(text: widget.member.endDate);
     attendanceController = TextEditingController(
-      text: widget.member.attendance,
+      text: widget.member.attendance.toString(),
     );
     selectedStatus = widget.member.status;
     selectedGender = widget.member.gender;
@@ -44,8 +44,8 @@ class _MemberDialogState extends State<MemberDialog> {
   void dispose() {
     nameController.dispose();
     phoneController.dispose();
-    startController.dispose();
-    endController.dispose();
+    // startController.dispose();
+    // endController.dispose();
     attendanceController.dispose();
     super.dispose();
   }
@@ -54,9 +54,7 @@ class _MemberDialogState extends State<MemberDialog> {
     final updatedMember = widget.member.copyWith(
       name: nameController.text,
       phone: phoneController.text,
-      startdata: startController.text,
-      enddata: endController.text,
-      attendance: attendanceController.text,
+      attendance: attendanceValue,
       status: selectedStatus ?? widget.member.status,
       gender: selectedGender ?? widget.member.gender,
     );
@@ -89,14 +87,14 @@ class _MemberDialogState extends State<MemberDialog> {
               label: 'الهاتف',
               child: TextFieldAddWidget(controller: phoneController),
             ),
-            FieldLabelAndInputAddWidget(
-              label: 'تاريخ البدء',
-              child: TextFieldAddWidget(controller: startController),
-            ),
-            FieldLabelAndInputAddWidget(
-              label: 'تاريخ الانتهاء',
-              child: TextFieldAddWidget(controller: endController),
-            ),
+            // FieldLabelAndInputAddWidget(
+            //   label: 'تاريخ البدء',
+            //   child: TextFieldAddWidget(controller: startController),
+            // ),
+            // FieldLabelAndInputAddWidget(
+            //   label: 'تاريخ الانتهاء',
+            //   child: TextFieldAddWidget(controller: endController),
+            // ),
             FieldLabelAndInputAddWidget(
               label: 'الحضور',
               child: TextFieldAddWidget(controller: attendanceController),

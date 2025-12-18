@@ -39,17 +39,19 @@ class PaymentDataTaple extends StatelessWidget {
             ]),
 
             ...payment.map(
-              (payment) => TableHelper.buildDataRow(
-                color: payment.plan == '_'
+              (pay) => TableHelper.buildDataRow(
+                color: pay.plan == '_'
                     ? Colors.red.withAlpha(20)
                     : Colors.transparent,
                 cells: [
-                  TableCellWidget(payment.type),
-                  TableCellWidget(payment.plan),
-                  TableCellWidget(payment.paid),
-                  TableCellWidget(DateHelper.formatPaymentDate(payment.date)),
+                  TableCellWidget(pay.type),
+                  TableCellWidget(pay.plan),
+                  TableCellWidget('${pay.paid.toStringAsFixed(2)}'), // عرض أفضل
                   TableCellWidget(
-                    payment.paymentMethod,
+                    DateHelper.formatPaymentDate(pay.date),
+                  ), // مباشر
+                  TableCellWidget(
+                    pay.paymentMethod,
                     style: const TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.bold,
@@ -58,22 +60,6 @@ class PaymentDataTaple extends StatelessWidget {
                 ],
               ),
             ),
-            // TableHelper.buildDataRow(
-            //   color: Colors.red.withAlpha(20),
-            //   cells: [
-            //     TableCellWidget('كهربا'),
-            //     TableCellWidget('_'),
-            //     TableCellWidget('800'),
-            //     TableCellWidget('01/03/2023'),
-            //     TableCellWidget(
-            //       'cash',
-            //       style: const TextStyle(
-            //         color: Colors.green,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ),

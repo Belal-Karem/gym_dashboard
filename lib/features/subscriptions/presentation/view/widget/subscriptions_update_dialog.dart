@@ -31,11 +31,15 @@ class _SubscriptionsUpdateDialogState extends State<SubscriptionsUpdateDialog> {
   void initState() {
     super.initState();
     typeController = TextEditingController(text: widget.subModel.type);
-    durationController = TextEditingController(text: widget.subModel.duration);
+    durationController = TextEditingController(
+      text: widget.subModel.duration.toString(),
+    );
     priceController = TextEditingController(text: widget.subModel.price);
-    freezeController = TextEditingController(text: widget.subModel.freeze);
+    freezeController = TextEditingController(
+      text: widget.subModel.freeze.toString(),
+    );
     invitationController = TextEditingController(
-      text: widget.subModel.invitation,
+      text: widget.subModel.invitation.toString(),
     );
     maxAttendanceController = TextEditingController(
       text: widget.subModel.maxAttendance,

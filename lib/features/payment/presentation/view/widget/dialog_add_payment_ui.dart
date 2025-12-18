@@ -75,12 +75,13 @@ class _DialogAddPaymentUiState extends State<DialogAddPaymentUi> {
                         final addPayment = PaymentModel(
                           id: '',
                           type: typeController.text,
-                          paid: paidController.text,
-                          paymentMethod: paymentMethod.toString(),
+                          paid: double.tryParse(paidController.text) ?? 0,
+                          paymentMethod: paymentMethod ?? 'نقدي',
                           plan: '_',
                           memberId: '',
-                          date: DateTime.now().toIso8601String(),
+                          date: DateTime.now(),
                         );
+
                         context.read<PaymentCubit>().addPayment(addPayment);
                       } else {
                         CustomErrorWidget(

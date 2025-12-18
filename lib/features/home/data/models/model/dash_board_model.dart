@@ -2,48 +2,45 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 
-class MemberModel {
+class DashBoardModel {
   final String id; // Firestore doc id
   final String memberId; // Logical member id
   final String name;
   final String phone;
   final DateTime joinDate;
   final DateTime startDate;
-  final String gender;
-  final int attendance;
-  final int freeze;
-  final int invites;
-  final DateTime? affiliationDate;
+  final int? attendance;
+  final int? freeze;
+  final int? invites;
+  final DateTime affiliationDate;
   final String status; // active / expired / frozen
   final String note;
   final MemberSubscriptionModel? subscription;
 
-  const MemberModel({
+  const DashBoardModel({
     required this.id,
-    required this.gender,
     required this.memberId,
     required this.name,
     required this.phone,
     required this.startDate,
+    required this.affiliationDate,
     required this.attendance,
     required this.status,
     required this.note,
     this.subscription,
     required this.joinDate,
-    required this.freeze,
-    required this.invites,
-    this.affiliationDate,
+    this.freeze,
+    this.invites,
   });
 
-  factory MemberModel.fromJson(Map<String, dynamic> json, String docId) {
-    return MemberModel(
+  factory DashBoardModel.fromJson(Map<String, dynamic> json, String docId) {
+    return DashBoardModel(
       id: docId,
       memberId: json[kmemberid] ?? '',
       name: json[kname] ?? '',
       phone: json[kPhone] ?? '',
       startDate: safeParseDate(json[kStartdate]),
-      // affiliationDate: safeParseDate(json[kaffiliationdate]),
-      gender: json[kgender],
+      affiliationDate: safeParseDate(json[kaffiliationdate]),
       attendance: json[kattendance] ?? '',
       status: json['status'] ?? 'active',
       note: json[knote] ?? '',
@@ -64,8 +61,7 @@ class MemberModel {
       'name': name,
       'phone': phone,
       'startDate': startDate.toIso8601String(),
-      // 'affiliationDate': affiliationDate.toIso8601String(),
-      'gender': gender,
+      'affiliationDate': affiliationDate.toIso8601String(),
       'attendance': attendance,
       'status': status,
       'note': note,
@@ -75,14 +71,13 @@ class MemberModel {
     };
   }
 
-  MemberModel copyWith({
+  DashBoardModel copyWith({
     String? id,
     String? memberId,
     String? name,
     String? phone,
     DateTime? startDate,
     DateTime? affiliationDate,
-    String? gender,
     int? attendance,
     String? status,
     String? note,
@@ -91,13 +86,13 @@ class MemberModel {
     int? freeze,
     MemberSubscriptionModel? subscription,
   }) {
-    return MemberModel(
+    return DashBoardModel(
       id: id ?? this.id,
       memberId: memberId ?? this.memberId,
       name: name ?? this.name,
       phone: phone ?? this.phone,
       startDate: startDate ?? this.startDate,
-      // affiliationDate: affiliationDate ?? this.affiliationDate,
+      affiliationDate: affiliationDate ?? this.affiliationDate,
       attendance: attendance ?? this.attendance,
       status: status ?? this.status,
       note: note ?? this.note,
@@ -105,7 +100,6 @@ class MemberModel {
       joinDate: joinDate ?? this.joinDate,
       invites: invites ?? this.invites,
       freeze: freeze ?? this.freeze,
-      gender: gender ?? this.gender,
     );
   }
 }

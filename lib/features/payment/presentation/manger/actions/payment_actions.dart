@@ -6,9 +6,9 @@ class PaymentActions {
 
   static Future<void> recordPayment({
     required String memberId,
-    required String paid,
+    required double paid, // double بدل String
     required String plan,
-    required String date,
+    required DateTime date, // DateTime بدل String
     required String name,
     required String paymentMethod,
   }) async {

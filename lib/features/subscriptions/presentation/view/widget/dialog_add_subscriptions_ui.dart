@@ -26,10 +26,18 @@ class _DialogAddSubscriptionsUiState extends State<DialogAddSubscriptionsUi> {
   final invitationController = TextEditingController();
   final priceController = TextEditingController();
   final maxAttendanceController = TextEditingController();
-  // final priceController = TextEditingController();
+  int freezeValue = 0;
+  int invitationValue = 0;
   String? selectedType = 'نشط';
   GlobalKey<FormState> formKey = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
+  @override
+  void initState() {
+    freezeValue = int.tryParse(freezeController.text) ?? 0;
+    invitationValue = int.tryParse(freezeController.text) ?? 0;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +99,8 @@ class _DialogAddSubscriptionsUiState extends State<DialogAddSubscriptionsUi> {
                         final addSub = SubModel(
                           id: '',
                           duration: durationController.text.trim(),
-                          freeze: freezeController.text.trim(),
-                          invitation: invitationController.text.trim(),
+                          freeze: freezeValue,
+                          invitation: invitationValue,
                           type: typeController.text.trim(),
                           status: selectedType.toString(),
                           price: priceController.text,

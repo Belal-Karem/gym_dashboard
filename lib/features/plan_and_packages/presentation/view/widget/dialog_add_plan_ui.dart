@@ -126,6 +126,7 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
                             status: 'active',
                             price: priceController.text,
                             attendance: '',
+                            duration: durationController.text,
                           );
 
                           context.read<PlanCubit>().addPlan(plan);

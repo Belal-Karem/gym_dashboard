@@ -19,7 +19,6 @@ class MemberActions {
     String? memberIdToReturn;
 
     try {
-      // عرض Loading
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -30,8 +29,6 @@ class MemberActions {
 
       await result.fold(
         (failure) {
-          Navigator.pop(context); // غلق الـ dialog
-          Navigator.pop(context);
           Navigator.pop(context);
           ScaffoldMessenger.of(
             context,
@@ -40,34 +37,25 @@ class MemberActions {
         (memberId) async {
           memberIdToReturn = memberId;
 
-          // حساب تاريخ الانتهاء وعدد الأيام المتبقية
-          final endDate = DateHelper.calculateEndDate(
-            member.startdata,
-            selectedSub.duration,
-          );
-          final remainingDays = DateHelper.calculateDaysRemaining(endDate);
+          final durationDays = int.tryParse(selectedSub.duration) ?? 0;
+          final endDate = member.startDate.add(Duration(days: durationDays));
 
-          // تحديث العضو في القاعدة
-          await membersCubit.updateMember(memberId, {
-            'endDate': endDate,
-            'remainingDays': remainingDays.toString(),
-          });
-
-          // إنشاء الاشتراك
-          final sub = MemberSubscriptionModel(
+          final subscription = MemberSubscriptionModel(
             memberId: memberId,
             subId: selectedSub.id,
-            startDate: member.startdata,
+            startDate: member.startDate,
             endDate: endDate,
             status: "active",
-            remainingDays: remainingDays,
           );
 
-          await subscriptionsCubit.addSubscription(sub);
+          await subscriptionsCubit.addSubscription(subscription);
 
-          Navigator.pop(context); // غلق الـ dialog
+          await membersCubit.updateMember(memberId, {
+            'subscription': subscription.toJson(),
+          });
+
           Navigator.pop(context);
-          Navigator.pop(context);
+
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('تم الحفظ بنجاح')));
@@ -79,7 +67,7 @@ class MemberActions {
       Navigator.pop(context);
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('حدث خطأ غير متوقع: $e')));
+      ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
     }
 
     return memberIdToReturn;

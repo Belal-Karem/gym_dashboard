@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/manger/actions/member_actions.dart';
 import 'package:power_gym/features/members/presentation/view/select_sup_view.dart';
@@ -10,8 +11,6 @@ class AddMemberController {
   final phone = TextEditingController();
   final note = TextEditingController();
   final startDate = TextEditingController();
-  final joinDate = TextEditingController();
-
   String gender = 'ذكر';
   String status = 'نشط';
 
@@ -20,20 +19,11 @@ class AddMemberController {
   void setGender(value) => gender = value;
   void setStatus(value) => status = value;
 
-  // void setGender(String? value) {
-  //   if (value != null) gender = value;
-  // }
-
-  // void setStatus(String? value) {
-  //   if (value != null) status = value;
-  // }
-
   void dispose() {
     name.dispose();
     phone.dispose();
     note.dispose();
     startDate.dispose();
-    joinDate.dispose();
   }
 
   Future<void> onSave(BuildContext context) async {
@@ -64,14 +54,21 @@ class AddMemberController {
           memberId: '',
           name: name.text,
           phone: phone.text,
-          startdata: startDate.text,
+          startDate: DateTime.parse(startDate.text),
           gender: gender,
           note: note.text,
           status: status,
-          attendance: '0',
-          endDate: '',
-          remainingDays: '0',
-          affiliationdate: DateTime.now().toIso8601String(),
+          attendance: 0,
+          subscription: MemberSubscriptionModel(
+            memberId: '',
+            subId: 'default',
+            startDate: DateTime.parse(startDate.text),
+            endDate: DateTime.parse(startDate.text),
+            status: 'بدون اشتراك',
+          ),
+          joinDate: DateTime.now(),
+          freeze: selectedSub.freeze,
+          invites: selectedSub.invitation,
         ),
         selectedSub: selectedSub,
       );
@@ -79,11 +76,11 @@ class AddMemberController {
       if (memberId != null) {
         await PaymentActions.recordPayment(
           memberId: memberId,
-          paid: selectedSub.price,
+          paid: double.tryParse(selectedSub.price) ?? 0,
           plan: selectedSub.type,
-          paymentMethod: "كاش",
-          date: DateTime.now().toIso8601String(),
+          date: DateTime.now(),
           name: name.text,
+          paymentMethod: "كاش",
         );
       }
     } catch (e) {
@@ -93,3 +90,18 @@ class AddMemberController {
     }
   }
 }
+
+// DateTime parseCustomDate(String input) {
+//   try {
+//     final parts = input.split('-');
+//     if (parts.length != 3) throw Exception();
+
+//     final day = int.parse(parts[0]);
+//     final month = int.parse(parts[1]);
+//     final year = int.parse(parts[2]);
+
+//     return DateTime(year, month, day);
+//   } catch (e) {
+//     throw FormatException('Invalid date format: $input');
+//   }
+// }

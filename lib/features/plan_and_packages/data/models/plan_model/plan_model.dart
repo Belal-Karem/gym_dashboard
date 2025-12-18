@@ -10,6 +10,7 @@ class PlanModel {
   final String status;
   final String price;
   final String attendance;
+  final String duration;
 
   PlanModel({
     required this.id,
@@ -19,6 +20,7 @@ class PlanModel {
     required this.status,
     required this.price,
     required this.attendance,
+    required this.duration,
   });
 
   Map<String, dynamic> toJson() {
@@ -30,6 +32,7 @@ class PlanModel {
       kstatus: status,
       kprice: price,
       kattendance: attendance,
+      kduration: duration,
     };
   }
 
@@ -47,6 +50,7 @@ class PlanModel {
       status: map[kstatus] ?? '',
       price: map[kprice] ?? '',
       attendance: map[kattendance] ?? '',
+      duration: map[kduration] ?? '',
     );
   }
 
@@ -59,6 +63,7 @@ class PlanModel {
     String? status,
     String? price,
     String? maxAttendance,
+    String? duration,
   }) {
     return PlanModel(
       id: id ?? this.id,
@@ -68,6 +73,7 @@ class PlanModel {
       status: status ?? this.status,
       price: price ?? this.price,
       attendance: type ?? this.attendance,
+      duration: duration ?? this.duration,
     );
   }
 }

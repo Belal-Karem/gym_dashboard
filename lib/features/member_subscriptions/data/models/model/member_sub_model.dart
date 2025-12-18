@@ -1,13 +1,11 @@
 class MemberSubscriptionModel {
   final String memberId;
   final String subId;
-  final String startDate;
-  final String endDate;
-  final int remainingDays;
+  final DateTime startDate;
+  final DateTime endDate;
   final String status; // active / expired / frozen
 
   MemberSubscriptionModel({
-    required this.remainingDays,
     required this.memberId,
     required this.subId,
     required this.startDate,
@@ -15,23 +13,28 @@ class MemberSubscriptionModel {
     required this.status,
   });
 
+  Map<String, dynamic> toJson() => {
+    "memberId": memberId,
+    "subId": subId,
+    "startDate": startDate.toIso8601String(),
+    "endDate": endDate.toIso8601String(),
+    "status": status,
+  };
+
   factory MemberSubscriptionModel.fromJson(Map<String, dynamic> json) {
     return MemberSubscriptionModel(
-      memberId: json['memberId'] ?? '',
-      subId: json['subId'] ?? '',
-      startDate: json['startDate'] ?? '',
-      endDate: json['endDate'] ?? '',
-      remainingDays: json['remainingDays'],
+      memberId: json['memberId'],
+      subId: json['subId'],
+      startDate: DateTime.parse(json['startDate']),
+      endDate: DateTime.parse(json['endDate']),
       status: json['status'] ?? 'active',
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    "memberId": memberId,
-    "subId": subId,
-    "startDate": startDate,
-    "endDate": endDate,
-    "status": status,
-    "remainingDays": remainingDays,
-  };
+  int get remainingDays {
+    final today = DateTime.now();
+    return endDate.difference(today).inDays;
+  }
+
+  bool get isExpired => remainingDays <= 0;
 }

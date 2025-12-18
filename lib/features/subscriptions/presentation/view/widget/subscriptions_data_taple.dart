@@ -47,7 +47,7 @@ class SubscriptionsDataTaple extends StatelessWidget {
                 },
                 cells: [
                   TableCellWidget(subs.type),
-                  TableCellWidget(subs.duration),
+                  TableCellWidget(subs.duration.toString()),
                   TableCellWidget(subs.price),
                   TableCellWidget('35'),
                   TableCellWidget(

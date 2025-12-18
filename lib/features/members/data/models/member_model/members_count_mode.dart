@@ -4,8 +4,10 @@ class MembersCountMode {
   final int children;
   final int active;
   final int expired;
+  final int? total;
 
   MembersCountMode({
+    this.total,
     required this.men,
     required this.women,
     required this.children,
