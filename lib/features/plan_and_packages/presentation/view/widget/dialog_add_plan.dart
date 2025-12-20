@@ -11,7 +11,7 @@ void openAddPlanDialog(BuildContext context, MemberModel member) {
     builder: (_) => BlocListener<PlanCubit, PlanState>(
       listener: (context, state) {
         if (state is AddPlanSuccess) {
-          Navigator.pop(context); // يقفل Dialog البريفت
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('تم إضافة الاشتراك بنجاح')),
           );

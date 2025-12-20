@@ -8,7 +8,7 @@ class PaymentActions {
     required String memberId,
     required String paid,
     required String plan,
-    required String date,
+    required DateTime date,
     required String name,
     required String paymentMethod,
   }) async {

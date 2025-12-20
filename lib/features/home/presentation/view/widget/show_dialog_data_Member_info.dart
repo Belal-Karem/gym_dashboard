@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/core/utils/constants.dart';
+import 'package:power_gym/core/utils/service_locator.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/attendance_cubit.dart';
 import 'package:power_gym/features/home/presentation/view/widget/list_title_member_info.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
+import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo_imlp.dart';
 import 'package:power_gym/model/show_dialog_data_member_Info_model.dart';
 
 class ShowDialogDataMemberInfo extends StatelessWidget {
@@ -133,21 +135,45 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      ElevatedBouttonMemberInfo(
-                        text: 'تعديل العضو',
-                        onPressed: () {},
+                      FutureBuilder<bool>(
+                        future: sl<PlanRepoImpl>().hasActivePrivatePlan(
+                          member.id,
+                        ),
+                        builder: (context, snapshot) {
+                          final isPrivate = snapshot.data ?? false;
+
+                          if (!isPrivate) return SizedBox.shrink();
+
+                          return ElevatedBouttonMemberInfo(
+                            text: 'حضور PT',
+                            onPressed: () async {
+                              try {
+                                await context
+                                    .read<AttendanceCubit>()
+                                    .markPresent(member);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('تم تسجيل حضور الجلسة ✅'),
+                                  ),
+                                );
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('حدث خطأ: $e')),
+                                );
+                              }
+                            },
+                          );
+                        },
                       ),
+
                       ElevatedBouttonMemberInfo(
                         text: 'يقبل',
                         onPressed: () {
                           context.read<AttendanceCubit>().markPresent(member);
                         },
                       ),
-                      ElevatedBouttonMemberInfo(
-                        text: 'تجميد',
-                        onPressed: () {},
-                      ),
-                      ElevatedBouttonMemberInfo(
+                      TextBouttonMemberInfo(text: 'تجميد', onPressed: () {}),
+                      TextBouttonMemberInfo(
                         text: 'دعوه',
                         onPressed: () {
                           Navigator.pop(context);
@@ -181,6 +207,24 @@ class ElevatedBouttonMemberInfo extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+        onPressed: onPressed,
+        child: Text(text, style: TextStyle(color: Colors.white, fontSize: 15)),
+      ),
+    );
+  }
+}
+
+class TextBouttonMemberInfo extends StatelessWidget {
+  const TextBouttonMemberInfo({super.key, required this.text, this.onPressed});
+
+  final String text;
+  final void Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextButton(
         onPressed: onPressed,
         child: Text(text, style: TextStyle(color: Colors.white, fontSize: 15)),
       ),

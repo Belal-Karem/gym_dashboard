@@ -60,7 +60,7 @@ class MembersDataTable extends StatelessWidget {
                   TableCellWidget(member.startdata),
                   TableCellWidget(DateHelper.formatPaymentDate(member.endDate)),
                   TableCellWidget(member.remainingDays),
-                  TableCellWidget(member.attendance),
+                  TableCellWidget(member.attendance.toString()),
                   TableCellWidget(
                     member.status,
                     style: member.status == 'نشط'

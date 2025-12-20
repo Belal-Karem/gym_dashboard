@@ -82,7 +82,7 @@ class AddMemberController {
           paid: selectedSub.price,
           plan: selectedSub.type,
           paymentMethod: "كاش",
-          date: DateTime.now().toIso8601String(),
+          date: DateTime.now(),
           name: name.text,
         );
       }

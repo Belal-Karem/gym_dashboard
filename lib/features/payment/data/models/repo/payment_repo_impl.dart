@@ -29,34 +29,12 @@ class PaymentRepoImpl implements PaymentRepo {
     }
   }
 
-  // @override
-  // Future<Either<Failure, Unit>> addPayment(PaymentModel Payment) async {
-  //   try {
-  //     await PaymentsRef.doc(Payment.id).set(Payment.toJson());
-  //     return const Right(unit);
-  //   } catch (e) {
-  //     return Left(handleFirebaseException(e));
-  //   }
-  // }
-
+  @override
   Future<Either<Failure, Unit>> addPayment(PaymentModel payment) async {
     try {
       final docRef = paymentsRef.doc();
       await docRef.set(payment.copyWith(id: docRef.id).toJson());
 
-      return const Right(unit);
-    } catch (e) {
-      return Left(handleFirebaseException(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, Unit>> updatePayment(
-    String id,
-    Map<String, dynamic> data,
-  ) async {
-    try {
-      await paymentsRef.doc(id).update(data);
       return const Right(unit);
     } catch (e) {
       return Left(handleFirebaseException(e));

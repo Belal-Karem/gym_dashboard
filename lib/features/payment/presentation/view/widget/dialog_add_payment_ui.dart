@@ -79,7 +79,7 @@ class _DialogAddPaymentUiState extends State<DialogAddPaymentUi> {
                           paymentMethod: paymentMethod.toString(),
                           plan: '_',
                           memberId: '',
-                          date: DateTime.now().toIso8601String(),
+                          date: DateTime.now(),
                         );
                         context.read<PaymentCubit>().addPayment(addPayment);
                       } else {

@@ -2,21 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/widget/members_statistics_card.dart';
 import 'package:power_gym/features/members/data/models/member_model/members_count_mode.dart';
-import 'package:power_gym/features/members/presentation/manger/cubit/members_count_cubit.dart';
+import 'package:power_gym/features/members/presentation/manger/cubit/members_count_stats_cubit.dart';
+import 'package:power_gym/features/members/presentation/manger/cubit/members_count_state_state.dart';
 
 class MembersStatisticsRow extends StatelessWidget {
   const MembersStatisticsRow({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MembersCountStatsCubit, MembersStatsState>(
+    return BlocBuilder<MembersCountStatsCubit, MembersCountStatsState>(
       builder: (context, state) {
-        if (state is MembersStatsLoading) {
+        if (state is MembersCountStatsLoading) {
           return CircularProgressIndicator();
-        } else if (state is MembersStatsLoaded) {
+        } else if (state is MembersCountStatsLoaded) {
           final count = state.count;
           return MembersStatisticsRowData(count: count);
-        } else if (state is MembersStatsError) {
+        } else if (state is MembersCountStatsError) {
           return Text('خطأ: ${state.message}');
         } else {
           return SizedBox.shrink();

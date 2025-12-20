@@ -12,36 +12,35 @@ class PlanRepoImpl implements PlanRepo {
   final CollectionReference plansRef = FirebaseFirestore.instance.collection(
     kplanCollections,
   );
+  final FirebaseFirestore firestore;
+
+  PlanRepoImpl(this.firestore);
 
   @override
   Future<Either<Failure, Stream<List<PlanModel>>>> getAllPlan() async {
     try {
-      // استخدم asyncMap عشان نقدر نعمل await لجلب بيانات العضو والمدرب
       final stream = plansRef.snapshots().asyncMap((snapshot) async {
         List<PlanModel> plans = [];
 
         for (var doc in snapshot.docs) {
           final data = doc.data() as Map<String, dynamic>;
 
-          // جلب بيانات العضو
           final memberDoc = await FirebaseFirestore.instance
               .collection(kMemberCollections)
               .doc(data[kmemberid])
               .get();
           if (!memberDoc.exists || memberDoc.data() == null) {
-            // هنا ممكن تعطي member افتراضي أو تتجاهل هذا Plan
-            continue; // تخطي هذا الـ plan
+            continue;
           }
 
           final member = MemberModel.fromJson(memberDoc.data()!, memberDoc.id);
 
-          // جلب بيانات المدرب
           final trainerDoc = await FirebaseFirestore.instance
               .collection(ktrainerCollections)
               .doc(data[ktrainerid])
               .get();
           if (!trainerDoc.exists || trainerDoc.data() == null) {
-            continue; // تخطي هذا الـ plan
+            continue;
           }
 
           final trainer = TrainerModel.fromJson(
@@ -49,7 +48,6 @@ class PlanRepoImpl implements PlanRepo {
             trainerDoc.id,
           );
 
-          // إنشاء PlanModel كامل
           plans.add(PlanModel.fromJson(data, doc.id, member, trainer));
         }
 
@@ -61,16 +59,6 @@ class PlanRepoImpl implements PlanRepo {
       return Left(handleFirebaseException(e));
     }
   }
-
-  // @override
-  // Future<Either<Failure, Unit>> addPlan(PlanModel Plan) async {
-  //   try {
-  //     await PlansRef.doc(Plan.id).set(Plan.toJson());
-  //     return const Right(unit);
-  //   } catch (e) {
-  //     return Left(handleFirebaseException(e));
-  //   }
-  // }
 
   Future<Either<Failure, Unit>> addPlan(PlanModel Plan) async {
     try {
@@ -104,5 +92,18 @@ class PlanRepoImpl implements PlanRepo {
     } catch (e) {
       return Left(handleFirebaseException(e));
     }
+  }
+
+  @override
+  Future<bool> hasActivePrivatePlan(String id) async {
+    final query = await firestore
+        .collection(kplanCollections)
+        .where('memberId', isEqualTo: id)
+        .where('private', isEqualTo: 'private')
+        .where('status', isEqualTo: 'نشط')
+        .limit(1)
+        .get();
+
+    return query.docs.isNotEmpty;
   }
 }

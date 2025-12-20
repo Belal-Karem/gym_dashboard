@@ -47,7 +47,9 @@ class PaymentDataTaple extends StatelessWidget {
                   TableCellWidget(payment.type),
                   TableCellWidget(payment.plan),
                   TableCellWidget(payment.paid),
-                  TableCellWidget(DateHelper.formatPaymentDate(payment.date)),
+                  TableCellWidget(
+                    DateHelper.formatPaymentDate(payment.date.toString()),
+                  ),
                   TableCellWidget(
                     payment.paymentMethod,
                     style: const TextStyle(
@@ -58,22 +60,6 @@ class PaymentDataTaple extends StatelessWidget {
                 ],
               ),
             ),
-            // TableHelper.buildDataRow(
-            //   color: Colors.red.withAlpha(20),
-            //   cells: [
-            //     TableCellWidget('كهربا'),
-            //     TableCellWidget('_'),
-            //     TableCellWidget('800'),
-            //     TableCellWidget('01/03/2023'),
-            //     TableCellWidget(
-            //       'cash',
-            //       style: const TextStyle(
-            //         color: Colors.green,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ),

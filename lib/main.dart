@@ -52,12 +52,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<GetDataMemberCubit>(
           create: (_) => sl<GetDataMemberCubit>(),
         ),
-        BlocProvider(
-          create: (_) => sl<DashboardCubit>(),
-        ),
-        BlocProvider(
-          create: (_) => sl<RecentMemberCubit>(),
-        ),
+        BlocProvider(create: (_) => sl<DashboardCubit>()),
+        BlocProvider(create: (_) => sl<RecentMemberCubit>()),
         BlocProvider(
           create: (_) => AttendanceCubit(sl<AttendanceRepo>()), // أو repo مباشر
         ),

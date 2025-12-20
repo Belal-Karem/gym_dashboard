@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/utils/service_locator.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
-import 'package:power_gym/features/members/presentation/manger/cubit/members_count_cubit.dart';
+import 'package:power_gym/features/members/presentation/manger/cubit/members_count_stats_cubit.dart';
 import 'package:power_gym/features/members/presentation/view/widget/member_of_men_and_women.dart';
 import 'package:power_gym/features/members/presentation/view/widget/member_view_body.dart';
 

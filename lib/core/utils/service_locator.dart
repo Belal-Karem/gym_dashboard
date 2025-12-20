@@ -12,7 +12,8 @@ import 'package:power_gym/features/member_subscriptions/data/models/repo/member_
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/repo/member_repo_impl.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
-import 'package:power_gym/features/members/presentation/manger/cubit/members_count_cubit.dart';
+import 'package:power_gym/features/members/presentation/manger/cubit/members_count_stats_cubit.dart';
+import 'package:power_gym/features/payment/data/models/repo/payment_repo.dart';
 import 'package:power_gym/features/payment/data/models/repo/payment_repo_impl.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo_imlp.dart';
@@ -61,14 +62,16 @@ void setupLocator() {
     () => SubscriptionsCubit(sl<MemberSubscriptionsRepo>()),
   );
 
-  sl.registerLazySingleton<PaymentRepoImpl>(() => PaymentRepoImpl());
+  sl.registerLazySingleton<PaymentRepo>(() => PaymentRepoImpl());
   sl.registerFactory<PaymentCubit>(
-    () => PaymentCubit(sl<PaymentRepoImpl>())..loadPayment(),
+    () => PaymentCubit(sl<PaymentRepo>())..loadPayment(),
   );
 
-  sl.registerLazySingleton<PlanRepoImpl>(() => PlanRepoImpl());
+  sl.registerLazySingleton<PlanRepoImpl>(
+    () => PlanRepoImpl(FirebaseFirestore.instance),
+  );
   sl.registerFactory<PlanCubit>(
-    () => PlanCubit(sl<PlanRepoImpl>())..loadPlan(),
+    () => PlanCubit(sl<PlanRepoImpl>(), sl<PaymentRepo>())..loadPlan(),
   );
 
   sl.registerLazySingleton<GetDataMemberRepoImpl>(

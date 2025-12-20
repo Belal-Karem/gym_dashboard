@@ -2,20 +2,18 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:power_gym/features/members/data/models/member_model/members_count_mode.dart';
 import 'package:power_gym/features/members/data/models/repo/member_repo.dart';
+import 'package:power_gym/features/members/presentation/manger/cubit/members_count_state_state.dart';
 
-part 'members_count_state.dart';
-
-class MembersCountStatsCubit extends Cubit<MembersStatsState> {
+class MembersCountStatsCubit extends Cubit<MembersCountStatsState> {
   final MemberRepo repo;
   StreamSubscription? _membersSubscription;
 
-  MembersCountStatsCubit(this.repo) : super(MembersStatsInitial());
-
+  MembersCountStatsCubit(this.repo) : super(MembersCountStatsInitial());
   void loadStats() async {
-    emit(MembersStatsLoading());
+    emit(MembersCountStatsLoading());
 
     final result = await repo.getAllMembers();
-    result.fold((failure) => emit(MembersStatsError(failure.message)), (
+    result.fold((failure) => emit(MembersCountStatsError(failure.message)), (
       stream,
     ) {
       _membersSubscription = stream.listen((members) {
@@ -36,7 +34,7 @@ class MembersCountStatsCubit extends Cubit<MembersStatsState> {
             .length;
 
         emit(
-          MembersStatsLoaded(
+          MembersCountStatsLoaded(
             MembersCountMode(
               men: men,
               women: women,
@@ -46,7 +44,7 @@ class MembersCountStatsCubit extends Cubit<MembersStatsState> {
             ),
           ),
         );
-      }, onError: (error) => emit(MembersStatsError(error.toString())));
+      }, onError: (error) => emit(MembersCountStatsError(error.toString())));
     });
   }
 

@@ -39,28 +39,6 @@ class PaymentCubit extends Cubit<PaymentState> {
     );
   }
 
-  Future<void> updatePayment(String id, Map<String, dynamic> data) async {
-    emit(UpdatePaymentLoading());
-
-    final result = await repo.updatePayment(id, data);
-
-    result.fold(
-      (failure) => emit(UpdatePaymentError(failure.message)),
-      (_) => emit(UpdatePaymentSuccess()),
-    );
-  }
-
-  Future<void> deletePayment(String id) async {
-    emit(DeletePaymentLoading());
-
-    final result = await repo.deletePayment(id);
-
-    result.fold(
-      (failure) => emit(DeletePaymentError(failure.message)),
-      (_) => emit(DeletePaymentSuccess()),
-    );
-  }
-
   @override
   Future<void> close() {
     _paymentSubscription?.cancel();

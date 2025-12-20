@@ -44,9 +44,11 @@ class PlanDataTaple extends StatelessWidget {
                   TableCellWidget(plan.member.name),
                   TableCellWidget(plan.trainer.name),
                   TableCellWidget(plan.price),
-                  TableCellWidget('month'),
+                  TableCellWidget(plan.duration),
                   TableCellWidget(plan.session),
-                  TableCellWidget(plan.attendance),
+                  TableCellWidget(
+                    plan.attendance.isEmpty ? '0' : plan.attendance,
+                  ),
                 ],
               ),
             ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
+import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/elevated_button_to_dialog.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
+import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/plan_model/plan_model.dart';
@@ -26,6 +28,7 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
   final priceController = TextEditingController();
 
   TrainerModel? selectedTrainer;
+  String? selectedMethod = 'نقدي';
 
   final formKey = GlobalKey<FormState>();
 
@@ -49,7 +52,6 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
 
     return Stack(
       children: [
-        /// ================= UI =================
         Form(
           key: formKey,
           child: CustomContainerStatistics(
@@ -59,7 +61,6 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  /// ----------- اسم العضو (ثابت) -----------
                   Text(
                     'العضو: ${widget.member.name}',
                     style: const TextStyle(
@@ -70,7 +71,6 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
 
                   const SizedBox(height: 15),
 
-                  /// ----------- المدة / الجلسات -----------
                   DoubleFieldRowAddWidget(
                     leftLabel: 'المدة',
                     leftChild: TextFieldAddWidget(
@@ -84,10 +84,24 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
 
                   const SizedBox(height: 10),
 
-                  /// ----------- السعر / المدرب -----------
                   DoubleFieldRowAddWidget(
-                    leftLabel: 'السعر',
-                    leftChild: TextFieldAddWidget(controller: priceController),
+                    leftLabel: 'طريقة الدفع',
+                    leftChild: CustomDropdownWidget(
+                      items: [
+                        DropdownMenuItem(value: 'نقدي', child: Text('نقدي')),
+                        DropdownMenuItem(value: 'محفظه', child: Text('محفظه')),
+                        DropdownMenuItem(value: 'فيزا', child: Text('فيزا')),
+                        DropdownMenuItem(
+                          value: 'إنستاباي',
+                          child: Text('إنستاباي'),
+                        ),
+                      ],
+                      initialValue: selectedMethod,
+                      onChanged: (value) {
+                        setState(() => selectedMethod = value);
+                      },
+                    ),
+
                     rightLabel: 'المدرب',
                     rightChild: DropdownButtonFormField<TrainerModel>(
                       decoration: const InputDecoration(
@@ -107,10 +121,12 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
                           value == null ? 'من فضلك اختر المدرب' : null,
                     ),
                   ),
-
+                  FieldLabelAndInputAddWidget(
+                    label: 'السعر',
+                    child: TextFieldAddWidget(controller: priceController),
+                  ),
                   const Divider(height: 30),
 
-                  /// ----------- الأزرار -----------
                   Row(
                     children: [
                       ElevatedButtonWidget(
@@ -120,14 +136,16 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
 
                           final plan = PlanModel(
                             id: '',
-                            member: widget.member, // ✅ صح
-                            trainer: selectedTrainer!, // ✅ صح
+                            member: widget.member,
+                            trainer: selectedTrainer!,
                             session: sessionController.text,
-                            status: 'active',
+                            method: selectedMethod.toString(),
                             price: priceController.text,
                             attendance: '',
+                            duration: durationController.text,
+                            status: 'نشط',
+                            private: 'private',
                           );
-
                           context.read<PlanCubit>().addPlan(plan);
                         },
                       ),
@@ -144,7 +162,6 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
           ),
         ),
 
-        /// ================= Loading Overlay =================
         BlocBuilder<PlanCubit, PlanState>(
           builder: (context, state) {
             if (state is AddPlanLoading) {

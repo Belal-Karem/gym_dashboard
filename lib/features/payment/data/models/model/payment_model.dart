@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:power_gym/constants.dart';
 
 class PaymentModel {
@@ -6,7 +7,7 @@ class PaymentModel {
   final String paid;
   final String paymentMethod;
   final String plan;
-  final String date;
+  final DateTime date;
   final String memberId;
 
   PaymentModel({
@@ -26,7 +27,7 @@ class PaymentModel {
       kpaid: paid,
       kpaymentMethod: paymentMethod,
       kplan: plan,
-      kdate: date,
+      kdate: Timestamp.fromDate(date),
       kmemberid: memberId,
     };
   }
@@ -35,7 +36,9 @@ class PaymentModel {
     return PaymentModel(
       id: docId,
       memberId: map[kmemberid] ?? '',
-      date: map[kdate] ?? '',
+      date: map[kdate] != null
+          ? (map[kdate] as Timestamp).toDate()
+          : DateTime.now(),
       type: map[ktype] ?? '',
       paid: map[kpaid] ?? '',
       paymentMethod: map[kpaymentMethod] ?? '',
@@ -50,7 +53,7 @@ class PaymentModel {
     String? paymentMethod,
     String? paid,
     String? plan,
-    String? date,
+    DateTime? date,
     String? memberId,
   }) {
     return PaymentModel(

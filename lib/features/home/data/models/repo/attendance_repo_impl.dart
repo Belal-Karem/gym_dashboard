@@ -9,6 +9,35 @@ class AttendanceRepoImpl implements AttendanceRepo {
 
   AttendanceRepoImpl(this.firestore);
 
+  // @override
+  // Future<void> markAttendance(MemberModel member) async {
+  //   final today = DateUtils.dateOnly(DateTime.now());
+  //   final dateId = today.toIso8601String().split('T').first;
+
+  //   final docRef = firestore
+  //       .collection('attendance')
+  //       .doc(dateId)
+  //       .collection('members')
+  //       .doc(member.id);
+
+  //   final doc = await docRef.get();
+
+  //   if (doc.exists) {
+  //     throw Exception('العضو مسجل بالفعل');
+  //   }
+
+  //   await docRef.set({
+  //     'id': member.id,
+  //     'memberId': member.memberId,
+  //     'name': member.name,
+  //     'phone': member.phone,
+  //     'attendanceCount': int.parse(member.attendance) + 1,
+  //     'status': member.status,
+  //     'time': FieldValue.serverTimestamp(),
+  //   });
+
+  // }
+
   @override
   Future<void> markAttendance(MemberModel member) async {
     final today = DateUtils.dateOnly(DateTime.now());
@@ -23,18 +52,24 @@ class AttendanceRepoImpl implements AttendanceRepo {
     final doc = await docRef.get();
 
     if (doc.exists) {
-      throw Exception('العضو مسجل بالفعل');
+      // لو موجود بالفعل → نزود attendanceCount واحد
+      final currentCount = (doc.data()?['attendanceCount'] ?? 0) as int;
+      await docRef.update({
+        'attendanceCount': currentCount + 1,
+        'time': FieldValue.serverTimestamp(),
+      });
+    } else {
+      // لو أول مرة → نضيف العضو
+      await docRef.set({
+        'id': member.id,
+        'memberId': member.memberId,
+        'name': member.name,
+        'phone': member.phone,
+        'attendanceCount': int.parse(member.attendance) + 1,
+        'status': member.status,
+        'time': FieldValue.serverTimestamp(),
+      });
     }
-
-    await docRef.set({
-      'id': member.id,
-      'memberId': member.memberId,
-      'name': member.name,
-      'phone': member.phone,
-      'attendanceCount': int.parse(member.attendance) + 1,
-      'status': member.status,
-      'time': FieldValue.serverTimestamp(),
-    });
   }
 
   @override

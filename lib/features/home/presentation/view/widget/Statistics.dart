@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/core/utils/service_locator.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/dashboard_cubit.dart';
+import 'package:power_gym/features/members/presentation/manger/cubit/members_count_state_state.dart';
+import 'package:power_gym/features/members/presentation/manger/cubit/members_count_stats_cubit.dart';
 
 class Statistics extends StatelessWidget {
   const Statistics({super.key});
@@ -13,7 +16,10 @@ class Statistics extends StatelessWidget {
         if (state is DashboardLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is DashboardLoaded) {
-          return StatisticsUi(count: state.todayAttendanceCount);
+          return BlocProvider(
+            create: (context) => sl<MembersCountStatsCubit>(),
+            child: StatisticsUi(count: state.todayAttendanceCount),
+          );
         } else if (state is DashboardError) {
           return Center(child: Text('Error: ${state.message}'));
         } else {
@@ -26,7 +32,6 @@ class Statistics extends StatelessWidget {
 
 class StatisticsUi extends StatelessWidget {
   const StatisticsUi({super.key, required this.count});
-
   final int count;
 
   @override
@@ -38,15 +43,26 @@ class StatisticsUi extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  '120',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+                BlocBuilder<MembersCountStatsCubit, MembersCountStatsState>(
+                  builder: (context, state) {
+                    if (state is MembersCountStatsLoaded) {
+                      return Text(
+                        state.count.active.toString(),
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
+                    }
+                    return const Text('0', style: TextStyle(fontSize: 30));
+                  },
                 ),
-                Text('أعضاء', style: TextStyle(fontSize: 15)),
+                const Text('أعضاء', style: TextStyle(fontSize: 15)),
               ],
             ),
           ),
         ),
+
         Expanded(
           child: StatisticsContainer(
             title: count.toString(),

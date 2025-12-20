@@ -7,10 +7,5 @@ abstract class PaymentRepo {
 
   Future<Either<Failure, Unit>> addPayment(PaymentModel member);
 
-  Future<Either<Failure, Unit>> updatePayment(
-    String id,
-    Map<String, dynamic> data,
-  );
-
   Future<Either<Failure, Unit>> deletePayment(String id);
 }
