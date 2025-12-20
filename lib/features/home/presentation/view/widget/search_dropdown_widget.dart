@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/get_data_member_cubit.dart';
 import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
+import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 
 class SearchDropdownWidget extends StatefulWidget {
   const SearchDropdownWidget({super.key});
@@ -12,61 +15,9 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
   final LayerLink _layerLink = LayerLink();
   final TextEditingController _controller = TextEditingController();
 
-  final List<String> usernames = [
-    'Ahmed',
-    'Mohamed',
-    'Ibrahim',
-    'Omar',
-    'Youssef',
-    'Mostafa',
-    'Khaled',
-    'Mahmoud',
-    'Walid',
-    'Sami',
-    'Fady',
-    'Karim',
-    'Ali',
-    'Tamer',
-    'Nader',
-    'Essam',
-    'Sherif',
-    'Gamal',
-    'Wael',
-    'Mina',
-    'Rami',
-    'Hossam',
-    'Taha',
-    'Bassem',
-    'Emad',
-    'Samir',
-    'Ayman',
-    'Yasin',
-    'Adel',
-    'Fouad',
-    'Ziad',
-    'Amr',
-    'Saad',
-    'Anas',
-    'Belal',
-    'Hazem',
-    'Nabil',
-    'Farid',
-    'Sameh',
-    'Kareem',
-    'Hany',
-    'Tariq',
-    'Majed',
-    'Raouf',
-    'Islam',
-    'Marwan',
-    'Osama',
-    'Reda',
-    'Shady',
-    'Lotfy',
-    'Bassel',
-  ];
+  List<MemberModel> members = [];
+  List<MemberModel> filtered = [];
 
-  List<String> filtered = [];
   OverlayEntry? _overlayEntry;
 
   void _updateOverlay() {
@@ -115,18 +66,23 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
                   shrinkWrap: true,
                   itemCount: filtered.length,
                   itemBuilder: (context, index) {
+                    final member = filtered[index];
+
                     return ListTile(
-                      title: Text(filtered[index]),
+                      title: Text(member.name),
                       onTap: () {
-                        setState(() {
-                          _controller.text = filtered[index];
-                          filtered.clear();
-                        });
+                        _controller.text = member.name;
+                        filtered.clear();
                         _removeOverlay();
                         showDialog(
                           context: context,
-                          builder: (context) {
-                            return Dialog(child: ShowDialogDataMemberInfo());
+                          builder: (dialogContext) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: ShowDialogDataMemberInfo(member: member),
+                            );
                           },
                         );
                       },
@@ -143,34 +99,34 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: TextField(
-        cursorColor: Colors.white,
-        controller: _controller,
-        decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          labelText: 'بحث',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          prefixIcon: const Icon(Icons.search),
-        ),
+    return BlocBuilder<GetDataMemberCubit, GetDataMemberState>(
+      builder: (context, state) {
+        if (state is GetDataMemberLoaded) {
+          members = state.members;
+        }
 
-        onChanged: (value) {
-          filtered = usernames
-              .where(
-                (name) => name.toLowerCase().startsWith(value.toLowerCase()),
-              )
-              .toList();
-          _updateOverlay();
-        },
-        onTap: () {
-          if (filtered.isNotEmpty) _updateOverlay();
-        },
-        onEditingComplete: _removeOverlay,
-      ),
+        return CompositedTransformTarget(
+          link: _layerLink,
+          child: TextField(
+            controller: _controller,
+            decoration: InputDecoration(
+              labelText: 'بحث',
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onChanged: (value) {
+              filtered = members
+                  .where(
+                    (m) => m.name.toLowerCase().startsWith(value.toLowerCase()),
+                  )
+                  .toList();
+              _updateOverlay();
+            },
+          ),
+        );
+      },
     );
   }
 

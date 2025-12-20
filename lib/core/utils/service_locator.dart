@@ -1,4 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'package:power_gym/features/home/data/models/repo/attendance_repo.dart';
+import 'package:power_gym/features/home/data/models/repo/attendance_repo_impl.dart';
+import 'package:power_gym/features/home/data/models/repo/get_data_member_repo_impl.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/attendance_cubit.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/dashboard_cubit.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/get_data_member_cubit.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/recent_member_cubit.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo_impl.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
@@ -19,6 +27,9 @@ final sl = GetIt.instance;
 void setupLocator() {
   // سجل الـ Repo مرة واحدة فقط
   sl.registerLazySingleton<MemberRepoImpl>(() => MemberRepoImpl());
+  sl.registerLazySingleton<AttendanceRepo>(
+    () => AttendanceRepoImpl(FirebaseFirestore.instance),
+  );
 
   // سجل Cubit الخاص بالأعضاء
   sl.registerFactory<MembersCubit>(
@@ -58,5 +69,24 @@ void setupLocator() {
   sl.registerLazySingleton<PlanRepoImpl>(() => PlanRepoImpl());
   sl.registerFactory<PlanCubit>(
     () => PlanCubit(sl<PlanRepoImpl>())..loadPlan(),
+  );
+
+  sl.registerLazySingleton<GetDataMemberRepoImpl>(
+    () => GetDataMemberRepoImpl(),
+  );
+  sl.registerFactory<GetDataMemberCubit>(
+    () => GetDataMemberCubit(sl<GetDataMemberRepoImpl>())..loadData(),
+  );
+
+  sl.registerFactory<DashboardCubit>(
+    () => DashboardCubit(sl<AttendanceRepo>())..loadDashboard(),
+  );
+
+  sl.registerFactory<AttendanceCubit>(
+    () => AttendanceCubit(sl<AttendanceRepo>()),
+  );
+
+  sl.registerFactory<RecentMemberCubit>(
+    () => RecentMemberCubit(sl<AttendanceRepo>())..loadRecent(),
   );
 }

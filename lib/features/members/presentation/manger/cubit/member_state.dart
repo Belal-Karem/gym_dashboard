@@ -13,10 +13,8 @@ abstract class MembersState extends Equatable {
   List<Object?> get props => [];
 }
 
-/// الحالة المبدئية
 class MembersInitial extends MembersState {}
 
-/// تحميل جميع الأعضاء (Stream)
 class MembersLoading extends MembersState {}
 
 class MembersLoaded extends MembersState {

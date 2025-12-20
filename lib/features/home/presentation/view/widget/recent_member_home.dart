@@ -1,10 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
+import 'package:power_gym/features/home/data/models/model/recent_member_model.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/recent_member_cubit.dart';
 
 class RecentMemberHome extends StatelessWidget {
   const RecentMemberHome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RecentMemberCubit, RecentMemberState>(
+      builder: (context, state) {
+        if (state is RecentMemberLoading) {
+          return const CircularProgressIndicator();
+        }
+
+        if (state is RecentMemberLoaded) {
+          if (state.members.isEmpty) {
+            return const Text('لا يوجد حضور اليوم');
+          }
+
+          return RecentMemberHomeUi(members: state.members);
+        }
+
+        if (state is RecentMemberError) {
+          return Text(state.message);
+        }
+
+        return const SizedBox();
+      },
+    );
+  }
+}
+
+class RecentMemberHomeUi extends StatelessWidget {
+  const RecentMemberHomeUi({super.key, required this.members});
+
+  final List<RecentMemberModel> members;
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +76,21 @@ class RecentMemberHome extends StatelessWidget {
                   TableHeaderCellWidget('الحاله'),
                 ]),
 
-                TableHelper.buildDataRow(
-                  cells: [
-                    TableCellWidget('20'),
-                    TableCellWidget('belal karem'),
-                    TableCellWidget('25'),
-                    TableCellWidget(
-                      'Active',
-                      style: const TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
+                ...members.map(
+                  (members) => TableHelper.buildDataRow(
+                    cells: [
+                      TableCellWidget(members.memberId),
+                      TableCellWidget(members.name),
+                      TableCellWidget(members.attendanceCount.toString()),
+                      TableCellWidget(
+                        members.status,
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

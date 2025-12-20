@@ -5,6 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:power_gym/core/utils/app_router.dart';
 import 'package:power_gym/core/utils/service_locator.dart';
+import 'package:power_gym/features/home/data/models/repo/attendance_repo.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/attendance_cubit.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/dashboard_cubit.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/get_data_member_cubit.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/recent_member_cubit.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
@@ -44,6 +49,18 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<PaymentCubit>(create: (_) => sl<PaymentCubit>()),
         BlocProvider<PlanCubit>(create: (_) => sl<PlanCubit>()),
+        BlocProvider<GetDataMemberCubit>(
+          create: (_) => sl<GetDataMemberCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<DashboardCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<RecentMemberCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => AttendanceCubit(sl<AttendanceRepo>()), // أو repo مباشر
+        ),
       ],
       child: MaterialApp.router(
         locale: Locale('ar'),

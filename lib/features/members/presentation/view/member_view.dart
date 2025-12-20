@@ -25,10 +25,7 @@ class MemberView extends StatelessWidget {
               ),
             ],
           ),
-          BlocProvider(
-            create: (context) => sl<MembersCubit>(),
-            child: const MemberViewBody(),
-          ),
+          Expanded(child: const MemberViewBody()),
         ],
       ),
     );
