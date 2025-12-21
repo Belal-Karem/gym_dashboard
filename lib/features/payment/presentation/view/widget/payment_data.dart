@@ -15,7 +15,7 @@ class PaymentData extends StatelessWidget {
         if (state is PaymentLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is PaymentLoaded) {
-          final payment = state.payment;
+          final payment = state.payments;
           return PaymentDataTaple(payment: payment);
         } else if (state is PaymentError) {
           return CustomErrorWidget(errMessage: state.message);

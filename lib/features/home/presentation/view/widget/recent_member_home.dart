@@ -18,10 +18,6 @@ class RecentMemberHome extends StatelessWidget {
         }
 
         if (state is RecentMemberLoaded) {
-          if (state.members.isEmpty) {
-            return const Text('لا يوجد حضور اليوم');
-          }
-
           return RecentMemberHomeUi(members: state.members);
         }
 
@@ -79,11 +75,19 @@ class RecentMemberHomeUi extends StatelessWidget {
                 ...members.map(
                   (members) => TableHelper.buildDataRow(
                     cells: [
-                      TableCellWidget(members.memberId),
-                      TableCellWidget(members.name),
-                      TableCellWidget(members.attendanceCount.toString()),
                       TableCellWidget(
-                        members.status,
+                        members.memberId.isEmpty ? '---' : members.memberId,
+                      ),
+                      TableCellWidget(
+                        members.name.isEmpty ? '---' : members.name,
+                      ),
+                      TableCellWidget(
+                        members.attendanceCount.toString().isEmpty
+                            ? '---'
+                            : members.attendanceCount.toString(),
+                      ),
+                      TableCellWidget(
+                        members.status.isEmpty ? '---' : members.status,
                         style: const TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.bold,

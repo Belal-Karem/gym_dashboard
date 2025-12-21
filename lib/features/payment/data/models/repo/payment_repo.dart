@@ -6,6 +6,6 @@ abstract class PaymentRepo {
   Future<Either<Failure, Stream<List<PaymentModel>>>> getAllPayment();
 
   Future<Either<Failure, Unit>> addPayment(PaymentModel member);
-
+  Future<Either<Failure, Stream<List<PaymentModel>>>> getTodayPayments();
   Future<Either<Failure, Unit>> deletePayment(String id);
 }
