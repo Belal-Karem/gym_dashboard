@@ -60,6 +60,7 @@ class PlanCubit extends Cubit<PlanState> {
             plan: 'pt',
             paymentMethod: plan.method, // أو plan.method لو موجود
             date: DateTime.now(),
+            status: 'income',
           ),
         );
 

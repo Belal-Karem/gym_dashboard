@@ -9,6 +9,7 @@ import 'package:power_gym/core/widget/elevated_button_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/payment/data/models/model/payment_model.dart';
+import 'package:power_gym/features/payment/presentation/view/widget/money_type_form_field.dart';
 
 class DialogAddPaymentUi extends StatefulWidget {
   const DialogAddPaymentUi({super.key});
@@ -20,10 +21,10 @@ class DialogAddPaymentUi extends StatefulWidget {
 class _DialogAddPaymentUiState extends State<DialogAddPaymentUi> {
   final typeController = TextEditingController();
   final paidController = TextEditingController();
-  final paymentDataController = TextEditingController();
   final maxAttendanceController = TextEditingController();
-  String? paymentMethod;
+  String? paymentMethod = 'نقدي';
   GlobalKey<FormState> formKey = GlobalKey();
+  MoneyType? selectedMoneyType;
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +44,26 @@ class _DialogAddPaymentUiState extends State<DialogAddPaymentUi> {
                 rightChild: TextFieldAddWidget(controller: paidController),
               ),
               DoubleFieldRowAddWidget(
-                leftLabel: 'وقت الدفع',
-                leftChild: TextFieldAddWidget(
-                  controller: paymentDataController,
+                leftLabel: 'محدد نوع المال ',
+                leftChild: MoneyTypeFormField(
+                  initialValue: selectedMoneyType,
+                  validator: (value) {
+                    if (value == null) {
+                      return 'من فضلك اختر إدخال أو إخراج';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    selectedMoneyType = value;
+                  },
                 ),
+
                 rightLabel: 'طريقة الدفع',
                 rightChild: CustomDropdownWidget(
                   items: [
                     DropdownMenuItem(value: 'نقدي', child: Text('نقدي')),
                     DropdownMenuItem(value: 'محفظه', child: Text('محفظه')),
+                    DropdownMenuItem(value: 'فيزا', child: Text('فيزا')),
                     DropdownMenuItem(
                       value: 'إنستاباي',
                       child: Text('إنستاباي'),
@@ -63,7 +75,6 @@ class _DialogAddPaymentUiState extends State<DialogAddPaymentUi> {
                   },
                 ),
               ),
-              const SizedBox(height: 10),
 
               const Divider(height: 30),
               Row(
@@ -80,6 +91,9 @@ class _DialogAddPaymentUiState extends State<DialogAddPaymentUi> {
                           plan: '_',
                           memberId: '',
                           date: DateTime.now(),
+                          status: selectedMoneyType == MoneyType.income
+                              ? 'income'
+                              : 'expense',
                         );
                         context.read<PaymentCubit>().addPayment(addPayment);
                       } else {

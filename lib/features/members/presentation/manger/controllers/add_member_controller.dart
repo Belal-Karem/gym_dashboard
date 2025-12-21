@@ -84,6 +84,7 @@ class AddMemberController {
           paymentMethod: "كاش",
           date: DateTime.now(),
           name: name.text,
+          status: 'income',
         );
       }
     } catch (e) {

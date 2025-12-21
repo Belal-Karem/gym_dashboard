@@ -11,6 +11,7 @@ class PaymentActions {
     required DateTime date,
     required String name,
     required String paymentMethod,
+    required String status,
   }) async {
     final payment = PaymentModel(
       id: '',
@@ -20,6 +21,7 @@ class PaymentActions {
       date: date,
       paymentMethod: paymentMethod,
       type: name,
+      status: status,
     );
 
     await _repo.addPayment(payment);
