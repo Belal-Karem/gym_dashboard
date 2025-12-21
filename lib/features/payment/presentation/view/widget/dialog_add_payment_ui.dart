@@ -44,7 +44,7 @@ class _DialogAddPaymentUiState extends State<DialogAddPaymentUi> {
                 rightChild: TextFieldAddWidget(controller: paidController),
               ),
               DoubleFieldRowAddWidget(
-                leftLabel: 'محدد نوع المال ',
+                leftLabel: 'محدد نوع مصروفات ',
                 leftChild: MoneyTypeFormField(
                   initialValue: selectedMoneyType,
                   validator: (value) {

@@ -40,7 +40,7 @@ class PaymentDataTaple extends StatelessWidget {
 
             ...payment.map(
               (payment) => TableHelper.buildDataRow(
-                color: payment.plan == '_'
+                color: payment.status == 'expense'
                     ? Colors.red.withAlpha(20)
                     : Colors.transparent,
                 cells: [
