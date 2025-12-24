@@ -33,8 +33,14 @@ class PaymentRepoImpl implements PaymentRepo {
   Future<Either<Failure, Unit>> addPayment(PaymentModel payment) async {
     try {
       final docRef = paymentsRef.doc();
-      await docRef.set(payment.copyWith(id: docRef.id).toJson());
 
+      final date = payment.date;
+      final dateId =
+          '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+      await docRef.set(
+        payment.copyWith(id: docRef.id, dateId: dateId).toJson(),
+      );
       return const Right(unit);
     } catch (e) {
       return Left(handleFirebaseException(e));

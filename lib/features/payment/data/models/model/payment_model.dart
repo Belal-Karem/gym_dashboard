@@ -10,6 +10,7 @@ class PaymentModel {
   final DateTime date;
   final String memberId;
   final String status;
+  final String? dateId;
 
   PaymentModel({
     required this.memberId,
@@ -20,6 +21,7 @@ class PaymentModel {
     required this.paymentMethod,
     required this.plan,
     required this.status,
+    this.dateId,
   });
 
   Map<String, dynamic> toJson() {
@@ -32,6 +34,7 @@ class PaymentModel {
       kdate: Timestamp.fromDate(date),
       kmemberid: memberId,
       kstatus: status,
+      'dateId': dateId,
     };
   }
 
@@ -47,6 +50,7 @@ class PaymentModel {
       paymentMethod: map[kpaymentMethod] ?? '',
       plan: map[kplan] ?? '',
       status: map[kstatus] ?? '',
+      dateId: map['dateId'] ?? '',
     );
   }
 
@@ -59,11 +63,13 @@ class PaymentModel {
     String? plan,
     DateTime? date,
     String? memberId,
+    String? dateId,
     String? status,
   }) {
     return PaymentModel(
       id: id ?? this.id,
       memberId: memberId ?? this.memberId,
+      dateId: dateId ?? this.dateId,
       date: date ?? this.date,
       paymentMethod: paymentMethod ?? this.paymentMethod,
       paid: paid ?? this.paid,

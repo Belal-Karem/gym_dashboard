@@ -52,22 +52,23 @@ class AttendanceRepoImpl implements AttendanceRepo {
     final doc = await docRef.get();
 
     if (doc.exists) {
-      // لو موجود بالفعل → نزود attendanceCount واحد
       final currentCount = (doc.data()?['attendanceCount'] ?? 0) as int;
       await docRef.update({
         'attendanceCount': currentCount + 1,
         'time': FieldValue.serverTimestamp(),
       });
     } else {
-      // لو أول مرة → نضيف العضو
       await docRef.set({
         'id': member.id,
         'memberId': member.memberId,
-        'name': member.name,
+        'startDate': member.startdata,
+        'endDate': member.endDate,
+        'memberName': member.name,
         'phone': member.phone,
         'attendanceCount': int.parse(member.attendance) + 1,
         'status': member.status,
         'time': FieldValue.serverTimestamp(),
+        'note': member.note,
       });
     }
   }

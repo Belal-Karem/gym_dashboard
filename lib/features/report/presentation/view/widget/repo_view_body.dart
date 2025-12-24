@@ -4,16 +4,18 @@ import 'package:power_gym/features/report/presentation/view/widget/custom_presen
 import 'package:power_gym/features/report/presentation/view/widget/repo_view_body_app_bar.dart';
 
 class RepoViewBody extends StatelessWidget {
-  const RepoViewBody({super.key});
+  const RepoViewBody({super.key, required this.selectedDate});
+
+  final DateTime selectedDate;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: const Column(
+      child:  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RepoViewBodyAppBar(),
+          RepoViewBodyAppBar(date: selectedDate),
           SizedBox(height: 40),
           RepoViewHeader(),
           SizedBox(height: 40),

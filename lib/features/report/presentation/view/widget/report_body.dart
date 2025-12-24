@@ -1,65 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:power_gym/core/widget/custom_container_statistics.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/features/report/presentation/manger/cubit/report_filter_cubit.dart';
 import 'package:power_gym/features/report/presentation/view/widget/custom_dropdown_button.dart';
-import 'package:power_gym/features/report/presentation/view/widget/repo_view.dart';
+import 'package:power_gym/features/report/presentation/view/widget/date_card.dart';
 
-class ReportBody extends StatefulWidget {
+class ReportBody extends StatelessWidget {
   const ReportBody({super.key});
 
   @override
-  State<ReportBody> createState() => _ReportBodyState();
-}
-
-class _ReportBodyState extends State<ReportBody> {
-  @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> attendanceData = [
-      {'date': '5 November'},
-      {'date': '6 November'},
-      {'date': '7 November'},
-      {'date': '5 November'},
-      {'date': '6 November'},
-      {'date': '7 November'},
-      {'date': '5 November'},
-      {'date': '6 November'},
-      {'date': '7 November'},
-      {'date': '5 November'},
-      {'date': '6 November'},
-      {'date': '7 November'},
-      {'date': '5 November'},
-      {'date': '6 November'},
-      {'date': '7 November'},
-      {'date': '5 November'},
-      {'date': '6 November'},
-      {'date': '7 November'},
-      {'date': '7 November'},
-      {'date': '5 November'},
-      {'date': '6 November'},
-      {'date': '7 November'},
-      {'date': '5 November'},
-      {'date': '6 November'},
-      {'date': '7 November'},
-      {'date': '5 November'},
-      {'date': '6 November'},
-      {'date': '7 November'},
-      {'date': '5 November'},
-      {'date': '6 November'},
-      {'date': '7 November'},
-    ];
-
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
         children: [
-          CustomDropdownButton(),
-          SizedBox(height: 15),
+          const CustomDropdownButton(),
+          const SizedBox(height: 15),
+
+          /// Grid أيام الشهر
           Expanded(
-            child: CustomContainerStatistics(
-              padding: 0,
-              child: SizedBox(
-                height: 300,
-                child: GridView.builder(
-                  itemCount: attendanceData.length,
+            child: BlocBuilder<ReportFilterCubit, ReportFilterState>(
+              builder: (context, state) {
+                final days = _generateDays(state.year, state.month);
+
+                return GridView.builder(
+                  itemCount: days.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 6,
                     crossAxisSpacing: 8,
@@ -67,56 +31,19 @@ class _ReportBodyState extends State<ReportBody> {
                     childAspectRatio: 1.4,
                   ),
                   itemBuilder: (context, index) {
-                    final data = attendanceData[index];
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xff141318),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            data['date'],
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return RepoView();
-                                    },
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Color(0xff1B1C20),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Text('View Report'),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                    return DateCard(dayDate: days[index]);
                   },
-                ),
-              ),
+                );
+              },
             ),
           ),
         ],
       ),
     );
+  }
+
+  List<DateTime> _generateDays(int year, int month) {
+    final lastDay = DateTime(year, month + 1, 0).day;
+    return List.generate(lastDay, (i) => DateTime(year, month, i + 1));
   }
 }

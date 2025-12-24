@@ -7,13 +7,11 @@ class ReportViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Row(
-        children: [
-          Expanded(flex: 1, child: const CustomDrawer()),
-          Expanded(flex: 3, child: const ReportBody()),
-        ],
-      ),
+    return Row(
+      children: [
+        Expanded(flex: 1, child: const CustomDrawer()),
+        Expanded(flex: 3, child: ReportBody()),
+      ],
     );
   }
 }

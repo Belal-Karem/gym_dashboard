@@ -1,92 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/features/report/presentation/manger/cubit/report_filter_cubit.dart';
 
-class CustomDropdownButton extends StatefulWidget {
+class CustomDropdownButton extends StatelessWidget {
   const CustomDropdownButton({super.key});
 
   @override
-  State<CustomDropdownButton> createState() => _CustomDropdownButtonState();
-}
-
-class _CustomDropdownButtonState extends State<CustomDropdownButton> {
-  String selectedMonth = 'November';
-  String selectedYear = '2025';
-
-  final List<String> months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-  final List<String> years = ['2023', '2024', '2025', '2026'];
-
-  @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: DropdownButtonFormField<String>(
-            dropdownColor: const Color(0xff1B1C20),
-            value: selectedMonth,
-            decoration: InputDecoration(
-              labelText: 'Month',
-              labelStyle: const TextStyle(color: Colors.white70),
-              filled: true,
-              fillColor: const Color(0xff1B1C20),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none,
+    return BlocBuilder<ReportFilterCubit, ReportFilterState>(
+      builder: (context, state) {
+        return Row(
+          children: [
+            Expanded(
+              child: DropdownButtonFormField<int>(
+                dropdownColor: const Color(0xff1B1C20),
+                value: state.month,
+                decoration: _decoration('Month'),
+                items: List.generate(12, (index) {
+                  final month = index + 1;
+                  return DropdownMenuItem(
+                    value: month,
+                    child: Text(
+                      _monthName(month),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  );
+                }),
+                onChanged: (value) {
+                  if (value != null) {
+                    context.read<ReportFilterCubit>().changeMonth(value);
+                  }
+                },
               ),
             ),
-            items: months.map((month) {
-              return DropdownMenuItem(
-                value: month,
-                child: Text(month, style: const TextStyle(color: Colors.white)),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedMonth = value!;
-              });
-            },
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: DropdownButtonFormField<String>(
-            dropdownColor: const Color(0xff1B1C20),
-            value: selectedYear,
-            decoration: InputDecoration(
-              labelText: 'Year',
-              labelStyle: const TextStyle(color: Colors.white70),
-              filled: true,
-              fillColor: const Color(0xff1B1C20),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none,
+
+            const SizedBox(width: 12),
+
+            /// Year Dropdown
+            Expanded(
+              child: DropdownButtonFormField<int>(
+                dropdownColor: const Color(0xff1B1C20),
+                value: state.year,
+                decoration: _decoration('Year'),
+                items: List.generate(5, (index) {
+                  final year = DateTime.now().year - index;
+                  return DropdownMenuItem(
+                    value: year,
+                    child: Text(
+                      year.toString(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  );
+                }),
+                onChanged: (value) {
+                  if (value != null) {
+                    context.read<ReportFilterCubit>().changeYear(value);
+                  }
+                },
               ),
             ),
-            items: years.map((year) {
-              return DropdownMenuItem(
-                value: year,
-                child: Text(year, style: const TextStyle(color: Colors.white)),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedYear = value!;
-              });
-            },
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
+  }
+
+  InputDecoration _decoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.white70),
+      filled: true,
+      fillColor: const Color(0xff1B1C20),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide.none,
+      ),
+    );
+  }
+
+  String _monthName(int month) {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return months[month - 1];
   }
 }

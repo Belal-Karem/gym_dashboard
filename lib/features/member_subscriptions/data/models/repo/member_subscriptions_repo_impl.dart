@@ -16,9 +16,15 @@ class MemberSubscriptionsRepoImpl implements MemberSubscriptionsRepo {
     MemberSubscriptionModel subscription,
   ) async {
     try {
+      // await subsRef
+      //     .doc('${subscription.memberId}_${subscription.subId}')
+      //     .set(subscription.toJson());
+
+      final dateId = _extractDateIdFromString(subscription.startDate);
+
       await subsRef
           .doc('${subscription.memberId}_${subscription.subId}')
-          .set(subscription.toJson());
+          .set(subscription.copyWith(dateId: dateId).toJson());
       return const Right(unit);
     } catch (e) {
       return Left(handleFirebaseException(e));
@@ -42,4 +48,14 @@ class MemberSubscriptionsRepoImpl implements MemberSubscriptionsRepo {
       return Left(handleFirebaseException(e));
     }
   }
+}
+
+String _extractDateIdFromString(String date) {
+  // لو ISO DateTime
+  if (date.contains('T')) {
+    return date.split('T').first;
+  }
+
+  // لو ISO Date فقط
+  return date;
 }
