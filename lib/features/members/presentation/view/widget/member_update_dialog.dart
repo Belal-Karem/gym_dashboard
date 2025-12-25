@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/core/helper/format_date_helper.dart';
+import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/core/utils/constants.dart';
 import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
+import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
@@ -20,9 +23,10 @@ class MemberDialog extends StatefulWidget {
 class _MemberDialogState extends State<MemberDialog> {
   late TextEditingController nameController;
   late TextEditingController phoneController;
-  late TextEditingController startController;
-  late TextEditingController endController;
-  late TextEditingController attendanceController;
+  late String remainingDays;
+  late String endData;
+  late String startData;
+  late String affiliationdate;
   String? selectedStatus;
   String? selectedGender;
 
@@ -31,11 +35,10 @@ class _MemberDialogState extends State<MemberDialog> {
     super.initState();
     nameController = TextEditingController(text: widget.member.name);
     phoneController = TextEditingController(text: widget.member.phone);
-    startController = TextEditingController(text: widget.member.startdata);
-    endController = TextEditingController(text: widget.member.endDate);
-    attendanceController = TextEditingController(
-      text: widget.member.attendance,
-    );
+    remainingDays = widget.member.remainingDays;
+    endData = widget.member.endDate;
+    startData = widget.member.startdata;
+    affiliationdate = widget.member.affiliationdate;
     selectedStatus = widget.member.status;
     selectedGender = widget.member.gender;
   }
@@ -44,9 +47,6 @@ class _MemberDialogState extends State<MemberDialog> {
   void dispose() {
     nameController.dispose();
     phoneController.dispose();
-    startController.dispose();
-    endController.dispose();
-    attendanceController.dispose();
     super.dispose();
   }
 
@@ -54,9 +54,6 @@ class _MemberDialogState extends State<MemberDialog> {
     final updatedMember = widget.member.copyWith(
       name: nameController.text,
       phone: phoneController.text,
-      startdata: startController.text,
-      enddata: endController.text,
-      attendance: attendanceController.text,
       status: selectedStatus ?? widget.member.status,
       gender: selectedGender ?? widget.member.gender,
     );
@@ -76,11 +73,17 @@ class _MemberDialogState extends State<MemberDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: kprimaryColor,
-      title: const Text('تعديل بيانات العضو'),
+      title: const Text(' بيانات العضو'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            DisplayData(label: 'تاريخ الانضمام', child: affiliationdate),
+            DisplayData(label: 'تاريخ البدء', child2: startData),
+            DisplayData(label: 'تاريخ النتهاء', child2: endData),
+            DisplayData(label: 'الايام المتبقيه', child: remainingDays),
+
+            Text('تعديل'),
             FieldLabelAndInputAddWidget(
               label: 'الاسم',
               child: TextFieldAddWidget(controller: nameController),
@@ -89,22 +92,10 @@ class _MemberDialogState extends State<MemberDialog> {
               label: 'الهاتف',
               child: TextFieldAddWidget(controller: phoneController),
             ),
-            FieldLabelAndInputAddWidget(
-              label: 'تاريخ البدء',
-              child: TextFieldAddWidget(controller: startController),
-            ),
-            FieldLabelAndInputAddWidget(
-              label: 'تاريخ الانتهاء',
-              child: TextFieldAddWidget(controller: endController),
-            ),
-            FieldLabelAndInputAddWidget(
-              label: 'الحضور',
-              child: TextFieldAddWidget(controller: attendanceController),
-            ),
-            FieldLabelAndInputAddWidget(label: 'الغياب', child: Text('')),
-            FieldLabelAndInputAddWidget(
-              label: 'الحالة',
-              child: CustomDropdownWidget(
+
+            DoubleFieldRowAddWidget(
+              leftLabel: ' الحالة',
+              leftChild: CustomDropdownWidget(
                 items: const [
                   DropdownMenuItem(value: 'نشط', child: Text('نشط')),
                   DropdownMenuItem(value: 'متوقف', child: Text('متوقف')),
@@ -118,10 +109,8 @@ class _MemberDialogState extends State<MemberDialog> {
                   setState(() => selectedStatus = value);
                 },
               ),
-            ),
-            FieldLabelAndInputAddWidget(
-              label: 'النوع',
-              child: CustomDropdownWidget(
+              rightLabel: 'النوع',
+              rightChild: CustomDropdownWidget(
                 items: const [
                   DropdownMenuItem(value: 'ذكر', child: Text('ذكر')),
                   DropdownMenuItem(value: 'أنثى', child: Text('أنثى')),
@@ -160,6 +149,63 @@ class _MemberDialogState extends State<MemberDialog> {
           child: const Text('إغلاق'),
         ),
       ],
+    );
+  }
+}
+
+class DisplayData extends StatelessWidget {
+  const DisplayData({super.key, required this.label, this.child, this.child2});
+
+  final String label;
+  final String? child, child2;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.white.withAlpha(150)),
+      ),
+      child: Column(
+        children: [
+          ItemDisplayData(label: label, child: child, child2: child2 ?? ''),
+        ],
+      ),
+    );
+  }
+}
+
+class ItemDisplayData extends StatelessWidget {
+  const ItemDisplayData({
+    super.key,
+    required this.label,
+    this.child,
+    this.child2,
+  });
+
+  final String label;
+  final String? child2, child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Text('$label :', style: AppStyle.style20W500),
+          Text(
+            ' ${FormatDateHelper.formatDate(child)}',
+            style: AppStyle.style20.copyWith(
+              color: Colors.white.withAlpha(200),
+            ),
+          ),
+          Text(
+            ' ${child2}',
+            style: AppStyle.style20.copyWith(
+              color: Colors.white.withAlpha(200),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

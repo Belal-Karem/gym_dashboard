@@ -14,7 +14,10 @@ class AttendanceCubit extends Cubit<AttendanceState> {
 
     try {
       await repo.markAttendance(member);
-      emit(AttendanceSuccess());
+
+      final updatedMember = member.copyWith(attendance: member.attendance + 1);
+
+      emit(AttendanceSuccess(updatedMember));
     } catch (e) {
       emit(AttendanceError(e.toString()));
     }

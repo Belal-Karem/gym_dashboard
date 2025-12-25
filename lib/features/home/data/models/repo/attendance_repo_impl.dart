@@ -26,12 +26,13 @@ class AttendanceRepoImpl implements AttendanceRepo {
   //     throw Exception('العضو مسجل بالفعل');
   //   }
 
+  //   final attendanc = int.parse(member.attendance) + 1;
   //   await docRef.set({
   //     'id': member.id,
   //     'memberId': member.memberId,
   //     'name': member.name,
   //     'phone': member.phone,
-  //     'attendanceCount': int.parse(member.attendance) + 1,
+  //     'attendanceCount': attendanc,
   //     'status': member.status,
   //     'time': FieldValue.serverTimestamp(),
   //   });
@@ -43,34 +44,32 @@ class AttendanceRepoImpl implements AttendanceRepo {
     final today = DateUtils.dateOnly(DateTime.now());
     final dateId = today.toIso8601String().split('T').first;
 
-    final docRef = firestore
+    final attendanceRef = firestore
         .collection('attendance')
         .doc(dateId)
         .collection('members')
         .doc(member.id);
 
-    final doc = await docRef.get();
+    final memberRef = firestore.collection('member').doc(member.id);
 
-    if (doc.exists) {
-      final currentCount = (doc.data()?['attendanceCount'] ?? 0) as int;
-      await docRef.update({
-        'attendanceCount': currentCount + 1,
-        'time': FieldValue.serverTimestamp(),
-      });
-    } else {
-      await docRef.set({
-        'id': member.id,
-        'memberId': member.memberId,
-        'startDate': member.startdata,
-        'endDate': member.endDate,
-        'memberName': member.name,
-        'phone': member.phone,
-        'attendanceCount': int.parse(member.attendance) + 1,
-        'status': member.status,
-        'time': FieldValue.serverTimestamp(),
-        'note': member.note,
-      });
+    final attendanceDoc = await attendanceRef.get();
+
+    if (attendanceDoc.exists) {
+      throw Exception('العضو مسجل بالفعل');
     }
+
+    await attendanceRef.set({
+      'id': member.id,
+      'memberId': member.memberId,
+      'name': member.name,
+      'phone': member.phone,
+      'attendanceCount': member.attendance + 1,
+      'status': member.status,
+      'time': FieldValue.serverTimestamp(),
+    });
+
+    // 2️⃣ زوّد عدد الحضور في بيانات العضو
+    await memberRef.update({'attendance': FieldValue.increment(1)});
   }
 
   @override

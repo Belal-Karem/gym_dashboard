@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
@@ -76,10 +77,24 @@ class CustomPresenceUi extends StatelessWidget {
                       (a) => TableHelper.buildDataRow(
                         cells: [
                           TableCellWidget('${a.memberName}'),
-                          TableCellWidget('${a.startDate}'),
-                          TableCellWidget('${a.endDate}'),
+                          TableCellWidget(
+                            // DateFormat(
+                            //   'yyyy-MM-dd',
+                            //   'en_US',
+                            // ).format(a.startDate),
+                            '',
+                          ),
+                          TableCellWidget(
+                            // DateFormat('yyyy-MM-dd', 'en_US').format(a.endDate),
+                            '',
+                          ),
                           TableCellWidget('${a.status}'),
-                          TableCellWidget('${a.attendanceTime}'),
+                          TableCellWidget(
+                            DateFormat(
+                              'hh:mm a',
+                              'en_US',
+                            ).format(a.attendanceTime),
+                          ),
                           TableCellWidget('${a.note}'),
                         ],
                       ),

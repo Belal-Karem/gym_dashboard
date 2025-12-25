@@ -68,7 +68,7 @@ class AddMemberController {
           gender: gender,
           note: note.text,
           status: status,
-          attendance: '0',
+          attendance: 0,
           endDate: '',
           remainingDays: '0',
           affiliationdate: DateTime.now().toIso8601String(),

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/features/report/presentation/manger/cubit/report_filter_cubit.dart';
-import 'package:power_gym/features/report/presentation/view/report_view.dart';
 import 'package:power_gym/features/report/presentation/view/widget/repo_view.dart';
 
 class DateCard extends StatelessWidget {
@@ -13,12 +10,12 @@ class DateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xff141318),
+        color: const Color(0xff1B1C20),
         borderRadius: BorderRadius.circular(12),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             '${dayDate.day} ${_monthToString(dayDate.month)}',
@@ -28,7 +25,7 @@ class DateCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 30),
           Center(
             child: GestureDetector(
               onTap: () {
@@ -42,11 +39,11 @@ class DateCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xff1B1C20),
+                  color: const Color.fromARGB(255, 43, 43, 43),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Text(
-                  'View Report',
+                  'عرض التقرير',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -60,18 +57,19 @@ class DateCard extends StatelessWidget {
   String _monthToString(int month) {
     const months = [
       '',
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
+
+      'يناير،',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
     ];
     return months[month];
   }

@@ -6,7 +6,7 @@ class MemberModel {
   final String name;
   final String phone;
   final String startdata;
-  final String attendance;
+  final int attendance;
   final String status;
   final String note;
   final String gender;
@@ -52,8 +52,9 @@ class MemberModel {
       name: map[kname] ?? '',
       phone: map[kPhone] ?? '',
       startdata: map[kStartdate] ?? '',
-      attendance: map[kattendance] ?? '',
+      attendance: map[kattendance] ?? 0,
       status: map['status'] ?? '',
+
       note: map[knote] ?? '',
       gender: map[kgender] ?? '',
       memberId: map[kmemberid] ?? '',
@@ -69,7 +70,7 @@ class MemberModel {
     String? phone,
     String? startdata,
     String? enddata,
-    String? attendance,
+    int? attendance,
     String? status,
     String? gender,
     String? note,
