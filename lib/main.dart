@@ -16,9 +16,8 @@ import 'package:power_gym/features/members/presentation/manger/cubit/member_cubi
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_attendance_repo_impl.dart';
-import 'package:power_gym/features/report/data/models/repo/daily_summary_repo_impl.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_attendance_cubit.dart';
-import 'package:power_gym/features/report/presentation/manger/cubit/daily_summary_cubit.dart';
+import 'package:power_gym/features/report/presentation/manger/cubit/daily_report_comment_cubit.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/report_filter_cubit.dart';
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_cubit.dart';
 import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
@@ -64,6 +63,12 @@ class MyApp extends StatelessWidget {
           create: (_) => AttendanceCubit(sl<AttendanceRepo>()), // أو repo مباشر
         ),
         BlocProvider(create: (_) => ReportFilterCubit()),
+        BlocProvider(
+          create: (_) => DailyAttendanceCubit(
+            DailyAttendanceRepoImpl(FirebaseFirestore.instance),
+          ),
+        ),
+        BlocProvider(create: (_) => sl<DailyReportCommentCubit>()),
       ],
       child: MaterialApp.router(
         locale: Locale('ar'),

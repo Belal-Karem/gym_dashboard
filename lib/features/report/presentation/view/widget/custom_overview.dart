@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:power_gym/core/utils/app_style.dart';
+import 'package:power_gym/features/report/presentation/manger/cubit/daily_report_comment_cubit.dart';
 import 'package:power_gym/features/report/presentation/view/widget/list_title_item.dart';
 import 'package:power_gym/model/list_title_overview_model.dart';
 
@@ -35,12 +37,25 @@ class CustomOverview extends StatelessWidget {
             icon: Icons.person,
           ),
         ),
-        ListTitleItem(
-          listTitleOverviewModel: ListTitleOverviewModel(
-            text: 'ملحظات',
-            data: 'تم تنظيف الصاله',
-            icon: Icons.notes,
-          ),
+        BlocBuilder<DailyReportCommentCubit, DailyReportCommentState>(
+          builder: (context, state) {
+            if (state is DailyReportCommentStateLoading) {
+              return const CircularProgressIndicator();
+            }
+            if (state is DailyReportCommentStateLoaded) {
+              return ListTitleItem(
+                listTitleOverviewModel: ListTitleOverviewModel(
+                  text: 'الموضوع',
+                  data: state.comment?.comment ?? 'No comment for this day',
+                  icon: Icons.subject,
+                ),
+              );
+            }
+            if (state is DailyReportCommentStateError) {
+              return Text('Error: ${state.message}');
+            }
+            return const SizedBox();
+          },
         ),
       ],
     );

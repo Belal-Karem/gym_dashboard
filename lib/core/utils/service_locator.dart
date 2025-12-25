@@ -18,6 +18,9 @@ import 'package:power_gym/features/payment/data/models/repo/payment_repo_impl.da
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo_imlp.dart';
 import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
+import 'package:power_gym/features/report/data/models/repo/daily_report_comment_repo.dart';
+import 'package:power_gym/features/report/data/models/repo/daily_report_comment_repo_impl.dart';
+import 'package:power_gym/features/report/presentation/manger/cubit/daily_report_comment_cubit.dart';
 import 'package:power_gym/features/subscriptions/data/models/repo/sub_repo_impl.dart';
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_cubit.dart';
 import 'package:power_gym/features/trainers/data/models/repo/trainer_repo_impl.dart';
@@ -91,5 +94,12 @@ void setupLocator() {
 
   sl.registerFactory<RecentMemberCubit>(
     () => RecentMemberCubit(sl<AttendanceRepo>())..loadRecent(),
+  );
+
+  sl.registerLazySingleton<DailyReportCommentRepo>(
+    () => DailyReportCommentRepoImpl(FirebaseFirestore.instance),
+  );
+  sl.registerFactory<DailyReportCommentCubit>(
+    () => DailyReportCommentCubit(sl<DailyReportCommentRepo>()),
   );
 }
