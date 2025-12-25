@@ -139,7 +139,7 @@ class _MemberDialogState extends State<MemberDialog> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.pop(context); // نقفل Dialog العضو
+            Navigator.pop(context);
             openAddPlanDialog(context, widget.member); // ✅ نبعت العضو
           },
           child: const Text(

@@ -20,7 +20,9 @@ class DialogAddTrainer extends StatelessWidget {
         } else if (state is AddTrainerSuccess) {
           Navigator.pop(context);
           Navigator.pop(context);
-          CustomErrorWidget(errMessage: 'تم إضافة المدرب !');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('تم إضافة المدرب بنجاح!')),
+          );
           context.read<TrainerCubit>().loadTrainer();
         } else if (state is AddTrainerError) {
           Navigator.pop(context);
