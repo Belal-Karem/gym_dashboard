@@ -16,7 +16,7 @@ class TopSectionOfMembers extends StatelessWidget {
       children: [
         Expanded(flex: 1, child: CustomDropdownButtonWidgetSession()),
         const SizedBox(width: 12),
-        const Text('Status', style: AppStyle.style20),
+        const Text('حالة', style: AppStyle.style20),
         const SizedBox(width: 28),
         Expanded(
           flex: 2,

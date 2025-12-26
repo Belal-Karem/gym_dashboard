@@ -15,7 +15,7 @@ class TopSectionOfTrainer extends StatelessWidget {
       children: [
         Expanded(flex: 1, child: CustomDropdownButtonWidgetSession()),
         SizedBox(width: 12),
-        Text('Status', style: AppStyle.style20),
+        Text('حالة', style: AppStyle.style20),
         SizedBox(width: 28),
         Expanded(
           flex: 2,
