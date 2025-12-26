@@ -12,7 +12,7 @@ class PlanModel {
   final String price;
   final String attendance;
   final String private;
-  final String? status;
+  final String status;
 
   PlanModel({
     required this.id,

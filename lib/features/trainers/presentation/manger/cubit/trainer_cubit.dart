@@ -11,8 +11,9 @@ class TrainerCubit extends Cubit<TrainerState> {
   final TrainerRepo repo;
   StreamSubscription? _trainerSubscription;
 
-  // لاستخدامها في Dropdown
   List<TrainerModel> trainersList = [];
+  String _searchQuery = '';
+  String _statusFilter = 'all';
 
   TrainerCubit(this.repo) : super(TrainerInitial());
 
@@ -33,6 +34,40 @@ class TrainerCubit extends Cubit<TrainerState> {
         },
       );
     });
+  }
+
+  void searchMembers(String query) {
+    _searchQuery = query;
+    _applyFilters();
+  }
+
+  void filterByStatus(String status) {
+    _statusFilter = status;
+    _applyFilters();
+  }
+
+  void _applyFilters() {
+    List<TrainerModel> filtered = List.from(trainersList);
+
+    if (_searchQuery.isNotEmpty) {
+      filtered = filtered.where((trainer) {
+        return trainer.name.toLowerCase().contains(_searchQuery.toLowerCase());
+      }).toList();
+    }
+
+    if (_statusFilter != 'all') {
+      filtered = filtered.where((trainer) {
+        return trainer.status == _statusFilter;
+      }).toList();
+    }
+
+    emit(TrainerLoaded(filtered));
+  }
+
+  void resetFilters() {
+    _searchQuery = '';
+    _statusFilter = 'all';
+    _applyFilters();
   }
 
   Future<void> addTrainer(TrainerModel trainer) async {

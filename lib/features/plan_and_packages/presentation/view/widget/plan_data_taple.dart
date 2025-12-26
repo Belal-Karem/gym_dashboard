@@ -27,7 +27,8 @@ class PlanDataTaple extends StatelessWidget {
             2: FlexColumnWidth(1),
             3: FlexColumnWidth(1),
             4: FlexColumnWidth(1),
-            5: FlexColumnWidth(1.2),
+            5: FlexColumnWidth(1),
+            6: FlexColumnWidth(1.2),
           },
           children: [
             TableHelper.buildHeaderRow([
@@ -37,6 +38,7 @@ class PlanDataTaple extends StatelessWidget {
               TableHeaderCellWidget('المده'),
               TableHeaderCellWidget('الجلسات'),
               TableHeaderCellWidget('الحضور'),
+              TableHeaderCellWidget('الحاله'),
             ]),
             ...plan.map(
               (plan) => TableHelper.buildDataRow(
@@ -48,6 +50,18 @@ class PlanDataTaple extends StatelessWidget {
                   TableCellWidget(plan.session),
                   TableCellWidget(
                     plan.attendance.isEmpty ? '0' : plan.attendance,
+                  ),
+                  TableCellWidget(
+                    plan.status,
+                    style: plan.status == 'نشط'
+                        ? const TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          )
+                        : const TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
                   ),
                 ],
               ),

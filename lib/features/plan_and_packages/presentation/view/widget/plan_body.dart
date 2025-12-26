@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:power_gym/features/payment/presentation/view/widget/top_section_of_payment.dart';
 import 'package:power_gym/features/plan_and_packages/presentation/view/widget/plan_data.dart';
+import 'package:power_gym/features/plan_and_packages/presentation/view/widget/top_section_of_plan.dart';
 
 class PlanBody extends StatelessWidget {
   const PlanBody({super.key});
@@ -20,7 +20,7 @@ class PlanBody extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          TopSectionOfPayment(),
+          TopSectionOfPlan(),
           SizedBox(height: 15),
           Expanded(child: PlanData()),
           const SizedBox(height: 30),

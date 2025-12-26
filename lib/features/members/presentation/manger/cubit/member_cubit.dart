@@ -83,18 +83,13 @@ class MembersCubit extends Cubit<MembersState> {
   final MemberRepo repo;
   StreamSubscription? _membersSubscription;
 
-  // 🔹 Original data from stream
   List<MemberModel> _allMembers = [];
 
-  // 🔹 Filters state
   String _searchQuery = '';
   String _statusFilter = 'all'; // all | active | inactive
 
   MembersCubit(this.repo) : super(MembersInitial());
 
-  // =========================
-  // Load Members (Stream)
-  // =========================
   Future<void> loadMembers() async {
     emit(MembersLoading());
 
@@ -119,11 +114,8 @@ class MembersCubit extends Cubit<MembersState> {
     _applyFilters();
   }
 
-  // =========================
-  // Filter by Status
-  // =========================
   void filterByStatus(String status) {
-    _statusFilter = status; // all | active | inactive
+    _statusFilter = status;
     _applyFilters();
   }
 
@@ -162,9 +154,6 @@ class MembersCubit extends Cubit<MembersState> {
     );
   }
 
-  // =========================
-  // Update Member
-  // =========================
   Future<void> updateMember(String id, Map<String, dynamic> data) async {
     emit(UpdateMemberLoading());
 

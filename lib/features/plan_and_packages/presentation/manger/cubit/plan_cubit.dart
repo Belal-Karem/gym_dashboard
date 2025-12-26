@@ -14,6 +14,9 @@ class PlanCubit extends Cubit<PlanState> {
   final PaymentRepo paymentRepo;
 
   PlanCubit(this.repo, this.paymentRepo) : super(PlanInitial());
+  List<PlanModel> _allPlan = [];
+  String _searchQuery = '';
+  String _statusFilter = 'all';
 
   StreamSubscription? _panSubscription;
 
@@ -25,7 +28,7 @@ class PlanCubit extends Cubit<PlanState> {
     result.fold((failure) => emit(PlanError(failure.message)), (stream) {
       _panSubscription = stream.listen(
         (plans) {
-          // plans: List<PlanModel>
+          _allPlan = plans;
           emit(PlanLoaded(plans));
         },
         onError: (error) {
@@ -33,6 +36,42 @@ class PlanCubit extends Cubit<PlanState> {
         },
       );
     });
+  }
+
+  void searchMembers(String query) {
+    _searchQuery = query;
+    _applyFilters();
+  }
+
+  void filterByStatus(String status) {
+    _statusFilter = status;
+    _applyFilters();
+  }
+
+  void _applyFilters() {
+    List<PlanModel> filtered = List.from(_allPlan);
+
+    if (_searchQuery.isNotEmpty) {
+      filtered = filtered.where((paln) {
+        return paln.member.name.toLowerCase().contains(
+          _searchQuery.toLowerCase(),
+        );
+      }).toList();
+    }
+
+    if (_statusFilter != 'all') {
+      filtered = filtered.where((paln) {
+        return paln.status == _statusFilter;
+      }).toList();
+    }
+
+    emit(PlanLoaded(filtered));
+  }
+
+  void resetFilters() {
+    _searchQuery = '';
+    _statusFilter = 'all';
+    _applyFilters();
   }
 
   Future<void> addPlan(PlanModel plan) async {

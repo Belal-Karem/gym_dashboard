@@ -7,6 +7,9 @@ import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_s
 class SubCubit extends Cubit<SubState> {
   final SubRepo repo;
   StreamSubscription? _subSubscription;
+  List<SubModel> _allSubSubscription = [];
+  String _searchQuery = '';
+  String _statusFilter = 'all';
 
   SubCubit(this.repo) : super(SubInitial());
 
@@ -19,6 +22,7 @@ class SubCubit extends Cubit<SubState> {
       _subSubscription?.cancel();
       _subSubscription = stream.listen(
         (subs) {
+          _allSubSubscription = subs;
           emit(SubLoaded(subs)); // المصدر الوحيد للعرض
         },
         onError: (error) {
@@ -26,6 +30,42 @@ class SubCubit extends Cubit<SubState> {
         },
       );
     });
+  }
+
+  void searchMembers(String query) {
+    _searchQuery = query;
+    _applyFilters();
+  }
+
+  void filterByStatus(String status) {
+    _statusFilter = status;
+    _applyFilters();
+  }
+
+  void _applyFilters() {
+    List<SubModel> filtered = List.from(_allSubSubscription);
+
+    if (_searchQuery.isNotEmpty) {
+      filtered = filtered.where((subSubscription) {
+        return subSubscription.type.toLowerCase().contains(
+          _searchQuery.toLowerCase(),
+        );
+      }).toList();
+    }
+
+    if (_statusFilter != 'all') {
+      filtered = filtered.where((subSubscription) {
+        return subSubscription.status == _statusFilter;
+      }).toList();
+    }
+
+    emit(SubLoaded(filtered));
+  }
+
+  void resetFilters() {
+    _searchQuery = '';
+    _statusFilter = 'all';
+    _applyFilters();
   }
 
   Future<void> addSub(SubModel sub) async {
