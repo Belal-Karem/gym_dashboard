@@ -50,16 +50,14 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
                 ),
               ),
 
-              FieldLabelAndInputAddWidget(
-                label: 'ملحوظات',
-                child: TextFieldAddWidget(controller: controller.note),
-              ),
-
               const SizedBox(height: 10),
 
               DoubleFieldRowAddWidget(
-                leftLabel: 'تاريخ الانضمام',
-                leftChild: TextFieldAddWidget(controller: controller.joinDate),
+                leftLabel: 'ملحوظات ',
+                leftChild: TextFieldAddWidget(
+                  controller: controller.note,
+                  validator: (v) {},
+                ),
                 rightLabel: 'النوع',
                 rightChild: CustomDropdownWidget(
                   items: [

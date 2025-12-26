@@ -13,7 +13,7 @@ class PlanBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'الاشتراكات الخاصة',
+            'الاشتراكات Pt',
             style: TextStyle(
               color: Colors.white,
               fontSize: 26,

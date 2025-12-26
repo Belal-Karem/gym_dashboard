@@ -13,7 +13,7 @@ class DateCard extends StatelessWidget {
         color: const Color(0xff1B1C20),
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -25,7 +25,7 @@ class DateCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: MediaQuery.sizeOf(context).width / 70),
           Center(
             child: GestureDetector(
               onTap: () {

@@ -41,7 +41,7 @@ class DrawerItemModel {
     ),
     DrawerItemModel(
       icon: Icon(FontAwesomeIcons.cube),
-      title: Text('خطط / الباقات'),
+      title: Text('الاشتراكات Pt'),
       routerPath: AppRouter.kplanview,
     ),
     DrawerItemModel(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_report_comment_cubit.dart';
+import 'package:power_gym/features/report/presentation/view/widget/expandable_note.dart';
 import 'package:power_gym/features/report/presentation/view/widget/list_title_item.dart';
 import 'package:power_gym/model/list_title_overview_model.dart';
 
@@ -43,13 +44,7 @@ class CustomOverview extends StatelessWidget {
               return const CircularProgressIndicator();
             }
             if (state is DailyReportCommentStateLoaded) {
-              return ListTitleItem(
-                listTitleOverviewModel: ListTitleOverviewModel(
-                  text: 'الموضوع',
-                  data: state.comment?.comment ?? 'No comment for this day',
-                  icon: Icons.subject,
-                ),
-              );
+              return CommentSesstion(data: state.comment?.comment ?? '_');
             }
             if (state is DailyReportCommentStateError) {
               return Text('Error: ${state.message}');
@@ -58,6 +53,29 @@ class CustomOverview extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class CommentSesstion extends StatelessWidget {
+  const CommentSesstion({super.key, required this.data});
+
+  final String data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 350,
+      child: ListTile(
+        titleTextStyle: const TextStyle(fontSize: 20),
+        leadingAndTrailingTextStyle: const TextStyle(fontSize: 18),
+        title: const Text('ملحوظة'),
+        leading: const Icon(Icons.comment),
+        trailing: SizedBox(
+          width: 180, // مهم عشان الـ ellipsis يشتغل
+          child: ExpandableNote(text: data),
+        ),
+      ),
     );
   }
 }
