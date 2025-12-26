@@ -6,10 +6,12 @@ class CustomDropdownButtonWidget extends StatefulWidget {
     super.key,
     required this.items,
     this.initialValue,
+    this.onChanged,
   });
 
   final List<DropdownMenuItem<String>> items;
   final String? initialValue;
+  final void Function(String?)? onChanged;
   @override
   State<CustomDropdownButtonWidget> createState() =>
       _CustomDropdownButtonWidgetState();
@@ -42,8 +44,10 @@ class _CustomDropdownButtonWidgetState
         value: selectedValue,
         items: widget.items,
         onChanged: (value) {
-          selectedValue = value;
-          setState(() {});
+          setState(() => selectedValue = value);
+          if (widget.onChanged != null) {
+            widget.onChanged!(value);
+          }
         },
       ),
     );
