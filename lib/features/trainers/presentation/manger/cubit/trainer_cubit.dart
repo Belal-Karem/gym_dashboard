@@ -27,6 +27,7 @@ class TrainerCubit extends Cubit<TrainerState> {
       _trainerSubscription = stream.listen(
         (trainerList) {
           trainersList = trainerList;
+          _applyFilters();
           emit(TrainerLoaded(trainerList)); // المصدر الوحيد للعرض
         },
         onError: (error) {

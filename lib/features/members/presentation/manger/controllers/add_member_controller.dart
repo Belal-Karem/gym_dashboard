@@ -14,19 +14,13 @@ class AddMemberController {
 
   String gender = 'ذكر';
   String status = 'نشط';
+  String paymentMethod = 'نقدي';
 
   final formKey = GlobalKey<FormState>();
 
   void setGender(value) => gender = value;
   void setStatus(value) => status = value;
-
-  // void setGender(String? value) {
-  //   if (value != null) gender = value;
-  // }
-
-  // void setStatus(String? value) {
-  //   if (value != null) status = value;
-  // }
+  void setpaymentMethod(value) => paymentMethod = value;
 
   void dispose() {
     name.dispose();
@@ -81,7 +75,7 @@ class AddMemberController {
           memberId: memberId,
           paid: selectedSub.price,
           plan: selectedSub.type,
-          paymentMethod: "كاش",
+          paymentMethod: paymentMethod,
           date: DateTime.now(),
           name: name.text,
           status: 'income',

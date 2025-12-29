@@ -23,6 +23,7 @@ class SubCubit extends Cubit<SubState> {
       _subSubscription = stream.listen(
         (subs) {
           _allSubSubscription = subs;
+          _applyFilters();
           emit(SubLoaded(subs)); // المصدر الوحيد للعرض
         },
         onError: (error) {

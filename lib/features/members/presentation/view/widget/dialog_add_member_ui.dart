@@ -49,15 +49,19 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
                   validator: phoneValidator,
                 ),
               ),
+              FieldLabelAndInputAddWidget(
+                label: 'ملحوظات',
+                child: TextFieldAddWidget(
+                  controller: controller.note,
+                  validator: (v) {},
+                ),
+              ),
 
               const SizedBox(height: 10),
 
               DoubleFieldRowAddWidget(
-                leftLabel: 'ملحوظات ',
-                leftChild: TextFieldAddWidget(
-                  controller: controller.note,
-                  validator: (v) {},
-                ),
+                leftLabel: 'تاريخ البدء',
+                leftChild: TextFieldAddWidget(controller: controller.startDate),
                 rightLabel: 'النوع',
                 rightChild: CustomDropdownWidget(
                   items: [
@@ -71,8 +75,20 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
               ),
 
               DoubleFieldRowAddWidget(
-                leftLabel: 'تاريخ البدء',
-                leftChild: TextFieldAddWidget(controller: controller.startDate),
+                leftLabel: 'طريقة الدفع',
+                leftChild: CustomDropdownWidget(
+                  items: [
+                    DropdownMenuItem(value: 'نقدي', child: Text('نقدي')),
+                    DropdownMenuItem(value: 'محفظه', child: Text('محفظه')),
+                    DropdownMenuItem(value: 'فيزا', child: Text('فيزا')),
+                    DropdownMenuItem(
+                      value: 'إنستاباي',
+                      child: Text('إنستاباي'),
+                    ),
+                  ],
+                  initialValue: controller.paymentMethod,
+                  onChanged: controller.setpaymentMethod,
+                ),
                 rightLabel: '',
                 rightChild: CustomDropdownWidget(
                   items: [

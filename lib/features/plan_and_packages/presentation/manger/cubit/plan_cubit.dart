@@ -29,6 +29,7 @@ class PlanCubit extends Cubit<PlanState> {
       _panSubscription = stream.listen(
         (plans) {
           _allPlan = plans;
+          _applyFilters();
           emit(PlanLoaded(plans));
         },
         onError: (error) {

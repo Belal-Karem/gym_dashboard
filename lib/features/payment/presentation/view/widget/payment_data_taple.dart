@@ -35,7 +35,7 @@ class PaymentDataTaple extends StatelessWidget {
               TableHeaderCellWidget('الخطه'),
               TableHeaderCellWidget('المدفوع'),
               TableHeaderCellWidget('وقت الدفع'),
-              TableHeaderCellWidget('طريق الدفع'),
+              TableHeaderCellWidget('طريقة الدفع'),
             ]),
 
             ...payment.map(

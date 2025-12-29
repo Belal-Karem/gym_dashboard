@@ -12,9 +12,9 @@ class PaymentLoading extends PaymentState {}
 
 class PaymentLoaded extends PaymentState {
   final List<PaymentModel> payments;
-  final double totalToday;
+  final double? totalToday;
 
-  PaymentLoaded({required this.payments, required this.totalToday});
+  PaymentLoaded({required this.payments, this.totalToday});
 }
 
 class PaymentError extends PaymentState {
