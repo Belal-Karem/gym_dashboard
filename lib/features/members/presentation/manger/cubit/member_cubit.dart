@@ -84,9 +84,8 @@ class MembersCubit extends Cubit<MembersState> {
   StreamSubscription? _membersSubscription;
 
   List<MemberModel> _allMembers = [];
-
   String _searchQuery = '';
-  String _statusFilter = 'all'; // all | active | inactive
+  String _statusFilter = 'all';
 
   MembersCubit(this.repo) : super(MembersInitial());
 
@@ -123,35 +122,32 @@ class MembersCubit extends Cubit<MembersState> {
     List<MemberModel> filtered = List.from(_allMembers);
 
     if (_searchQuery.isNotEmpty) {
-      filtered = filtered.where((member) {
-        return member.name.toLowerCase().contains(_searchQuery.toLowerCase());
+      filtered = filtered.where((subSubscription) {
+        return subSubscription.name.toLowerCase().contains(
+          _searchQuery.toLowerCase(),
+        );
       }).toList();
     }
 
-    if (_statusFilter != 'all') {
-      filtered = filtered.where((member) {
-        return member.status == _statusFilter;
-      }).toList();
-    }
+    // if (_statusFilter != 'all') {
+    //   filtered = filtered.where((subSubscription) {
+    //     return subSubscription.status == _statusFilter;
+    //   }).toList();
+    // }
 
     emit(MembersLoaded(filtered));
   }
 
   void resetFilters() {
     _searchQuery = '';
-    _statusFilter = 'all';
     _applyFilters();
   }
 
-  Future<void> addMember(MemberModel member) async {
+  Future<Either<Failure, String>> addMemberAndReturnId(
+    MemberModel member,
+  ) async {
     emit(AddMemberLoading());
-
-    final result = await repo.addMember(member);
-
-    result.fold(
-      (failure) => emit(AddMemberError(failure.message)),
-      (_) => emit(AddMemberSuccess()),
-    );
+    return await repo.addMemberAndReturnId(member);
   }
 
   Future<void> updateMember(String id, Map<String, dynamic> data) async {
@@ -165,9 +161,6 @@ class MembersCubit extends Cubit<MembersState> {
     );
   }
 
-  // =========================
-  // Delete Member
-  // =========================
   Future<void> deleteMember(String id) async {
     emit(DeleteMemberLoading());
 
@@ -179,19 +172,6 @@ class MembersCubit extends Cubit<MembersState> {
     );
   }
 
-  // =========================
-  // Add Member & Return ID
-  // =========================
-  Future<Either<Failure, String>> addMemberAndReturnId(
-    MemberModel member,
-  ) async {
-    emit(AddMemberLoading());
-    return await repo.addMemberAndReturnId(member);
-  }
-
-  // =========================
-  // Dispose
-  // =========================
   @override
   Future<void> close() {
     _membersSubscription?.cancel();

@@ -16,7 +16,15 @@ class SubRepoImpl implements SubRepo {
     try {
       final stream = subsRef.snapshots().map((snapshot) {
         return snapshot.docs.map((doc) {
-          return SubModel.fromJson(doc.data() as Map<String, dynamic>, doc.id);
+          final sub = SubModel.fromJson(
+            doc.data() as Map<String, dynamic>,
+            doc.id,
+          );
+
+          // حساب duration بالأيام (لو محتاجه)
+          final durationDays = sub.durationDays;
+
+          return sub.copyWith(id: doc.id, durationDays: durationDays);
         }).toList();
       });
 
@@ -26,21 +34,11 @@ class SubRepoImpl implements SubRepo {
     }
   }
 
-  // @override
-  // Future<Either<Failure, Unit>> addSub(SubModel sub) async {
-  //   try {
-  //     await subsRef.doc(sub.id).set(sub.toJson());
-  //     return const Right(unit);
-  //   } catch (e) {
-  //     return Left(handleFirebaseException(e));
-  //   }
-  // }
-
+  @override
   Future<Either<Failure, Unit>> addSub(SubModel sub) async {
     try {
       final docRef = subsRef.doc();
       await docRef.set(sub.copyWith(id: docRef.id).toJson());
-
       return const Right(unit);
     } catch (e) {
       return Left(handleFirebaseException(e));
@@ -63,6 +61,16 @@ class SubRepoImpl implements SubRepo {
   @override
   Future<Either<Failure, Unit>> deleteSub(String id) async {
     try {
+      // ✅ تحقق قبل الحذف لو في اشتراكات نشطة
+      final subsCount = await FirebaseFirestore.instance
+          .collection(kmembersubscriptionsCollections)
+          .where('subId', isEqualTo: id)
+          .get();
+
+      if (subsCount.docs.isNotEmpty) {
+        throw Exception('لا يمكن حذف الاشتراك لانه مستخدم حالياً');
+      }
+
       await subsRef.doc(id).delete();
       return const Right(unit);
     } catch (e) {
@@ -70,3 +78,15 @@ class SubRepoImpl implements SubRepo {
     }
   }
 }
+
+
+
+  // @override
+  // Future<Either<Failure, Unit>> addSub(SubModel sub) async {
+  //   try {
+  //     await subsRef.doc(sub.id).set(sub.toJson());
+  //     return const Right(unit);
+  //   } catch (e) {
+  //     return Left(handleFirebaseException(e));
+  //   }
+  // }

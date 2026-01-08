@@ -31,14 +31,20 @@ class _SubscriptionsUpdateDialogState extends State<SubscriptionsUpdateDialog> {
   void initState() {
     super.initState();
     typeController = TextEditingController(text: widget.subModel.type);
-    durationController = TextEditingController(text: widget.subModel.duration);
-    priceController = TextEditingController(text: widget.subModel.price);
-    freezeController = TextEditingController(text: widget.subModel.freeze);
+    durationController = TextEditingController(
+      text: widget.subModel.durationDays.toString(),
+    );
+    priceController = TextEditingController(
+      text: widget.subModel.price.toString(),
+    );
+    freezeController = TextEditingController(
+      text: widget.subModel.freezeDays.toString(),
+    );
     invitationController = TextEditingController(
-      text: widget.subModel.invitation,
+      text: widget.subModel.invitationCount.toString(),
     );
     maxAttendanceController = TextEditingController(
-      text: widget.subModel.maxAttendance,
+      text: widget.subModel.maxAttendance.toString(),
     );
     selectedStatus = widget.subModel.status;
   }
@@ -54,7 +60,7 @@ class _SubscriptionsUpdateDialogState extends State<SubscriptionsUpdateDialog> {
   void updateSubscriptions() {
     final updatedSubscriptions = widget.subModel.copyWith(
       type: typeController.text,
-      duration: durationController.text,
+      durationDays: int.parse(durationController.text),
       status: selectedStatus ?? widget.subModel.status,
     );
 

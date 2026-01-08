@@ -20,7 +20,7 @@ class _SelectSupBodyState extends State<SelectSupBody> {
   @override
   Widget build(BuildContext context) {
     final sortedSubs = List<SubModel>.from(widget.subs)
-      ..sort((a, b) => a.duration.compareTo(b.duration));
+      ..sort((a, b) => a.durationDays.compareTo(b.durationDays));
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(15),

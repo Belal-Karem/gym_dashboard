@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:intl/intl.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/errors/failure.dart';
 import 'package:power_gym/core/errors/firebase_error_mapper.dart';
@@ -16,15 +17,10 @@ class MemberSubscriptionsRepoImpl implements MemberSubscriptionsRepo {
     MemberSubscriptionModel subscription,
   ) async {
     try {
-      // await subsRef
-      //     .doc('${subscription.memberId}_${subscription.subId}')
-      //     .set(subscription.toJson());
+      final dateId = _dateIdFromDateTime(subscription.startDate);
 
-      final dateId = _extractDateIdFromString(subscription.startDate);
+      await subsRef.add(subscription.copyWith(dateId: dateId).toJson());
 
-      await subsRef
-          .doc('${subscription.memberId}_${subscription.subId}')
-          .set(subscription.copyWith(dateId: dateId).toJson());
       return const Right(unit);
     } catch (e) {
       return Left(handleFirebaseException(e));
@@ -36,26 +32,34 @@ class MemberSubscriptionsRepoImpl implements MemberSubscriptionsRepo {
   getSubscriptionsByMember(String memberId) async {
     try {
       final result = await subsRef.where('memberId', isEqualTo: memberId).get();
-      final list = result.docs
-          .map(
-            (doc) => MemberSubscriptionModel.fromJson(
-              doc.data() as Map<String, dynamic>,
-            ),
-          )
-          .toList();
+
+      final list = result.docs.map((doc) {
+        return MemberSubscriptionModel.fromJson(
+          doc.data() as Map<String, dynamic>,
+          doc.id,
+        );
+      }).toList();
+
       return Right(list);
+    } catch (e) {
+      return Left(handleFirebaseException(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> updateMemberSubscription(
+    MemberSubscriptionModel subscription,
+  ) async {
+    try {
+      await subsRef.doc(subscription.id).update(subscription.toJson());
+
+      return const Right(unit);
     } catch (e) {
       return Left(handleFirebaseException(e));
     }
   }
 }
 
-String _extractDateIdFromString(String date) {
-  // لو ISO DateTime
-  if (date.contains('T')) {
-    return date.split('T').first;
-  }
-
-  // لو ISO Date فقط
-  return date;
+String _dateIdFromDateTime(DateTime date) {
+  return DateFormat('yyyy-MM-dd').format(date);
 }

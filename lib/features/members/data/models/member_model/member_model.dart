@@ -1,95 +1,62 @@
-import 'package:power_gym/constants.dart';
-
 class MemberModel {
   final String id;
   final String memberId;
   final String name;
   final String phone;
-  final String startdata;
-  final int attendance;
-  final String status;
-  final String note;
   final String gender;
-  final String endDate;
-  final String remainingDays;
-  final String affiliationdate;
+  final String note;
+  final DateTime affiliationDate;
 
   MemberModel({
     required this.id,
     required this.memberId,
     required this.name,
     required this.phone,
-    required this.startdata,
-    required this.attendance,
-    required this.status,
-    required this.note,
     required this.gender,
-    required this.endDate,
-    required this.remainingDays,
-    required this.affiliationdate,
+    required this.note,
+    required this.affiliationDate,
   });
 
   Map<String, dynamic> toJson() {
     return {
+      'memberId': memberId,
       'name': name,
       'phone': phone,
-      'startdata': startdata,
-      'attendance': attendance,
-      'status': status,
-      'note': note,
       'gender': gender,
-      'memberId': memberId,
-      'affiliationdate': affiliationdate,
-      'remainingDays': remainingDays,
-      'endDate': endDate,
+      'note': note,
+      'affiliationDate': affiliationDate.toIso8601String(),
     };
   }
 
   factory MemberModel.fromJson(Map<String, dynamic> map, String docId) {
     return MemberModel(
       id: docId,
-      affiliationdate: map[kaffiliationdate] ?? '',
-      name: map[kname] ?? '',
-      phone: map[kPhone] ?? '',
-      startdata: map[kStartdate] ?? '',
-      attendance: map[kattendance] ?? 0,
-      status: map['status'] ?? '',
-
-      note: map[knote] ?? '',
-      gender: map[kgender] ?? '',
-      memberId: map[kmemberid] ?? '',
-      endDate: map['endDate'] ?? '',
-      remainingDays: map['remainingDays'] ?? '',
+      memberId: map['memberId'] ?? '',
+      name: map['name'] ?? '',
+      phone: map['phone'] ?? '',
+      gender: map['gender'] ?? '',
+      note: map['note'] ?? '',
+      affiliationDate: DateTime.parse(map['affiliationDate']),
     );
   }
-
   MemberModel copyWith({
     String? id,
-    String? memberId, // صححنا الاسم
+    String? memberId,
     String? name,
     String? phone,
-    String? startdata,
-    String? enddata,
     int? attendance,
-    String? status,
     String? gender,
     String? note,
-    String? affiliationdate,
-    String? remainingdays,
+    DateTime? affiliationDate,
   }) {
     return MemberModel(
       id: id ?? this.id,
       name: name ?? this.name,
       phone: phone ?? this.phone,
-      startdata: startdata ?? this.startdata,
-      affiliationdate: affiliationdate ?? this.affiliationdate,
-      attendance: attendance ?? this.attendance,
-      status: status ?? this.status,
       note: note ?? this.note,
       gender: gender ?? this.gender,
       memberId: memberId ?? this.memberId,
-      endDate: enddata ?? this.endDate,
-      remainingDays: remainingdays ?? this.remainingDays,
+      affiliationDate: affiliationDate ?? this.affiliationDate,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/core/helper/date_helper.dart';
 import 'package:power_gym/core/helper/format_date_helper.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/core/utils/constants.dart';
@@ -23,10 +24,7 @@ class MemberDialog extends StatefulWidget {
 class _MemberDialogState extends State<MemberDialog> {
   late TextEditingController nameController;
   late TextEditingController phoneController;
-  late String remainingDays;
-  late String endData;
-  late String startData;
-  late String affiliationdate;
+  late DateTime affiliationdate;
   String? selectedStatus;
   String? selectedGender;
 
@@ -35,11 +33,7 @@ class _MemberDialogState extends State<MemberDialog> {
     super.initState();
     nameController = TextEditingController(text: widget.member.name);
     phoneController = TextEditingController(text: widget.member.phone);
-    remainingDays = widget.member.remainingDays;
-    endData = widget.member.endDate;
-    startData = widget.member.startdata;
-    affiliationdate = widget.member.affiliationdate;
-    selectedStatus = widget.member.status;
+    affiliationdate = widget.member.affiliationDate;
     selectedGender = widget.member.gender;
   }
 
@@ -54,7 +48,6 @@ class _MemberDialogState extends State<MemberDialog> {
     final updatedMember = widget.member.copyWith(
       name: nameController.text,
       phone: phoneController.text,
-      status: selectedStatus ?? widget.member.status,
       gender: selectedGender ?? widget.member.gender,
     );
 
@@ -78,12 +71,18 @@ class _MemberDialogState extends State<MemberDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            DisplayData(label: 'تاريخ الانضمام', child: affiliationdate),
-            DisplayData(label: 'تاريخ البدء', child2: startData),
-            DisplayData(label: 'تاريخ النتهاء', child2: endData),
-            DisplayData(label: 'الايام المتبقيه', child: remainingDays),
+            DisplayData(
+              label: 'تاريخ الانضمام',
+              child: affiliationdate.toString(),
+            ),
+            // DisplayData(label: 'تاريخ البدء', child2: startData),
+            // DisplayData(label: 'تاريخ النتهاء', child2: endData),
 
-            Text('تعديل'),
+            // DisplayData(
+            //   label: 'الايام المتبقيه',
+            //   child: ),
+            // ),
+            Text('تعديل', style: AppStyle.style20),
             FieldLabelAndInputAddWidget(
               label: 'الاسم',
               child: TextFieldAddWidget(controller: nameController),

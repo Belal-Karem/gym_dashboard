@@ -51,21 +51,19 @@ class AddMemberController {
     }
 
     try {
+      final DateTime parsedStartDate = DateTime.parse(startDate.text);
+
       final memberId = await MemberActions.saveMemberAndSubscription(
         context: context,
+        startDate: parsedStartDate,
         member: MemberModel(
           id: '',
           memberId: '',
           name: name.text,
           phone: phone.text,
-          startdata: startDate.text,
           gender: gender,
           note: note.text,
-          status: status,
-          attendance: 0,
-          endDate: '',
-          remainingDays: '0',
-          affiliationdate: DateTime.now().toIso8601String(),
+          affiliationDate: DateTime.now(),
         ),
         selectedSub: selectedSub,
       );
@@ -73,7 +71,7 @@ class AddMemberController {
       if (memberId != null) {
         await PaymentActions.recordPayment(
           memberId: memberId,
-          paid: selectedSub.price,
+          paid: selectedSub.price.toString(),
           plan: selectedSub.type,
           paymentMethod: paymentMethod,
           date: DateTime.now(),

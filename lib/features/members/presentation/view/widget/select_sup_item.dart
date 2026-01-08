@@ -39,19 +39,19 @@ class SelectSupItem extends StatelessWidget {
           ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'مدة',
-              trailing: subs.duration,
+              trailing: subs.durationDays.toString(),
             ),
           ),
           ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'دعوة',
-              trailing: subs.invitation,
+              trailing: subs.invitationCount.toString(),
             ),
           ),
           ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'تجميد',
-              trailing: subs.freeze,
+              trailing: subs.freezeDays.toString(),
             ),
           ),
 
@@ -78,7 +78,7 @@ class SelectSupItem extends StatelessWidget {
             styleTrailing: TextStyle(fontSize: 30, color: Colors.white),
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'سعر',
-              trailing: subs.price,
+              trailing: subs.price.toString(),
             ),
           ),
         ],

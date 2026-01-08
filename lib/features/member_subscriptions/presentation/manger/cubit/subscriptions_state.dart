@@ -1,19 +1,38 @@
 part of 'subscriptions_cubit.dart';
 
-abstract class SubscriptionsState {}
+abstract class MemberSubscriptionState {}
 
-class SubscriptionsInitial extends SubscriptionsState {}
+class MemberSubscriptionInitial extends MemberSubscriptionState {}
 
-class SubscriptionsLoading extends SubscriptionsState {}
+class MemberSubscriptionLoading extends MemberSubscriptionState {}
 
-class SubscriptionsSuccess extends SubscriptionsState {
-  final List<MemberSubscriptionModel> subscriptions;
-  SubscriptionsSuccess(this.subscriptions);
+/// اشتراك نشط + الخطة
+class MemberSubscriptionLoaded extends MemberSubscriptionState {
+  final MemberSubscriptionModel subscription;
+  final SubModel plan;
+
+  MemberSubscriptionLoaded({required this.subscription, required this.plan});
 }
 
-class SubscriptionsFailure extends SubscriptionsState {
+/// لا يوجد اشتراك (حالة طبيعية)
+class MemberSubscriptionEmpty extends MemberSubscriptionState {}
+
+/// إضافة اشتراك
+class MemberSubscriptionAddSuccess extends MemberSubscriptionState {}
+
+/// تحديث (حضور – تجديد – فريز)
+class MemberSubscriptionUpdateSuccess extends MemberSubscriptionState {}
+
+/// خطأ حقيقي
+class MemberSubscriptionFailure extends MemberSubscriptionState {
   final String message;
-  SubscriptionsFailure(this.message);
+
+  MemberSubscriptionFailure(this.message);
 }
 
-class SubscriptionAdded extends SubscriptionsState {}
+/// اشتراكات نشطة لكل الأعضاء
+class MembersSubscriptionLoaded extends MemberSubscriptionState {
+  final Map<String, MemberSubscriptionModel> subscription;
+
+  MembersSubscriptionLoaded(this.subscription);
+}

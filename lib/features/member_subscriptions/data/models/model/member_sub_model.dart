@@ -1,67 +1,79 @@
+import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
+
 class MemberSubscriptionModel {
+  final String id;
   final String memberId;
-  final String subId;
-  final String startDate;
-  final String endDate;
+  final String subscriptionId;
+
+  final DateTime startDate;
+  final DateTime endDate;
+
   final int remainingDays;
+  final int attendance;
+  final SubscriptionStatus status;
   final String? dateId;
-  final bool? isRenewal;
-  final String status; // active / expired / frozen
 
   MemberSubscriptionModel({
-    required this.remainingDays,
+    required this.id,
     required this.memberId,
-    required this.subId,
+    required this.subscriptionId,
     required this.startDate,
     required this.endDate,
+    required this.remainingDays,
+    required this.attendance,
     required this.status,
     this.dateId,
-    this.isRenewal,
   });
 
-  factory MemberSubscriptionModel.fromJson(Map<String, dynamic> json) {
-    return MemberSubscriptionModel(
-      memberId: json['memberId'] ?? '',
-      subId: json['subId'] ?? '',
-      startDate: json['startDate'] ?? '',
-      endDate: json['endDate'] ?? '',
-      remainingDays: json['remainingDays'],
-      status: json['status'] ?? 'active',
-      dateId: json['dateId'] ?? '',
-      isRenewal: json['isRenewal'] ?? false,
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      'memberId': memberId,
+      'subscriptionId': subscriptionId,
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
+      'dateId': dateId,
+      'remainingDays': remainingDays,
+      'attendance': attendance,
+      'status': status.name,
+    };
   }
 
-  Map<String, dynamic> toJson() => {
-    "memberId": memberId,
-    "subId": subId,
-    "startDate": startDate,
-    "endDate": endDate,
-    "status": status,
-    "remainingDays": remainingDays,
-    "dateId": dateId,
-    "isRenewal": isRenewal,
-  };
-
+  factory MemberSubscriptionModel.fromJson(
+    Map<String, dynamic> map,
+    String docId,
+  ) {
+    return MemberSubscriptionModel(
+      id: docId,
+      memberId: map['memberId'],
+      subscriptionId: map['subscriptionId'],
+      startDate: DateTime.parse(map['startDate']),
+      endDate: DateTime.parse(map['endDate']),
+      remainingDays: map['remainingDays'],
+      attendance: map['attendance'],
+      status: SubscriptionStatus.values.firstWhere(
+        (e) => e.name == map['status'],
+        orElse: () => SubscriptionStatus.expired,
+      ),
+    );
+  }
   MemberSubscriptionModel copyWith({
-    String? memberId,
-    String? subId,
-    String? startDate,
-    String? endDate,
-    int? remainingDays,
-    String? status,
     String? dateId,
-    bool? isRenewal,
+    DateTime? startDate,
+    DateTime? endDate,
+    int? remainingDays,
+    int? attendance,
+    SubscriptionStatus? status,
   }) {
     return MemberSubscriptionModel(
-      memberId: memberId ?? this.memberId,
-      subId: subId ?? this.subId,
+      id: id,
+      memberId: memberId,
+      subscriptionId: subscriptionId,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
-      remainingDays: remainingDays ?? this.remainingDays,
-      status: status ?? this.status,
       dateId: dateId ?? this.dateId,
-      isRenewal: isRenewal ?? this.isRenewal,
+      remainingDays: remainingDays ?? this.remainingDays,
+      attendance: attendance ?? this.attendance,
+      status: status ?? this.status,
     );
   }
 }

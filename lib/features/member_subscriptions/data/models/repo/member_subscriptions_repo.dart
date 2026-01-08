@@ -8,4 +8,7 @@ abstract class MemberSubscriptionsRepo {
   );
   Future<Either<Failure, List<MemberSubscriptionModel>>>
   getSubscriptionsByMember(String memberId);
+  Future<Either<Failure, Unit>> updateMemberSubscription(
+    MemberSubscriptionModel subscription,
+  );
 }

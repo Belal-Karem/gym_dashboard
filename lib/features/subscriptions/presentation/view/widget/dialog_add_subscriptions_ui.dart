@@ -90,13 +90,15 @@ class _DialogAddSubscriptionsUiState extends State<DialogAddSubscriptionsUi> {
                       if (formKey.currentState!.validate()) {
                         final addSub = SubModel(
                           id: '',
-                          duration: durationController.text.trim(),
-                          freeze: freezeController.text.trim(),
-                          invitation: invitationController.text.trim(),
+                          durationDays: int.parse(durationController.text),
+                          freezeDays: int.parse(freezeController.text),
+                          invitationCount: int.parse(invitationController.text),
                           type: typeController.text.trim(),
                           status: selectedType.toString(),
-                          price: priceController.text,
-                          maxAttendance: maxAttendanceController.text,
+                          price: double.parse(priceController.text),
+                          maxAttendance: int.parse(
+                            maxAttendanceController.text,
+                          ),
                         );
 
                         context.read<SubCubit>().addSub(addSub);

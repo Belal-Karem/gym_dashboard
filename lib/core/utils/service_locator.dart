@@ -9,6 +9,8 @@ import 'package:power_gym/features/home/presentation/manger/cubit/get_data_membe
 import 'package:power_gym/features/home/presentation/manger/cubit/recent_member_cubit.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo_impl.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/repo/plans_repo.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/repo/plans_repo_impl.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/repo/member_repo_impl.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
@@ -42,7 +44,10 @@ void setupLocator() {
 
   // سجل Cubit الخاص بالإحصائيات
   sl.registerFactory<MembersCountStatsCubit>(
-    () => MembersCountStatsCubit(sl<MemberRepoImpl>())..loadStats(),
+    () => MembersCountStatsCubit(
+      sl<MemberRepoImpl>(),
+      sl<MemberSubscriptionsRepo>(),
+    )..loadStats(),
   );
   // Repository
   sl.registerLazySingleton<SubRepoImpl>(() => SubRepoImpl());
@@ -61,10 +66,12 @@ void setupLocator() {
   sl.registerLazySingleton<MemberSubscriptionsRepo>(
     () => MemberSubscriptionsRepoImpl(),
   );
-  sl.registerFactory<SubscriptionsCubit>(
-    () => SubscriptionsCubit(sl<MemberSubscriptionsRepo>()),
+  sl.registerFactory<MemberSubscriptionCubit>(
+    () =>
+        MemberSubscriptionCubit(sl<MemberSubscriptionsRepo>(), sl<PlansRepo>()),
   );
 
+  sl.registerLazySingleton<PlansRepo>(() => PlansRepoImpl());
   sl.registerLazySingleton<PaymentRepo>(() => PaymentRepoImpl());
   sl.registerFactory<PaymentCubit>(
     () => PaymentCubit(sl<PaymentRepo>())..loadPayment(),

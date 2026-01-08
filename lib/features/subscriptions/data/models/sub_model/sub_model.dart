@@ -2,70 +2,68 @@ import 'package:power_gym/constants.dart';
 
 class SubModel {
   final String id;
-  final String duration;
-  final String freeze;
-  final String invitation;
-  final String status;
-  final String price;
-  final String maxAttendance;
+  final int durationDays;
+  final int freezeDays;
+  final int invitationCount;
+  final int maxAttendance;
+  final double price;
   final String type;
+  final String status;
 
   SubModel({
     required this.id,
-    required this.duration,
-    required this.freeze,
-    required this.invitation,
+    required this.durationDays,
+    required this.freezeDays,
+    required this.invitationCount,
+    required this.maxAttendance,
+    required this.price,
     required this.type,
     required this.status,
-    required this.price,
-    required this.maxAttendance,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'duration': duration,
-      'freeze': freeze,
-      'invitation': invitation,
-      'status': status,
-      'price': price,
+      'durationDays': durationDays,
+      'freezeDays': freezeDays,
+      'invitationCount': invitationCount,
       'maxAttendance': maxAttendance,
+      'price': price,
       'type': type,
+      'status': status,
     };
   }
 
   factory SubModel.fromJson(Map<String, dynamic> map, String docId) {
     return SubModel(
       id: docId,
-      duration: map[kduration] ?? '',
-      freeze: map[kfreeze] ?? '',
-      invitation: map[kinvitation] ?? '',
-      status: map[kstatus] ?? '',
-      price: map[kprice] ?? '',
-      maxAttendance: map[kmaxAttendance] ?? '',
-      type: map[ktype] ?? '',
+      durationDays: (map['durationDays'] ?? 0) as int,
+      freezeDays: (map['freezeDays'] ?? 0) as int,
+      invitationCount: (map['invitationCount'] ?? 0) as int,
+      maxAttendance: (map['maxAttendance'] ?? 0) as int,
+      price: (map['price'] ?? 0).toDouble(),
+      type: map['type'] ?? '',
+      status: map['status'] ?? 'active',
     );
   }
-
   SubModel copyWith({
     String? id,
-    String? duration,
-    String? freeze,
-    String? invitation,
+    int? durationDays,
+    int? freezeDays,
+    int? invitationCount,
+    int? maxAttendance,
+    double? price,
     String? type,
     String? status,
-    String? price,
-    String? maxAttendance,
   }) {
     return SubModel(
       id: id ?? this.id,
-      duration: duration ?? this.duration,
-      freeze: freeze ?? this.freeze,
-      invitation: invitation ?? this.invitation,
-      status: status ?? this.status,
-      price: price ?? this.price,
+      durationDays: durationDays ?? this.durationDays,
+      freezeDays: freezeDays ?? this.freezeDays,
+      invitationCount: invitationCount ?? this.invitationCount,
       maxAttendance: maxAttendance ?? this.maxAttendance,
+      price: price ?? this.price,
       type: type ?? this.type,
+      status: status ?? this.status,
     );
   }
 }

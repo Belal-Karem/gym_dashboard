@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:power_gym/core/widget/custom_error_widget.dart';
+import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,19 +11,49 @@ class MembersData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MembersCubit, MembersState>(
-      builder: (context, state) {
-        if (state is MembersLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is MembersLoaded) {
-          final members = state.members;
-          return MembersDataTable(members: members);
-        } else if (state is MembersError) {
-          return CustomErrorWidget(errMessage: state.message);
-        } else {
-          return const SizedBox.shrink();
+    return BlocListener<MembersCubit, MembersState>(
+      listener: (context, state) {
+        if (state is MembersLoaded) {
+          context
+              .read<MemberSubscriptionCubit>()
+              .loadMembersActiveSubscriptions(state.members);
         }
       },
+      child: BlocBuilder<MembersCubit, MembersState>(
+        builder: (context, state) {
+          if (state is MembersLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (state is MembersLoaded) {
+            return BlocBuilder<
+              MemberSubscriptionCubit,
+              MemberSubscriptionState
+            >(
+              builder: (context, subState) {
+                if (subState is MemberSubscriptionLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (subState is MembersSubscriptionLoaded) {
+                  return MembersDataTable(
+                    members: state.members,
+                    subscriptions: subState.subscription,
+                  );
+                }
+
+                return const SizedBox.shrink();
+              },
+            );
+          }
+
+          if (state is MembersError) {
+            return CustomErrorWidget(errMessage: state.message);
+          }
+
+          return const SizedBox.shrink();
+        },
+      ),
     );
   }
 }

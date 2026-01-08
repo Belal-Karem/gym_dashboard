@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/core/helper/date_helper.dart';
+import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
@@ -12,14 +12,14 @@ class MemberActions {
     required BuildContext context,
     required MemberModel member,
     required SubModel selectedSub,
+    required DateTime startDate,
   }) async {
     final membersCubit = context.read<MembersCubit>();
-    final subscriptionsCubit = context.read<SubscriptionsCubit>();
+    final subscriptionsCubit = context.read<MemberSubscriptionCubit>();
 
     String? memberIdToReturn;
 
     try {
-      // عرض Loading
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -30,8 +30,6 @@ class MemberActions {
 
       await result.fold(
         (failure) {
-          Navigator.pop(context); // غلق الـ dialog
-          Navigator.pop(context);
           Navigator.pop(context);
           ScaffoldMessenger.of(
             context,
@@ -40,33 +38,31 @@ class MemberActions {
         (memberId) async {
           memberIdToReturn = memberId;
 
-          // حساب تاريخ الانتهاء وعدد الأيام المتبقية
-          final endDate = DateHelper.calculateEndDate(
-            member.startdata,
-            selectedSub.duration,
+          /// 🧠 حساب endDate
+          final endDate = startDate.add(
+            Duration(days: selectedSub.durationDays),
           );
-          final remainingDays = DateHelper.calculateDaysRemaining(endDate);
 
-          // تحديث العضو في القاعدة
-          await membersCubit.updateMember(memberId, {
-            'endDate': endDate,
-            'remainingDays': remainingDays.toString(),
-          });
+          /// 🧠 حساب remainingDays
+          final remainingDays = endDate.difference(DateTime.now()).inDays;
 
-          // إنشاء الاشتراك
-          final sub = MemberSubscriptionModel(
+          /// 🧠 تحديد الحالة
+          final status = remainingDays <= 0
+              ? SubscriptionStatus.expired
+              : SubscriptionStatus.active;
+          final memberSub = MemberSubscriptionModel(
+            id: '',
             memberId: memberId,
-            subId: selectedSub.id,
-            startDate: member.startdata,
+            subscriptionId: selectedSub.id,
+            startDate: startDate,
             endDate: endDate,
-            status: "active",
             remainingDays: remainingDays,
+            attendance: 0,
+            status: status,
           );
 
-          await subscriptionsCubit.addSubscription(sub);
+          await subscriptionsCubit.addSubscription(memberSub);
 
-          Navigator.pop(context); // غلق الـ dialog
-          Navigator.pop(context);
           Navigator.pop(context);
           ScaffoldMessenger.of(
             context,

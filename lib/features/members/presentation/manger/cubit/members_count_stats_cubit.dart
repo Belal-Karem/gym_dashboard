@@ -1,51 +1,85 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo.dart';
 import 'package:power_gym/features/members/data/models/member_model/members_count_mode.dart';
 import 'package:power_gym/features/members/data/models/repo/member_repo.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/members_count_state_state.dart';
 
 class MembersCountStatsCubit extends Cubit<MembersCountStatsState> {
-  final MemberRepo repo;
+  final MemberRepo memberRepo;
+  final MemberSubscriptionsRepo subscriptionsRepo;
+
   StreamSubscription? _membersSubscription;
 
-  MembersCountStatsCubit(this.repo) : super(MembersCountStatsInitial());
+  MembersCountStatsCubit(this.memberRepo, this.subscriptionsRepo)
+    : super(MembersCountStatsInitial());
   void loadStats() async {
     emit(MembersCountStatsLoading());
 
-    final result = await repo.getAllMembers();
-    result.fold((failure) => emit(MembersCountStatsError(failure.message)), (
-      stream,
-    ) {
-      _membersSubscription = stream.listen((members) {
-        final men = members
-            .where((m) => m.gender.toLowerCase() == 'ذكر')
-            .length;
-        final women = members
-            .where((m) => m.gender.toLowerCase() == 'أنثى')
-            .length;
-        final children = members
-            .where((m) => m.gender.toLowerCase() == 'طفل')
-            .length;
-        final active = members
-            .where((m) => m.status.toLowerCase() == 'نشط')
-            .length;
-        final expired = members
-            .where((m) => m.status.toLowerCase() != 'نشط')
-            .length;
+    final membersResult = await memberRepo.getAllMembers();
 
-        emit(
-          MembersCountStatsLoaded(
-            MembersCountMode(
-              men: men,
-              women: women,
-              children: children,
-              active: active,
-              expired: expired,
+    membersResult.fold(
+      (failure) => emit(MembersCountStatsError(failure.message)),
+      (membersStream) {
+        _membersSubscription = membersStream.listen((members) async {
+          int men = 0;
+          int women = 0;
+          int children = 0;
+          int active = 0;
+          int expired = 0;
+
+          for (final member in members) {
+            // النوع
+            switch (member.gender.toLowerCase()) {
+              case 'ذكر':
+                men++;
+                break;
+              case 'أنثى':
+                women++;
+                break;
+              case 'طفل':
+                children++;
+                break;
+            }
+
+            // الاشتراك
+            final subResult = await subscriptionsRepo.getSubscriptionsByMember(
+              member.id,
+            );
+
+            subResult.fold(
+              (_) {
+                expired++;
+              },
+              (subs) {
+                final hasActive = subs.any(
+                  (s) => s.status == SubscriptionStatus.active,
+                );
+
+                if (hasActive) {
+                  active++;
+                } else {
+                  expired++;
+                }
+              },
+            );
+          }
+
+          emit(
+            MembersCountStatsLoaded(
+              MembersCountMode(
+                men: men,
+                women: women,
+                children: children,
+                active: active,
+                expired: expired,
+              ),
             ),
-          ),
-        );
-      }, onError: (error) => emit(MembersCountStatsError(error.toString())));
-    });
+          );
+        }, onError: (e) => emit(MembersCountStatsError(e.toString())));
+      },
+    );
   }
 
   @override
