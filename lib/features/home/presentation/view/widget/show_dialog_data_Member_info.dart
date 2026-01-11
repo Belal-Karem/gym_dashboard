@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/core/utils/constants.dart';
+import 'package:power_gym/features/home/presentation/view/widget/elevated_boutton_member_info.dart';
 import 'package:power_gym/features/home/presentation/view/widget/list_title_member_info.dart';
+import 'package:power_gym/features/home/presentation/view/widget/text_boutton_member_info.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/model/show_dialog_data_member_Info_model.dart';
@@ -183,8 +185,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                       style: const TextStyle(color: Colors.red),
                     );
                   }
-
-                  return const SizedBox();
+                  return Text('no sub');
                 },
               ),
             ],
@@ -208,44 +209,3 @@ enum SubscriptionStatus { active, frozen, expired }
 //         trailing: member.status,
 //       ),
 // ),
-
-class ElevatedBouttonMemberInfo extends StatelessWidget {
-  const ElevatedBouttonMemberInfo({
-    super.key,
-    required this.text,
-    this.onPressed,
-  });
-
-  final String text;
-  final void Function()? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-        onPressed: onPressed,
-        child: Text(text, style: TextStyle(color: Colors.white, fontSize: 15)),
-      ),
-    );
-  }
-}
-
-class TextBouttonMemberInfo extends StatelessWidget {
-  const TextBouttonMemberInfo({super.key, required this.text, this.onPressed});
-
-  final String text;
-  final void Function()? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextButton(
-        onPressed: onPressed,
-        child: Text(text, style: TextStyle(color: Colors.white, fontSize: 15)),
-      ),
-    );
-  }
-}

@@ -18,12 +18,10 @@ class RecentMemberHome extends StatelessWidget {
         }
 
         if (state is RecentMemberLoaded) {
-          print('==================${state.members}');
           return RecentMemberHomeUi(members: state.members);
         }
 
         if (state is RecentMemberError) {
-          print('==================${state.message}');
           return Text(state.message);
         }
 

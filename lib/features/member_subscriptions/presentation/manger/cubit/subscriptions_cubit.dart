@@ -29,11 +29,12 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     );
   }
 
-  /// جلب الاشتراك النشط للعضو
+  /// جلب اشتراك العضو الحالي
   Future<void> getMemberSubscriptions(String memberId) async {
     emit(MemberSubscriptionLoading());
 
     final result = await repo.getSubscriptionsByMember(memberId);
+    print(result);
 
     result.fold((failure) => emit(MemberSubscriptionFailure(failure.message)), (
       list,
@@ -45,23 +46,30 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
       final recalculated = list.map(_recalculateSubscription).toList();
 
-      final activeList = recalculated
-          .where((s) => s.status == SubscriptionStatus.active)
+      MemberSubscriptionModel? activeSub;
+
+      final validSubs = recalculated
+          .where(
+            (s) =>
+                s.status == SubscriptionStatus.active ||
+                s.status == SubscriptionStatus.frozen,
+          )
           .toList();
 
-      if (activeList.isEmpty) {
+      if (validSubs.isEmpty) {
         emit(MemberSubscriptionEmpty());
         return;
       }
 
-      final activeSub = activeList.first;
+      activeSub = validSubs.first;
 
       final planResult = await plansRepo.getPlanById(activeSub.subscriptionId);
 
       planResult.fold(
         (failure) => emit(MemberSubscriptionFailure(failure.message)),
-        (plan) =>
-            emit(MemberSubscriptionLoaded(subscription: activeSub, plan: plan)),
+        (plan) => emit(
+          MemberSubscriptionLoaded(subscription: activeSub!, plan: plan),
+        ),
       );
     });
   }
@@ -84,7 +92,6 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       endDate: endDate,
       remainingDays: endDate.difference(DateTime.now()).inDays,
       attendance: 0,
-      status: SubscriptionStatus.active,
     );
 
     final result = await repo.updateMemberSubscription(renewed);
@@ -100,7 +107,10 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     required MemberSubscriptionModel subscription,
     required int freezeDays,
   }) async {
-    if (subscription.status != SubscriptionStatus.active) return;
+    if (subscription.status != SubscriptionStatus.active) {
+      emit(MemberSubscriptionFailure('الاشتراك غير نشط'));
+      return;
+    }
 
     final updated = subscription.copyWith(
       endDate: subscription.endDate.add(Duration(days: freezeDays)),
@@ -111,7 +121,9 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
     result.fold(
       (failure) => emit(MemberSubscriptionFailure(failure.message)),
-      (_) => emit(MemberSubscriptionUpdateSuccess()),
+      (_) => (_) async {
+        await getMemberSubscriptions(subscription.memberId);
+      },
     );
   }
 
@@ -138,11 +150,13 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
     result.fold(
       (failure) => emit(MemberSubscriptionFailure(failure.message)),
-      (_) => emit(MemberSubscriptionUpdateSuccess()),
+      (_) => (_) async {
+        await getMemberSubscriptions(subscription.memberId);
+      },
     );
   }
 
-  /// إعادة حساب الاشتراك (من غير لعب في status)
+  /// إعادة حساب الاشتراك
   MemberSubscriptionModel _recalculateSubscription(
     MemberSubscriptionModel sub,
   ) {
@@ -152,20 +166,27 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       return sub.copyWith(remainingDays: 0, status: SubscriptionStatus.expired);
     }
 
-    return sub.copyWith(remainingDays: remaining);
+    return sub.copyWith(
+      remainingDays: remaining,
+      status: sub.status == SubscriptionStatus.frozen
+          ? SubscriptionStatus.frozen
+          : SubscriptionStatus.active,
+    );
   }
 
-  /// استخدام دعوة
   Future<void> useInvitation(MemberSubscriptionModel subscription) async {
+    // ✅ TODO: Implement invitation logic
     final updated = subscription.copyWith(
-      // logic الدعوات
+      // هنا تزود logic الخصم أو العد
     );
 
     final result = await repo.updateMemberSubscription(updated);
 
     result.fold(
       (failure) => emit(MemberSubscriptionFailure(failure.message)),
-      (_) => emit(MemberSubscriptionUpdateSuccess()),
+      (_) => (_) async {
+        await getMemberSubscriptions(subscription.memberId);
+      },
     );
   }
 

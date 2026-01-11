@@ -1,45 +1,26 @@
 import 'package:bloc/bloc.dart';
 
-part 'report_filter_state.dart';
-
 class ReportFilterCubit extends Cubit<ReportFilterState> {
   ReportFilterCubit()
     : super(
         ReportFilterState(
-          year: DateTime.now().year,
           month: DateTime.now().month,
-          selectedDay: null,
+          year: DateTime.now().year,
         ),
       );
 
-  void changeYear(int year) {
-    emit(
-      state.copyWith(
-        year: year,
-        selectedDay: null, // مهم
-      ),
-    );
-  }
-
   void changeMonth(int month) {
-    emit(
-      state.copyWith(
-        month: month,
-        selectedDay: null, // نلغي اليوم المختار
-      ),
-    );
+    emit(ReportFilterState(month: month, year: state.year));
   }
 
-  void selectDay(DateTime day) {
-    emit(state.copyWith(selectedDay: day));
+  void changeYear(int year) {
+    emit(ReportFilterState(month: state.month, year: year));
   }
+}
 
-  /// helper مهم جدًا
-  String? get selectedDateId {
-    if (state.selectedDay == null) return null;
-    final d = state.selectedDay!;
-    return '${d.year}-${_two(d.month)}-${_two(d.day)}';
-  }
+class ReportFilterState {
+  final int month;
+  final int year;
 
-  String _two(int n) => n.toString().padLeft(2, '0');
+  ReportFilterState({required this.month, required this.year});
 }

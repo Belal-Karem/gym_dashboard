@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:power_gym/core/validators/validators.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
@@ -20,9 +21,49 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
   final controller = AddMemberController();
 
   @override
+  void initState() {
+    super.initState();
+    // ✅ Set default start date to today
+    controller.startDate.text = DateFormat(
+      'yyyy-MM-dd',
+      'en_US',
+    ).format(DateTime.now());
+  }
+
+  @override
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+  // ✅ ADDED: Date Picker Function
+  Future<void> _selectDate(
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Color(0xff9D1D1E),
+              onPrimary: Colors.white,
+              surface: Color(0xff1D1E22),
+              onSurface: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      controller.text = DateFormat('yyyy-MM-dd').format(picked);
+    }
   }
 
   @override
@@ -49,11 +90,12 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
                   validator: phoneValidator,
                 ),
               ),
+
               FieldLabelAndInputAddWidget(
                 label: 'ملحوظات',
                 child: TextFieldAddWidget(
                   controller: controller.note,
-                  validator: (v) {},
+                  validator: (v) => null, // ✅ Fixed: Allow empty notes
                 ),
               ),
 
@@ -61,7 +103,20 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
 
               DoubleFieldRowAddWidget(
                 leftLabel: 'تاريخ البدء',
-                leftChild: TextFieldAddWidget(controller: controller.startDate),
+                leftChild: GestureDetector(
+                  onTap: () => _selectDate(context, controller.startDate),
+                  child: AbsorbPointer(
+                    child: TextFieldAddWidget(
+                      controller: controller.startDate,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء اختيار تاريخ البدء';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ),
                 rightLabel: 'النوع',
                 rightChild: CustomDropdownWidget(
                   items: [
@@ -89,7 +144,7 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
                   initialValue: controller.paymentMethod,
                   onChanged: controller.setpaymentMethod,
                 ),
-                rightLabel: '',
+                rightLabel: 'الحالة',
                 rightChild: CustomDropdownWidget(
                   items: [
                     DropdownMenuItem(value: 'نشط', child: Text('نشط')),

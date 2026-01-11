@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/get_data_member_cubit.dart';
 import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
+import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 
 class SearchDropdownWidget extends StatefulWidget {
@@ -74,14 +75,22 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
                         _controller.text = member.name;
                         filtered.clear();
                         _removeOverlay();
+
+                         context
+                            .read<MemberSubscriptionCubit>()
+                            .getMemberSubscriptions(member.id);
+                            
                         showDialog(
                           context: context,
                           builder: (dialogContext) {
-                            return Dialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                            return BlocProvider.value(
+                              value: context.read<MemberSubscriptionCubit>(),
+                              child: Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: ShowDialogDataMemberInfo(member: member),
                               ),
-                              child: ShowDialogDataMemberInfo(member: member),
                             );
                           },
                         );

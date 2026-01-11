@@ -8,36 +8,35 @@ part 'daily_report_comment_state.dart';
 class DailyReportCommentCubit extends Cubit<DailyReportCommentState> {
   final DailyReportCommentRepo repo;
 
-  DailyReportCommentCubit(this.repo) : super(DailyReportCommentStateInitial()) {
-    loadCurrentDate();
-  }
+  DailyReportCommentCubit(this.repo) : super(DailyReportCommentStateInitial());
 
-  String get currentDateId => DateFormat('yyyy-MM-dd').format(DateTime.now());
-
-  Future<void> load(String date) async {
+  Future<void> loadComment([String? dateId]) async {
     emit(DailyReportCommentStateLoading());
+
     try {
-      final comment = await repo.getByDate(date);
+      final id = dateId ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
+      final comment = await repo.getByDate(id);
       emit(DailyReportCommentStateLoaded(comment));
     } catch (e) {
       emit(DailyReportCommentStateError(e.toString()));
     }
   }
 
-  Future<void> loadCurrentDate() async {
-    await load(currentDateId);
-  }
-
   Future<void> addOrUpdateComment(DailyReportComment comment) async {
-    emit(DailyReportCommentStateLoading());
-    await repo.upsert(comment.date, comment.comment);
-    final updated = await repo.getByDate(comment.date);
-    emit(DailyReportCommentStateLoaded(updated));
+    try {
+      await repo.upsert(comment.date, comment.comment);
+      await loadComment(comment.date);
+    } catch (e) {
+      emit(DailyReportCommentStateError(e.toString()));
+    }
   }
 
   Future<void> deleteComment(String dateId) async {
-    emit(DailyReportCommentStateLoading());
-    await repo.delete(dateId);
-    emit(DailyReportCommentStateLoaded(null));
+    try {
+      await repo.delete(dateId);
+      await loadComment(dateId);
+    } catch (e) {
+      emit(DailyReportCommentStateError(e.toString()));
+    }
   }
 }

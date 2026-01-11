@@ -6,7 +6,7 @@ class MemberSubscriptionInitial extends MemberSubscriptionState {}
 
 class MemberSubscriptionLoading extends MemberSubscriptionState {}
 
-/// اشتراك نشط + الخطة
+/// تحميل اشتراكات عضو
 class MemberSubscriptionLoaded extends MemberSubscriptionState {
   final MemberSubscriptionModel subscription;
   final SubModel plan;
@@ -14,23 +14,22 @@ class MemberSubscriptionLoaded extends MemberSubscriptionState {
   MemberSubscriptionLoaded({required this.subscription, required this.plan});
 }
 
-/// لا يوجد اشتراك (حالة طبيعية)
+/// ✅ ADDED: Missing Empty State
 class MemberSubscriptionEmpty extends MemberSubscriptionState {}
 
 /// إضافة اشتراك
 class MemberSubscriptionAddSuccess extends MemberSubscriptionState {}
 
-/// تحديث (حضور – تجديد – فريز)
+/// تحديث (تجديد – فريز – حضور)
 class MemberSubscriptionUpdateSuccess extends MemberSubscriptionState {}
 
-/// خطأ حقيقي
+/// خطأ
 class MemberSubscriptionFailure extends MemberSubscriptionState {
   final String message;
 
   MemberSubscriptionFailure(this.message);
 }
 
-/// اشتراكات نشطة لكل الأعضاء
 class MembersSubscriptionLoaded extends MemberSubscriptionState {
   final Map<String, MemberSubscriptionModel> subscription;
 

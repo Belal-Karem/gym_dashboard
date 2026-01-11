@@ -13,8 +13,8 @@ class DailyAttendanceCubit extends Cubit<DailyAttendanceState> {
     emit(DailyAttendanceLoading());
 
     try {
-      final data = await repo.getDailyAttendance(dateId);
-      emit(DailyAttendanceLoaded(data));
+      final attendance = await repo.getDailyAttendance(dateId);
+      emit(DailyAttendanceLoaded(attendance));
     } catch (e) {
       emit(DailyAttendanceError(e.toString()));
     }

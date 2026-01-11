@@ -4,9 +4,8 @@ import 'package:power_gym/features/plan_and_packages/data/models/plan_model/plan
 
 abstract class PlanRepo {
   Future<Either<Failure, Stream<List<PlanModel>>>> getAllPlan();
-  Future<bool> hasActivePrivatePlan(String id);
 
-  Future<Either<Failure, Unit>> addPlan(PlanModel member);
+  Future<Either<Failure, Unit>> addPlan(PlanModel plan);
 
   Future<Either<Failure, Unit>> updatePlan(
     String id,
@@ -14,4 +13,6 @@ abstract class PlanRepo {
   );
 
   Future<Either<Failure, Unit>> deletePlan(String id);
+
+  Future<bool> hasActivePrivatePlan(String memberId);
 }

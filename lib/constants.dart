@@ -1,4 +1,14 @@
+import 'package:flutter/material.dart';
+
+// ✅ Firebase Collections
 const kMemberCollections = 'member';
+const kSubCollections = 'plan';
+const ktrainerCollections = 'trainers';
+const kpaymentCollections = 'payment';
+const kmembersubscriptionsCollections = 'member_subscriptions';
+const kplanCollections = 'planAndPackages';
+
+// ✅ Member Fields
 const kmemberid = 'memberId';
 const kname = 'name';
 const kPhone = 'phone';
@@ -11,7 +21,7 @@ const kgender = 'gender';
 const kdate = 'date';
 const kaffiliationdate = 'affiliationdate';
 
-const kSubCollections = 'plan';
+// ✅ Subscription Fields
 const kduration = 'duration';
 const kfreeze = 'freeze';
 const kinvitation = 'invitation';
@@ -20,17 +30,18 @@ const kprice = 'price';
 const kstatus = 'status';
 const ktype = 'type';
 
-const ktrainerCollections = 'trainers';
+// ✅ Trainer Fields
 const kptNumber = 'ptNumber';
 
-const kpaymentCollections = 'payment';
+// ✅ Payment Fields
 const kpaid = 'paid';
 const kpaymentDate = 'payment date';
 const kpaymentMethod = 'payment method';
 const kplan = 'plan';
 
-const kmembersubscriptionsCollections = 'member_subscriptions';
-const kplanCollections = 'planAndPackages';
-
+// ✅ Plan Fields
 const ksession = 'session';
 const ktrainerid = 'trainerId';
+
+// ✅ UI Colors
+const kprimaryColor = Color(0xff1B1C20);

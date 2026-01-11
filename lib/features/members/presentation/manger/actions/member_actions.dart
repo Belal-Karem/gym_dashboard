@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
+import 'package:intl/intl.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
+import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
 
 class MemberActions {
   static Future<String?> saveMemberAndSubscription({
@@ -20,17 +21,19 @@ class MemberActions {
     String? memberIdToReturn;
 
     try {
+      // ✅ Show loading dialog
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) => const Center(child: CircularProgressIndicator()),
       );
 
+      // ✅ Add member and get ID
       final result = await membersCubit.addMemberAndReturnId(member);
 
       await result.fold(
         (failure) {
-          Navigator.pop(context);
+          Navigator.pop(context); // Close loading
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(failure.message)));
@@ -38,18 +41,19 @@ class MemberActions {
         (memberId) async {
           memberIdToReturn = memberId;
 
-          /// 🧠 حساب endDate
+          // ✅ Calculate subscription details
           final endDate = startDate.add(
             Duration(days: selectedSub.durationDays),
           );
-
-          /// 🧠 حساب remainingDays
           final remainingDays = endDate.difference(DateTime.now()).inDays;
-
-          /// 🧠 تحديد الحالة
           final status = remainingDays <= 0
               ? SubscriptionStatus.expired
               : SubscriptionStatus.active;
+
+          // ✅ Create dateId for payments tracking
+          final dateId = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+          // ✅ Create member subscription
           final memberSub = MemberSubscriptionModel(
             id: '',
             memberId: memberId,
@@ -59,20 +63,27 @@ class MemberActions {
             remainingDays: remainingDays,
             attendance: 0,
             status: status,
+            dateId: dateId,
           );
 
+          // ✅ Save subscription
           await subscriptionsCubit.addSubscription(memberSub);
 
-          Navigator.pop(context);
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('تم الحفظ بنجاح')));
+          Navigator.pop(context); // Close loading
 
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تم الحفظ بنجاح'),
+              backgroundColor: Colors.green,
+            ),
+          );
+
+          // ✅ Reload members list
           membersCubit.loadMembers();
         },
       );
     } catch (e) {
-      Navigator.pop(context);
+      Navigator.pop(context); // Close loading if open
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('حدث خطأ غير متوقع: $e')));

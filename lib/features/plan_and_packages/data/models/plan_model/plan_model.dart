@@ -1,4 +1,3 @@
-import 'package:power_gym/constants.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
 
@@ -6,13 +5,13 @@ class PlanModel {
   final String id;
   final MemberModel member;
   final TrainerModel trainer;
-  final String duration;
   final String session;
   final String method;
   final String price;
   final String attendance;
-  final String private;
+  final String duration;
   final String status;
+  final String private;
 
   PlanModel({
     required this.id,
@@ -29,14 +28,13 @@ class PlanModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      kmemberid: member.id, // مجرد ID
-      ktrainerid: trainer.id, // مجرد ID
-      ksession: session,
+      'memberId': member.id,
+      'trainerId': trainer.id,
+      'session': session,
       'method': method,
-      kprice: price,
-      kattendance: attendance,
-      kduration: duration,
+      'price': price,
+      'attendance': attendance,
+      'duration': duration,
       'status': status,
       'private': private,
     };
@@ -52,13 +50,13 @@ class PlanModel {
       id: docId,
       member: member,
       trainer: trainer,
-      duration: map[kduration] ?? '',
-      session: map[ksession] ?? '',
+      session: map['session'] ?? '',
       method: map['method'] ?? '',
-      price: map[kprice] ?? '',
-      attendance: map[kattendance] ?? '0',
-      status: map['status'],
-      private: map['private'] ?? 'لا',
+      price: map['price'] ?? '',
+      attendance: map['attendance'] ?? '0',
+      duration: map['duration'] ?? '',
+      status: map['status'] ?? 'نشط',
+      private: map['private'] ?? 'private',
     );
   }
 
@@ -67,9 +65,9 @@ class PlanModel {
     MemberModel? member,
     TrainerModel? trainer,
     String? session,
-    String? attendance,
     String? method,
     String? price,
+    String? attendance,
     String? duration,
     String? status,
     String? private,
