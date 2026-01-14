@@ -132,6 +132,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     required MemberSubscriptionModel subscription,
     required SubModel plan,
   }) async {
+    // 1️⃣ تحقق الاشتراك
     if (subscription.status != SubscriptionStatus.active) {
       emit(MemberSubscriptionFailure('الاشتراك غير نشط'));
       return;
@@ -142,6 +143,9 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       return;
     }
 
+    emit(MemberSubscriptionLoading());
+
+    // 2️⃣ تحديث الحضور
     final updated = subscription.copyWith(
       attendance: subscription.attendance + 1,
     );
@@ -149,9 +153,21 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     final result = await repo.updateMemberSubscription(updated);
 
     result.fold(
-      (failure) => emit(MemberSubscriptionFailure(failure.message)),
-      (_) => (_) async {
+      // ❌ فشل
+      (failure) {
+        emit(MemberSubscriptionFailure(failure.message));
+      },
+
+      // ✅ نجاح
+      (_) async {
         await getMemberSubscriptions(subscription.memberId);
+
+        emit(
+          MemberSubscriptionAttendanceSuccess(
+            subscription: updated,
+            plan: plan,
+          ),
+        );
       },
     );
   }

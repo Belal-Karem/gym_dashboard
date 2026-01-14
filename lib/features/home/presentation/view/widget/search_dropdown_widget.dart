@@ -7,7 +7,6 @@ import 'package:power_gym/features/members/data/models/member_model/member_model
 
 class SearchDropdownWidget extends StatefulWidget {
   const SearchDropdownWidget({super.key});
-
   @override
   State<SearchDropdownWidget> createState() => _SearchDropdownWidgetState();
 }
@@ -76,10 +75,10 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
                         filtered.clear();
                         _removeOverlay();
 
-                         context
+                        context
                             .read<MemberSubscriptionCubit>()
                             .getMemberSubscriptions(member.id);
-                            
+
                         showDialog(
                           context: context,
                           builder: (dialogContext) {

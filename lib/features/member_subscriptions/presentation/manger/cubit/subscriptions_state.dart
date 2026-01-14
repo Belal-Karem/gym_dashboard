@@ -35,3 +35,13 @@ class MembersSubscriptionLoaded extends MemberSubscriptionState {
 
   MembersSubscriptionLoaded(this.subscription);
 }
+
+class MemberSubscriptionAttendanceSuccess extends MemberSubscriptionState {
+  final MemberSubscriptionModel subscription;
+  final SubModel plan;
+
+  MemberSubscriptionAttendanceSuccess({
+    required this.subscription,
+    required this.plan,
+  });
+}

@@ -1,5 +1,3 @@
-import 'package:power_gym/constants.dart';
-
 class SubModel {
   final String id;
   final int durationDays;
