@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/utils/app_style.dart';
-import 'package:power_gym/core/utils/constants.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/attendance_cubit.dart';
 import 'package:power_gym/features/home/presentation/view/widget/elevated_boutton_member_info.dart';
 import 'package:power_gym/features/home/presentation/view/widget/list_title_member_info.dart';
@@ -214,8 +214,6 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
     );
   }
 }
-
-enum SubscriptionStatus { active, frozen, expired }
 
 // ListTitleMemberInfo(
 //   leadingAndTrailingTextStyle: TextStyle(

@@ -8,6 +8,7 @@ import 'package:power_gym/core/widget/elevated_button_widget.dart';
 import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
+import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/plan_model/plan_model.dart';
 import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
 import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
@@ -133,7 +134,7 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
                         text: 'حفظ',
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
-
+                          final paymentCubit = context.read<PaymentCubit>();
                           final plan = PlanModel(
                             id: '',
                             member: widget.member,
@@ -146,7 +147,7 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
                             status: 'نشط',
                             private: 'private',
                           );
-                          context.read<PlanCubit>().addPlan(plan);
+                          context.read<PlanCubit>().addPlan(plan, paymentCubit);
                         },
                       ),
                       const SizedBox(width: 10),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:power_gym/core/utils/constants.dart';
+import 'package:power_gym/constants.dart';
 
 class CustomDropdownButtonWidget extends StatefulWidget {
   const CustomDropdownButtonWidget({

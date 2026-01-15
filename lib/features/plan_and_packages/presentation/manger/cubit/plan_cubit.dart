@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:power_gym/features/payment/data/models/model/payment_model.dart';
 import 'package:power_gym/features/payment/data/models/repo/payment_repo.dart';
+import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/plan_model/plan_model.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo.dart';
 
@@ -75,7 +76,7 @@ class PlanCubit extends Cubit<PlanState> {
     _applyFilters();
   }
 
-  Future<void> addPlan(PlanModel plan) async {
+  Future<void> addPlan(PlanModel plan, PaymentCubit paymentCubit) async {
     emit(AddPlanLoading());
 
     final hasActive = await repo.hasActivePrivatePlan(plan.member.id);
@@ -91,19 +92,18 @@ class PlanCubit extends Cubit<PlanState> {
         emit(AddPlanError(failure.message));
       },
       (_) async {
-        await paymentRepo.addPayment(
+        await paymentCubit.addPayment(
           PaymentModel(
             id: '',
             memberId: plan.member.id,
             type: plan.member.name,
             paid: plan.price,
             plan: 'pt',
-            paymentMethod: plan.method, // أو plan.method لو موجود
+            paymentMethod: plan.method,
             date: DateTime.now(),
             status: 'income',
           ),
         );
-
         emit(AddPlanSuccess());
       },
     );

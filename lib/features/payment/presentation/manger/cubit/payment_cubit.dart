@@ -87,7 +87,6 @@ class PaymentCubit extends Cubit<PaymentState> {
           final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
           _allPayment = allPayments;
           _applyFilters();
-          _applyFilters();
           final todayIncome = allPayments.where((p) {
             return p.date.isAfter(start) && p.date.isBefore(end);
           }).toList();

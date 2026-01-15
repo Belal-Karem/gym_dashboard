@@ -7,14 +7,20 @@ import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/plan_and_packages/presentation/view/widget/dialog_add_plan.dart';
 
 class MemberDialog extends StatefulWidget {
   final MemberModel member;
+  final MemberSubscriptionModel subscription;
 
-  const MemberDialog({super.key, required this.member});
+  const MemberDialog({
+    super.key,
+    required this.member,
+    required this.subscription,
+  });
 
   @override
   State<MemberDialog> createState() => _MemberDialogState();
@@ -26,6 +32,9 @@ class _MemberDialogState extends State<MemberDialog> {
   late DateTime affiliationdate;
   String? selectedStatus;
   String? selectedGender;
+  late DateTime endDate;
+  late DateTime startDate;
+  late int remainingDays;
 
   @override
   void initState() {
@@ -34,6 +43,9 @@ class _MemberDialogState extends State<MemberDialog> {
     phoneController = TextEditingController(text: widget.member.phone);
     affiliationdate = widget.member.affiliationDate;
     selectedGender = widget.member.gender;
+    endDate = widget.subscription.endDate;
+    startDate = widget.subscription.startDate;
+    remainingDays = widget.subscription.remainingDays;
   }
 
   @override
@@ -74,13 +86,14 @@ class _MemberDialogState extends State<MemberDialog> {
               label: 'تاريخ الانضمام',
               child: affiliationdate.toString(),
             ),
-            // DisplayData(label: 'تاريخ البدء', child2: startData),
-            // DisplayData(label: 'تاريخ النتهاء', child2: endData),
+            DisplayData(label: 'تاريخ البدء', child: startDate.toString()),
+            DisplayData(label: 'تاريخ النتهاء', child: endDate.toString()),
 
-            // DisplayData(
-            //   label: 'الايام المتبقيه',
-            //   child: ),
-            // ),
+            DisplayData(
+              label: 'الايام المتبقيه',
+              child2: remainingDays.toString(),
+            ),
+
             Text('تعديل', style: AppStyle.style20),
             FieldLabelAndInputAddWidget(
               label: 'الاسم',

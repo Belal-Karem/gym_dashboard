@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
-import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/view/widget/member_update_dialog.dart';
@@ -79,7 +79,8 @@ class MembersDataTable extends StatelessWidget {
                 onTap: (cells) {
                   showDialog(
                     context: context,
-                    builder: (_) => MemberDialog(member: member),
+                    builder: (_) =>
+                        MemberDialog(member: member, subscription: sub),
                   );
                 },
                 cells: [

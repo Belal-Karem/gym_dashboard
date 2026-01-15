@@ -45,3 +45,18 @@ const ktrainerid = 'trainerId';
 
 // ✅ UI Colors
 const kprimaryColor = Color(0xff1B1C20);
+
+enum SubscriptionStatus { active, frozen, expired }
+
+extension SubscriptionStatusX on SubscriptionStatus {
+  String get arabicName {
+    switch (this) {
+      case SubscriptionStatus.active:
+        return 'نشط';
+      case SubscriptionStatus.frozen:
+        return 'مجمّد';
+      case SubscriptionStatus.expired:
+        return 'منتهي';
+    }
+  }
+}

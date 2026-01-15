@@ -43,7 +43,7 @@ class NotificationsRepoImpl {
           body = 'اشتراك ($memberName : id $memberId) ينتهي بكرة';
         } else {
           body =
-              'اشتراك ($memberName / id: $memberId) ينتهي خلال $remainingDays أيام';
+              'اشتراك ($memberName  :id $memberId) ينتهي خلال $remainingDays أيام';
         }
 
         notifications.add(

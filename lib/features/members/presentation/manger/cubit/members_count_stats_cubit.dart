@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo.dart';
 import 'package:power_gym/features/members/data/models/member_model/members_count_mode.dart';
 import 'package:power_gym/features/members/data/models/repo/member_repo.dart';

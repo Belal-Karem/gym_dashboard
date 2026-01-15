@@ -14,12 +14,12 @@ class DialogAddMember extends StatelessWidget {
         if (state is AddMemberLoading) {
           showDialog(
             context: context,
-            barrierDismissible: false,
+            barrierDismissible: true,
             builder: (_) => const Center(child: CircularProgressIndicator()),
           );
         } else if (state is AddMemberSuccess) {
-          Navigator.pop(context); // يقفل الـ loading
-          Navigator.pop(context); // يقفل الـ dialog
+          Navigator.pop(context);
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('تم إضافة العضو بنجاح!')),
           );

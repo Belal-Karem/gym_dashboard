@@ -1,4 +1,4 @@
-import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
+import 'package:power_gym/constants.dart';
 
 class MemberSubscriptionModel {
   final String id;

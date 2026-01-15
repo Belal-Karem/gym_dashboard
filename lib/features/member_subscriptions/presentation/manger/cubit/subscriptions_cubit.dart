@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/plans_repo.dart';
@@ -190,6 +190,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     );
   }
 
+  //Invitation(
   Future<void> useInvitation(MemberSubscriptionModel subscription) async {
     // ✅ TODO: Implement invitation logic
     final updated = subscription.copyWith(

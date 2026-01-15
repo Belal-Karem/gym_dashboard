@@ -4,8 +4,10 @@ import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/errors/failure.dart';
 import 'package:power_gym/core/errors/firebase_error_mapper.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
+import 'package:power_gym/features/members/data/models/repo/member_repo.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/plan_model/plan_model.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo.dart';
+import 'package:power_gym/features/trainers/data/models/repo/trainer_repo.dart';
 import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
 
 class PlanRepoImpl implements PlanRepo {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/manger/actions/member_actions.dart';
 import 'package:power_gym/features/members/presentation/view/select_sup_view.dart';
-import 'package:power_gym/features/payment/presentation/manger/actions/payment_actions.dart';
+import 'package:power_gym/features/payment/data/models/model/payment_model.dart';
+import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
 
 class AddMemberController {
@@ -69,14 +71,17 @@ class AddMemberController {
       );
 
       if (memberId != null) {
-        await PaymentActions.recordPayment(
-          memberId: memberId,
-          paid: selectedSub.price.toString(),
-          plan: selectedSub.type,
-          paymentMethod: paymentMethod,
-          date: DateTime.now(),
-          name: name.text,
-          status: 'income',
+        context.read<PaymentCubit>().addPayment(
+          PaymentModel(
+            id: '',
+            memberId: memberId,
+            paid: selectedSub.price.toString(),
+            plan: selectedSub.type,
+            date: DateTime.now(),
+            paymentMethod: paymentMethod,
+            type: name.text,
+            status: 'income',
+          ),
         );
       }
     } catch (e) {
