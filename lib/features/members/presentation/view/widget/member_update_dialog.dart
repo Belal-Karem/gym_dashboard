@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/helper/format_date_helper.dart';
 import 'package:power_gym/core/utils/app_style.dart';
-import 'package:power_gym/core/utils/constants.dart';
 import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
+import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
+import 'package:power_gym/features/members/presentation/view/select_sup_view.dart';
 import 'package:power_gym/features/plan_and_packages/presentation/view/widget/dialog_add_plan.dart';
+import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
 
 class MemberDialog extends StatefulWidget {
   final MemberModel member;
@@ -151,6 +154,7 @@ class _MemberDialogState extends State<MemberDialog> {
           onPressed: deleteMember,
           child: const Text('حذف', style: TextStyle(color: Colors.red)),
         ),
+
         TextButton(
           onPressed: updateMember,
           child: const Text('تحديث', style: TextStyle(color: Colors.blue)),

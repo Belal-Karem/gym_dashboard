@@ -8,6 +8,7 @@ import 'package:power_gym/features/home/presentation/view/widget/list_title_memb
 import 'package:power_gym/features/home/presentation/view/widget/text_boutton_member_info.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
+import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
 import 'package:power_gym/model/show_dialog_data_member_Info_model.dart';
 
 class ShowDialogDataMemberInfo extends StatelessWidget {
@@ -97,7 +98,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                 ),
               ),
               BlocListener<MemberSubscriptionCubit, MemberSubscriptionState>(
-                listenWhen: (prev, curr) =>
+                listenWhen: (_, curr) =>
                     curr is MemberSubscriptionAttendanceSuccess,
                 listener: (context, state) {
                   final s = state as MemberSubscriptionAttendanceSuccess;
@@ -114,96 +115,90 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                       MemberSubscriptionState
                     >(
                       builder: (context, state) {
-                        if (state is MemberSubscriptionLoading) {
-                          return const CircularProgressIndicator();
-                        }
+                        final cubit = context.watch<MemberSubscriptionCubit>();
+                        final subscription =
+                            cubit.cachedSubscriptions[member.id];
 
-                        if (state is MemberSubscriptionLoaded) {
-                          final subscription = state.subscription;
-                          final plan = state.plan;
-
-                          final canAttend =
-                              subscription.status ==
-                                  SubscriptionStatus.active &&
-                              subscription.attendance < plan.maxAttendance;
-
-                          return Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (plan.type == 'pt')
-                                ElevatedBouttonMemberInfo(
-                                  text: 'حضور PT',
-                                  onPressed: canAttend
-                                      ? () {
-                                          context
-                                              .read<MemberSubscriptionCubit>()
-                                              .markAttendance(
-                                                subscription: subscription,
-                                                plan: plan,
-                                              );
-                                        }
-                                      : null,
-                                ),
-
-                              ElevatedBouttonMemberInfo(
-                                text: 'يقبل',
-                                onPressed: canAttend
-                                    ? () {
-                                        context
-                                            .read<MemberSubscriptionCubit>()
-                                            .markAttendance(
-                                              subscription: subscription,
-                                              plan: plan,
-                                            );
-                                      }
-                                    : null,
-                              ),
-
-                              TextBouttonMemberInfo(
-                                text: 'تجميد',
-                                onPressed:
-                                    subscription.status ==
-                                            SubscriptionStatus.active &&
-                                        plan.freezeDays > 0
-                                    ? () {
-                                        context
-                                            .read<MemberSubscriptionCubit>()
-                                            .applyFreeze(
-                                              subscription: subscription,
-                                              freezeDays: plan.freezeDays,
-                                            );
-                                      }
-                                    : null,
-                              ),
-
-                              TextBouttonMemberInfo(
-                                text: 'دعوه',
-                                onPressed: plan.invitationCount > 0
-                                    ? () {
-                                        context
-                                            .read<MemberSubscriptionCubit>()
-                                            .useInvitation(subscription);
-                                      }
-                                    : null,
-                              ),
-                            ],
-                          );
-                        }
-
-                        if (state is MemberSubscriptionEmpty) {
+                        if (subscription == null) {
                           return const Text(
                             'لا يوجد اشتراك نشط',
                             style: TextStyle(color: Colors.red),
                           );
                         }
 
-                        if (state is MemberSubscriptionFailure) {
-                          return Text(
-                            state.message,
-                            style: const TextStyle(color: Colors.red),
+                        final plan = cubit.getPlan(subscription.subscriptionId);
+
+                        if (plan == null) {
+                          return const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
                           );
                         }
-                        return Text('no sub');
+
+                        final canAttend =
+                            subscription.status == SubscriptionStatus.active &&
+                            subscription.attendance < plan.maxAttendance;
+
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (plan.type == 'pt')
+                              ElevatedBouttonMemberInfo(
+                                text: 'حضور PT',
+                                onPressed: canAttend
+                                    ? () {
+                                        context
+                                            .read<MemberSubscriptionCubit>()
+                                            .markAttendance(
+                                              subscription: subscription,
+                                            );
+                                      }
+                                    : null,
+                              ),
+
+                            ElevatedBouttonMemberInfo(
+                              text: 'يقبل',
+                              onPressed: canAttend
+                                  ? () {
+                                      context
+                                          .read<MemberSubscriptionCubit>()
+                                          .markAttendance(
+                                            subscription: subscription,
+                                          );
+                                    }
+                                  : null,
+                            ),
+
+                            TextBouttonMemberInfo(
+                              text: 'تجميد',
+                              onPressed:
+                                  subscription.status ==
+                                          SubscriptionStatus.active &&
+                                      plan.freezeDays > 0
+                                  ? () {
+                                      context
+                                          .read<MemberSubscriptionCubit>()
+                                          .applyFreeze(
+                                            subscription: subscription,
+                                            freezeDays: plan.freezeDays,
+                                          );
+                                    }
+                                  : null,
+                            ),
+
+                            TextBouttonMemberInfo(
+                              text: 'دعوه',
+                              onPressed: plan.invitationCount > 0
+                                  ? () {
+                                      context
+                                          .read<MemberSubscriptionCubit>()
+                                          .useInvitation(subscription);
+                                    }
+                                  : null,
+                            ),
+                          ],
+                        );
                       },
                     ),
               ),

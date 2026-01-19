@@ -60,14 +60,12 @@ class CustomPresenceUi extends StatelessWidget {
                     1: FlexColumnWidth(1),
                     2: FlexColumnWidth(1),
                     3: FlexColumnWidth(1),
-                    4: FlexColumnWidth(1),
-                    5: FlexColumnWidth(1.2),
+                    4: FlexColumnWidth(1.2),
                   },
                   children: [
                     TableHelper.buildHeaderRow([
+                      TableHeaderCellWidget('id'),
                       TableHeaderCellWidget('الاسم'),
-                      TableHeaderCellWidget('بداية'),
-                      TableHeaderCellWidget('النهايه'),
                       TableHeaderCellWidget('الحاله'),
                       TableHeaderCellWidget('التوقيت'),
                       TableHeaderCellWidget('ملحظه'),
@@ -76,18 +74,8 @@ class CustomPresenceUi extends StatelessWidget {
                     ...a.map(
                       (a) => TableHelper.buildDataRow(
                         cells: [
+                          TableCellWidget('${a.memberId}'),
                           TableCellWidget('${a.memberName}'),
-                          TableCellWidget(
-                            // DateFormat(
-                            //   'yyyy-MM-dd',
-                            //   'en_US',
-                            // ).format(a.startDate),
-                            '',
-                          ),
-                          TableCellWidget(
-                            // DateFormat('yyyy-MM-dd', 'en_US').format(a.endDate),
-                            '',
-                          ),
                           TableCellWidget('${a.status}'),
                           TableCellWidget(
                             DateFormat(

@@ -21,19 +21,18 @@ class MemberActions {
     String? memberIdToReturn;
 
     try {
-      // ✅ Show loading dialog
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) => const Center(child: CircularProgressIndicator()),
       );
 
-      // ✅ Add member and get ID
       final result = await membersCubit.addMemberAndReturnId(member);
 
       await result.fold(
         (failure) {
-          Navigator.pop(context); // Close loading
+          Navigator.pop(context);
+          Navigator.pop(context);
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(failure.message)));
@@ -41,7 +40,6 @@ class MemberActions {
         (memberId) async {
           memberIdToReturn = memberId;
 
-          // ✅ Calculate subscription details
           final endDate = startDate.add(
             Duration(days: selectedSub.durationDays),
           );
@@ -50,10 +48,8 @@ class MemberActions {
               ? SubscriptionStatus.expired
               : SubscriptionStatus.active;
 
-          // ✅ Create dateId for payments tracking
           final dateId = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-          // ✅ Create member subscription
           final memberSub = MemberSubscriptionModel(
             id: '',
             memberId: memberId,
@@ -66,24 +62,19 @@ class MemberActions {
             dateId: dateId,
           );
 
-          // ✅ Save subscription
           await subscriptionsCubit.addSubscription(memberSub);
 
-          Navigator.pop(context); // Close loading
+          Navigator.pop(context);
+          Navigator.pop(context);
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('تم الحفظ بنجاح')));
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تم الحفظ بنجاح'),
-              backgroundColor: Colors.green,
-            ),
-          );
-
-          // ✅ Reload members list
           membersCubit.loadMembers();
         },
       );
     } catch (e) {
-      Navigator.pop(context); // Close loading if open
+      Navigator.pop(context);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('حدث خطأ غير متوقع: $e')));

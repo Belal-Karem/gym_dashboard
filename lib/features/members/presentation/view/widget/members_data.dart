@@ -17,10 +17,12 @@ class MembersData extends StatelessWidget {
           context
               .read<MemberSubscriptionCubit>()
               .loadMembersActiveSubscriptions(state.members);
+          print('SizedBox1');
         }
       },
       child: BlocBuilder<MembersCubit, MembersState>(
         builder: (context, state) {
+          print('SizedBox2');
           if (state is MembersLoading) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -31,18 +33,18 @@ class MembersData extends StatelessWidget {
               MemberSubscriptionState
             >(
               builder: (context, subState) {
-                if (subState is MemberSubscriptionLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                final subscriptions = context
+                    .read<MemberSubscriptionCubit>()
+                    .cachedSubscriptions;
+
+                if (subscriptions.isEmpty) {
+                  return const Center(child: Text('لا توجد اشتراكات'));
                 }
 
-                if (subState is MembersSubscriptionLoaded) {
-                  return MembersDataTable(
-                    members: state.members,
-                    subscriptions: subState.subscription,
-                  );
-                }
-
-                return const SizedBox.shrink();
+                return MembersDataTable(
+                  members: state.members,
+                  subscriptions: subscriptions,
+                );
               },
             );
           }

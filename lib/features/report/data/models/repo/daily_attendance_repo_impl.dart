@@ -22,7 +22,9 @@ class DailyAttendanceRepoImpl implements DailyAttendanceRepo {
 
       result.add(
         AttendanceReportModel(
+          attendanceCount: result.length,
           memberName: data['name'] ?? '',
+          memberId: data['memberId'] ?? '',
           startDate: _parseDate(data['startDate']),
           endDate: _parseDate(data['endDate']),
           status: data['status'] ?? '',

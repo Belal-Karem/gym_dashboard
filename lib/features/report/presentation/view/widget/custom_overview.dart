@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:power_gym/core/utils/app_style.dart';
+import 'package:power_gym/features/report/presentation/manger/cubit/daily_attendance_cubit.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_report_comment_cubit.dart';
 import 'package:power_gym/features/report/presentation/view/widget/expandable_note.dart';
 import 'package:power_gym/features/report/presentation/view/widget/list_title_item.dart';
@@ -17,26 +17,24 @@ class CustomOverview extends StatelessWidget {
       children: [
         Text('ملخص', style: AppStyle.style20W500),
         SizedBox(height: 10),
-        ListTitleItem(
-          listTitleOverviewModel: ListTitleOverviewModel(
-            text: 'تاريخ',
-            data: '5 نوفمبر 2025',
-            icon: Icons.calendar_month,
-          ),
-        ),
-        ListTitleItem(
-          listTitleOverviewModel: ListTitleOverviewModel(
-            text: 'ساعات العمل',
-            data: '24h',
-            icon: FontAwesomeIcons.clock,
-          ),
-        ),
-        ListTitleItem(
-          listTitleOverviewModel: ListTitleOverviewModel(
-            text: 'إجمالي الزيارات',
-            data: '27',
-            icon: Icons.person,
-          ),
+
+        BlocBuilder<DailyAttendanceCubit, DailyAttendanceState>(
+          builder: (context, state) {
+            if (state is DailyAttendanceLoaded) {
+              final a = state.attendance;
+              return ListTitleItem(
+                listTitleOverviewModel: ListTitleOverviewModel(
+                  text: 'إجمالي الزيارات',
+                  data: a.length.toString(),
+                  icon: Icons.person,
+                ),
+              );
+            }
+            if (state is DailyAttendanceError) {
+              return Text(state.message);
+            }
+            return const SizedBox.shrink();
+          },
         ),
         BlocBuilder<DailyReportCommentCubit, DailyReportCommentState>(
           builder: (context, state) {

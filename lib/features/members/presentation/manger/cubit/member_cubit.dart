@@ -89,6 +89,7 @@ class MembersCubit extends Cubit<MembersState> {
 
   MembersCubit(this.repo) : super(MembersInitial());
 
+  // ================= LOAD =================
   Future<void> loadMembers() async {
     emit(MembersLoading());
 
@@ -108,70 +109,72 @@ class MembersCubit extends Cubit<MembersState> {
     });
   }
 
+  // ================= SEARCH =================
   void searchMembers(String query) {
     _searchQuery = query;
     _applyFilters();
   }
 
+  // ================= FILTER =================
   void filterByStatus(String status) {
     _statusFilter = status;
     _applyFilters();
   }
 
+  // ================= APPLY FILTERS =================
   void _applyFilters() {
     List<MemberModel> filtered = List.from(_allMembers);
 
     if (_searchQuery.isNotEmpty) {
-      filtered = filtered.where((subSubscription) {
-        return subSubscription.name.toLowerCase().contains(
-          _searchQuery.toLowerCase(),
-        );
+      filtered = filtered.where((member) {
+        return member.name.toLowerCase().contains(_searchQuery.toLowerCase());
       }).toList();
     }
 
     // if (_statusFilter != 'all') {
-    //   filtered = filtered.where((subSubscription) {
-    //     return subSubscription.status == _statusFilter;
+    //   filtered = filtered.where((member) {
+    //     return member.status == _statusFilter;
     //   }).toList();
     // }
 
     emit(MembersLoaded(filtered));
   }
 
+  // ================= RESET =================
   void resetFilters() {
     _searchQuery = '';
+    _statusFilter = 'all';
     _applyFilters();
   }
 
+  // ================= ADD =================
   Future<Either<Failure, String>> addMemberAndReturnId(
     MemberModel member,
   ) async {
-    emit(AddMemberLoading());
     return await repo.addMemberAndReturnId(member);
   }
 
+  // ================= UPDATE =================
   Future<void> updateMember(String id, Map<String, dynamic> data) async {
-    emit(UpdateMemberLoading());
-
     final result = await repo.updateMember(id, data);
 
-    result.fold(
-      (failure) => emit(UpdateMemberError(failure.message)),
-      (_) => emit(UpdateMemberSuccess()),
-    );
+    result.fold((failure) => emit(MembersError(failure.message)), (_) {
+      // الـ stream هيحدّث _allMembers تلقائي
+      // وإحنا بس نعيد الفلاتر
+      _applyFilters();
+    });
   }
 
+  // ================= DELETE =================
   Future<void> deleteMember(String id) async {
-    emit(DeleteMemberLoading());
-
     final result = await repo.deleteMember(id);
 
-    result.fold(
-      (failure) => emit(DeleteMemberError(failure.message)),
-      (_) => emit(DeleteMemberSuccess()),
-    );
+    result.fold((failure) => emit(MembersError(failure.message)), (_) {
+      _applyFilters();
+    });
   }
 
+  // ================= CLOSE =================
   @override
   Future<void> close() {
     _membersSubscription?.cancel();

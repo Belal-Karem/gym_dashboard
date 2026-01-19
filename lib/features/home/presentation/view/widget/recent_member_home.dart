@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
@@ -87,11 +88,7 @@ class RecentMemberHomeUi extends StatelessWidget {
                             : members.attendanceCount.toString(),
                       ),
                       TableCellWidget(
-                        members.status.isEmpty ? '---' : members.status,
-                        style: const TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        DateFormat('hh:mm a', 'en_US').format(members.time),
                       ),
                     ],
                   ),

@@ -12,8 +12,10 @@ class MemberSubscriptionModel {
   final int attendance;
   final SubscriptionStatus status;
   final String? dateId;
+  final String? dateIdAttendance;
 
   MemberSubscriptionModel({
+    this.dateIdAttendance,
     required this.id,
     required this.memberId,
     required this.subscriptionId,
@@ -35,6 +37,7 @@ class MemberSubscriptionModel {
       'remainingDays': remainingDays,
       'attendance': attendance,
       'status': status.name,
+      'dateIdAttendance': dateIdAttendance,
     };
   }
 
@@ -54,10 +57,13 @@ class MemberSubscriptionModel {
         (e) => e.name == map['status'],
         orElse: () => SubscriptionStatus.expired,
       ),
+      dateId: map['dateId'] as String?,
+      dateIdAttendance: map['dateIdAttendance'] as String?,
     );
   }
   MemberSubscriptionModel copyWith({
     String? dateId,
+    String? dateIdAttendance,
     DateTime? startDate,
     DateTime? endDate,
     int? remainingDays,
@@ -74,6 +80,7 @@ class MemberSubscriptionModel {
       remainingDays: remainingDays ?? this.remainingDays,
       attendance: attendance ?? this.attendance,
       status: status ?? this.status,
+      dateIdAttendance: dateIdAttendance ?? this.dateIdAttendance,
     );
   }
 }

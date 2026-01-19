@@ -5,8 +5,12 @@ class AttendanceReportModel {
   final String status;
   final DateTime attendanceTime;
   final String note;
+  final String memberId;
+  final int? attendanceCount;
 
   AttendanceReportModel({
+    this.attendanceCount,
+    required this.memberId,
     required this.memberName,
     required this.startDate,
     required this.endDate,
@@ -18,6 +22,7 @@ class AttendanceReportModel {
   Map<String, dynamic> toMap() {
     return {
       'memberName': memberName,
+      'memberId': memberId,
       'startDate': startDate,
       'endDate': endDate,
       'status': status,

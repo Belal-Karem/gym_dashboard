@@ -54,7 +54,8 @@ class MembersDataTable extends StatelessWidget {
             ]),
             ...members.map((member) {
               final sub = subscriptions[member.id];
-
+              print(sub.toString());
+              print(member.toJson());
               if (sub == null) {
                 return TableHelper.buildDataRow(
                   onTap: (_) {},
@@ -96,7 +97,7 @@ class MembersDataTable extends StatelessWidget {
                   TableCellWidget(sub.remainingDays.toString()),
                   TableCellWidget(sub.attendance.toString()),
                   TableCellWidget(
-                    sub.status.name,
+                    sub.status.arabicName,
                     style: sub.status == SubscriptionStatus.active
                         ? const TextStyle(
                             color: Colors.green,
