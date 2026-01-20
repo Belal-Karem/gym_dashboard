@@ -14,6 +14,7 @@ class PaymentView extends StatelessWidget {
             children: [
               Image.asset('assets/image/image.png', height: 120, width: 120),
               Text('Power House Gym', style: TextStyle(fontSize: 20)),
+              const SizedBox(width: 100),
               const PaymentStatisticsRow(),
             ],
           ),

@@ -14,7 +14,6 @@ class PaymentStatisticsRow extends StatelessWidget {
         if (state is PaymentLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is PaymentLoaded) {
-          print('state.totalIncomeToday ${state.totalIncomeToday}');
           return PaymentStatisticsRowData(
             todayIncome: state.totalIncomeToday,
             todayOutcome: state.totalOutcomeToday,

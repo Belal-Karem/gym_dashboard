@@ -83,7 +83,7 @@ class PaymentCubit extends Cubit<PaymentState> {
       _paymentSubscription = stream.listen(
         (allPayments) {
           _allPayment = allPayments;
-          _applyFilters(); // هو الوحيد اللي يعمل emit
+          _applyFilters();
         },
         onError: (error) {
           emit(PaymentError(error.toString()));
@@ -137,15 +137,11 @@ class PaymentCubit extends Cubit<PaymentState> {
       return p.date.isAfter(start) && p.date.isBefore(end);
     }).toList();
 
-    print(
-      'totalIncomeToday $totalIncomeToday totalOutcomeToday $totalOutcomeToday',
-    );
-
     emit(
       PaymentLoaded(
-        payments: todayFilteredPayments, // للعرض في widgets
-        totalIncomeToday: totalIncomeToday, // دخل اليوم
-        totalOutcomeToday: totalOutcomeToday, // خرج اليوم
+        payments: todayFilteredPayments,
+        totalIncomeToday: totalIncomeToday,
+        totalOutcomeToday: totalOutcomeToday,
       ),
     );
   }
@@ -162,9 +158,8 @@ class PaymentCubit extends Cubit<PaymentState> {
     final result = await repo.addPayment(payment);
 
     result.fold((failure) => emit(AddPaymentError(failure.message)), (_) {
-      // أضف الـ payment للقائمة وحدث الفلاتر
       _allPayment.add(payment);
-      _applyFilters(); // هتحدث الـ UI والقائمة والـ total
+      _applyFilters();
       emit(AddPaymentSuccess());
     });
   }

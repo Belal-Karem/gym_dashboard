@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/errors/failure.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/data/models/repo/member_repo.dart';
@@ -89,7 +90,6 @@ class MembersCubit extends Cubit<MembersState> {
 
   MembersCubit(this.repo) : super(MembersInitial());
 
-  // ================= LOAD =================
   Future<void> loadMembers() async {
     emit(MembersLoading());
 
@@ -109,19 +109,16 @@ class MembersCubit extends Cubit<MembersState> {
     });
   }
 
-  // ================= SEARCH =================
   void searchMembers(String query) {
     _searchQuery = query;
     _applyFilters();
   }
 
-  // ================= FILTER =================
   void filterByStatus(String status) {
     _statusFilter = status;
     _applyFilters();
   }
 
-  // ================= APPLY FILTERS =================
   void _applyFilters() {
     List<MemberModel> filtered = List.from(_allMembers);
 
@@ -131,41 +128,35 @@ class MembersCubit extends Cubit<MembersState> {
       }).toList();
     }
 
-    // if (_statusFilter != 'all') {
-    //   filtered = filtered.where((member) {
-    //     return member.status == _statusFilter;
-    //   }).toList();
-    // }
+    if (_statusFilter != 'all') {
+      filtered = filtered.where((SubscriptionStatus) {
+        return SubscriptionStatus == _statusFilter;
+      }).toList();
+    }
 
     emit(MembersLoaded(filtered));
   }
 
-  // ================= RESET =================
   void resetFilters() {
     _searchQuery = '';
     _statusFilter = 'all';
     _applyFilters();
   }
 
-  // ================= ADD =================
   Future<Either<Failure, String>> addMemberAndReturnId(
     MemberModel member,
   ) async {
     return await repo.addMemberAndReturnId(member);
   }
 
-  // ================= UPDATE =================
   Future<void> updateMember(String id, Map<String, dynamic> data) async {
     final result = await repo.updateMember(id, data);
 
     result.fold((failure) => emit(MembersError(failure.message)), (_) {
-      // الـ stream هيحدّث _allMembers تلقائي
-      // وإحنا بس نعيد الفلاتر
       _applyFilters();
     });
   }
 
-  // ================= DELETE =================
   Future<void> deleteMember(String id) async {
     final result = await repo.deleteMember(id);
 
@@ -174,7 +165,6 @@ class MembersCubit extends Cubit<MembersState> {
     });
   }
 
-  // ================= CLOSE =================
   @override
   Future<void> close() {
     _membersSubscription?.cancel();

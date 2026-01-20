@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
@@ -54,11 +55,28 @@ class MembersDataTable extends StatelessWidget {
             ]),
             ...members.map((member) {
               final sub = subscriptions[member.id];
-              print(sub.toString());
-              print(member.toJson());
               if (sub == null) {
                 return TableHelper.buildDataRow(
-                  onTap: (_) {},
+                  onTap: (cells) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => MemberDialog(
+                        member: member,
+                        subscription:
+                            sub ??
+                            MemberSubscriptionModel(
+                              memberId: member.id,
+                              subscriptionId: '',
+                              startDate: DateTime.now(),
+                              endDate: DateTime.now(),
+                              remainingDays: 0,
+                              attendance: 0,
+                              status: SubscriptionStatus.expired,
+                              id: '',
+                            ),
+                      ),
+                    );
+                  },
                   cells: [
                     TableCellWidget(member.memberId),
                     TableCellWidget(member.name),

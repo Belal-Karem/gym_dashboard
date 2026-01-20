@@ -151,6 +151,54 @@ class _MemberDialogState extends State<MemberDialog> {
           ),
         ),
         TextButton(
+          onPressed: () async {
+            final cubit = context.read<MemberSubscriptionCubit>();
+            Navigator.pop(context);
+
+            final selectedSub = await Navigator.push<SubModel>(
+              context,
+              MaterialPageRoute(builder: (_) => const SelectSupView()),
+            );
+
+            if (selectedSub == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('يرجى اختيار مدة الاشتراك')),
+              );
+              return;
+            }
+
+            // ⚡ إذا الاشتراك فاضي (عضو جديد)، نعمل add
+            if (widget.subscription.subscriptionId.isEmpty) {
+              cubit.addSubscription(
+                MemberSubscriptionModel(
+                  memberId: widget.subscription.memberId,
+                  subscriptionId: selectedSub.id,
+                  startDate: DateTime.now(),
+                  endDate: DateTime.now().add(
+                    Duration(days: selectedSub.durationDays),
+                  ),
+                  remainingDays: selectedSub.durationDays,
+                  attendance: 0,
+                  status: SubscriptionStatus.active,
+                  id: '', // ممكن Firestore يولد id
+                ),
+              );
+            } else {
+              // ⚡ لو موجود بالفعل → تجديد / تمديد
+              cubit.renewOrExtendSubscription(
+                currentSub: widget.subscription,
+                plan: selectedSub,
+              );
+            }
+          },
+          child: Text(
+            widget.subscription.status == SubscriptionStatus.expired
+                ? 'تجديد الاشتراك'
+                : 'تمديد الاشتراك',
+          ),
+        ),
+
+        TextButton(
           onPressed: deleteMember,
           child: const Text('حذف', style: TextStyle(color: Colors.red)),
         ),

@@ -63,6 +63,7 @@ class MemberSubscriptionModel {
   }
   MemberSubscriptionModel copyWith({
     String? dateId,
+    String? subscriptionId,
     String? dateIdAttendance,
     DateTime? startDate,
     DateTime? endDate,
@@ -73,7 +74,7 @@ class MemberSubscriptionModel {
     return MemberSubscriptionModel(
       id: id,
       memberId: memberId,
-      subscriptionId: subscriptionId,
+      subscriptionId: subscriptionId ?? this.subscriptionId,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       dateId: dateId ?? this.dateId,
