@@ -82,23 +82,8 @@ class PaymentCubit extends Cubit<PaymentState> {
 
       _paymentSubscription = stream.listen(
         (allPayments) {
-          final now = DateTime.now();
-          final start = DateTime(now.year, now.month, now.day);
-          final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
           _allPayment = allPayments;
-          _applyFilters();
-          final todayIncome = allPayments.where((p) {
-            return p.date.isAfter(start) && p.date.isBefore(end);
-          }).toList();
-
-          final totalIncomeToday = todayIncome.fold<double>(
-            0.0,
-            (sum, p) => sum + double.parse(p.paid),
-          );
-
-          emit(
-            PaymentLoaded(payments: todayIncome, totalToday: totalIncomeToday),
-          );
+          _applyFilters(); // هو الوحيد اللي يعمل emit
         },
         onError: (error) {
           emit(PaymentError(error.toString()));
@@ -118,6 +103,22 @@ class PaymentCubit extends Cubit<PaymentState> {
   }
 
   void _applyFilters() {
+    final now = DateTime.now();
+    final start = DateTime(now.year, now.month, now.day);
+    final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+    final todayPayments = _allPayment.where((p) {
+      return p.date.isAfter(start) && p.date.isBefore(end);
+    }).toList();
+
+    final totalIncomeToday = todayPayments
+        .where((p) => p.status == 'income')
+        .fold<double>(0.0, (sum, p) => sum + double.parse(p.paid));
+
+    final totalOutcomeToday = todayPayments
+        .where((p) => p.status == 'expense')
+        .fold<double>(0.0, (sum, p) => sum + double.parse(p.paid));
+
     List<PaymentModel> filtered = List.from(_allPayment);
 
     if (_searchQuery.isNotEmpty) {
@@ -132,20 +133,21 @@ class PaymentCubit extends Cubit<PaymentState> {
       }).toList();
     }
 
-    final now = DateTime.now();
-    final start = DateTime(now.year, now.month, now.day);
-    final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
-
-    final todayPayments = filtered.where((p) {
+    final todayFilteredPayments = filtered.where((p) {
       return p.date.isAfter(start) && p.date.isBefore(end);
     }).toList();
 
-    final totalToday = todayPayments.fold<double>(
-      0.0,
-      (sum, p) => sum + double.parse(p.paid),
+    print(
+      'totalIncomeToday $totalIncomeToday totalOutcomeToday $totalOutcomeToday',
     );
 
-    emit(PaymentLoaded(payments: filtered, totalToday: totalToday));
+    emit(
+      PaymentLoaded(
+        payments: todayFilteredPayments, // للعرض في widgets
+        totalIncomeToday: totalIncomeToday, // دخل اليوم
+        totalOutcomeToday: totalOutcomeToday, // خرج اليوم
+      ),
+    );
   }
 
   void resetFilters() {
@@ -159,10 +161,12 @@ class PaymentCubit extends Cubit<PaymentState> {
 
     final result = await repo.addPayment(payment);
 
-    result.fold(
-      (failure) => emit(AddPaymentError(failure.message)),
-      (_) => emit(AddPaymentSuccess()),
-    );
+    result.fold((failure) => emit(AddPaymentError(failure.message)), (_) {
+      // أضف الـ payment للقائمة وحدث الفلاتر
+      _allPayment.add(payment);
+      _applyFilters(); // هتحدث الـ UI والقائمة والـ total
+      emit(AddPaymentSuccess());
+    });
   }
 
   @override

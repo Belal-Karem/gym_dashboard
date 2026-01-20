@@ -8,7 +8,6 @@ import 'package:power_gym/features/home/presentation/view/widget/list_title_memb
 import 'package:power_gym/features/home/presentation/view/widget/text_boutton_member_info.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
-import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
 import 'package:power_gym/model/show_dialog_data_member_Info_model.dart';
 
 class ShowDialogDataMemberInfo extends StatelessWidget {
@@ -209,15 +208,3 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
     );
   }
 }
-
-// ListTitleMemberInfo(
-//   leadingAndTrailingTextStyle: TextStyle(
-//     fontSize: 20,
-//     color: const Color.fromARGB(255, 13, 223, 20),
-//   ),
-//   showDialogDataMemberInfoModel:
-//       ShowDialogDataMemberInfoModel(
-//         title: 'حالة',
-//         trailing: member.status,
-//       ),
-// ),

@@ -15,7 +15,7 @@ class MonthlyInDashoard extends StatelessWidget {
         if (state is PaymentLoading) {
           return const CircularProgressIndicator();
         } else if (state is PaymentLoaded) {
-          return MonthlyInDashoardUi(totalToday: state.totalToday!);
+          return MonthlyInDashoardUi(totalToday: state.totalIncomeToday);
         } else if (state is PaymentError) {
           return Text(state.message);
         } else {

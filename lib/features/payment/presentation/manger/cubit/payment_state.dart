@@ -12,12 +12,17 @@ class PaymentLoading extends PaymentState {}
 
 class PaymentLoaded extends PaymentState with EquatableMixin {
   final List<PaymentModel> payments;
-  final double? totalToday;
+  final double totalIncomeToday;
+  final double totalOutcomeToday;
 
-  PaymentLoaded({required this.payments, this.totalToday});
+  PaymentLoaded({
+    required this.payments,
+    required this.totalIncomeToday,
+    required this.totalOutcomeToday,
+  });
 
   @override
-  List<Object?> get props => [payments, totalToday];
+  List<Object> get props => [payments, totalIncomeToday, totalOutcomeToday];
 }
 
 class PaymentError extends PaymentState {

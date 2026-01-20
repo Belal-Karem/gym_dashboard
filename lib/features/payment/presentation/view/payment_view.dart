@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/features/payment/presentation/view/widget/payment_statistics_row_data.dart';
 import 'package:power_gym/features/payment/presentation/view/widget/payment_view_body.dart';
 
 class PaymentView extends StatelessWidget {
@@ -13,6 +14,7 @@ class PaymentView extends StatelessWidget {
             children: [
               Image.asset('assets/image/image.png', height: 120, width: 120),
               Text('Power House Gym', style: TextStyle(fontSize: 20)),
+              const PaymentStatisticsRow(),
             ],
           ),
           PaymentViewBody(),
