@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
+import 'package:power_gym/core/utils/date_utils.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
@@ -21,6 +21,7 @@ class MembersDataTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
     return CustomContainerStatistics(
       padding: 0,
       child: SingleChildScrollView(
@@ -73,6 +74,9 @@ class MembersDataTable extends StatelessWidget {
                               attendance: 0,
                               status: SubscriptionStatus.expired,
                               id: '',
+                              actionDate: DateTime.now(),
+                              isRenewal: false,
+                              dateIdForReport: generateDateId(now),
                             ),
                       ),
                     );

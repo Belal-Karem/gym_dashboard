@@ -3,7 +3,9 @@ import 'package:power_gym/features/report/presentation/view/widget/custom_financ
 import 'package:power_gym/features/report/presentation/view/widget/custom_overview.dart';
 
 class RepoViewHeader extends StatelessWidget {
-  const RepoViewHeader({super.key});
+  const RepoViewHeader({super.key, required this.date});
+
+  final DateTime date;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class RepoViewHeader extends StatelessWidget {
       child: Row(
         children: [
           CustomOverview(),
-          Expanded(child: CustomFinancialDetails()),
+          Expanded(child: CustomFinancialDetails(date: date)),
         ],
       ),
     );

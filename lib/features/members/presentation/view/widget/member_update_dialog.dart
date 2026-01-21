@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/helper/format_date_helper.dart';
 import 'package:power_gym/core/utils/app_style.dart';
+import 'package:power_gym/core/utils/date_utils.dart';
 import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
@@ -167,20 +168,24 @@ class _MemberDialogState extends State<MemberDialog> {
               return;
             }
 
-            // ⚡ إذا الاشتراك فاضي (عضو جديد)، نعمل add
+            final now = DateTime.now();
             if (widget.subscription.subscriptionId.isEmpty) {
               cubit.addSubscription(
                 MemberSubscriptionModel(
+                  id: '',
                   memberId: widget.subscription.memberId,
                   subscriptionId: selectedSub.id,
                   startDate: DateTime.now(),
                   endDate: DateTime.now().add(
                     Duration(days: selectedSub.durationDays),
                   ),
+                  actionDate: DateTime.now(),
+                  isRenewal: true,
                   remainingDays: selectedSub.durationDays,
                   attendance: 0,
+                  dateId: generateDateId(now),
                   status: SubscriptionStatus.active,
-                  id: '', // ممكن Firestore يولد id
+                  dateIdForReport: generateDateId(now),
                 ),
               );
             } else {

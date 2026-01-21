@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:power_gym/constants.dart';
+import 'package:power_gym/core/utils/date_utils.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/plans_repo.dart';
@@ -242,6 +243,8 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
         status: SubscriptionStatus.active,
         subscriptionId: plan.id,
         dateIdAttendance: null,
+        dateIdForReport: generateDateId(now),
+        isRenewal: true,
       );
     } else {
       // ⚡ Extend
@@ -249,6 +252,8 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
         endDate: currentSub.endDate.add(Duration(days: plan.durationDays)),
         subscriptionId: plan.id,
         status: SubscriptionStatus.active,
+        dateIdForReport: generateDateId(now),
+        isRenewal: true,
       );
     }
 

@@ -12,12 +12,12 @@ class RepoViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child:  Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           RepoViewBodyAppBar(date: selectedDate),
           SizedBox(height: 40),
-          RepoViewHeader(),
+          RepoViewHeader(date: selectedDate),
           SizedBox(height: 40),
           CustomPresence(),
         ],

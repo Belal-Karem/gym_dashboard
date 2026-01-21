@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:power_gym/core/helper/table_helper.dart';
-import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
-import 'package:power_gym/core/widget/table_cell_widget.dart';
 import 'package:power_gym/features/subscriptions/presentation/view/widget/dialog_add_subscriptions.dart';
 import 'package:power_gym/features/subscriptions/presentation/view/widget/subscriptions_data.dart';
-import 'package:power_gym/features/subscriptions/presentation/view/widget/subscriptions_data_taple.dart';
 import 'package:power_gym/features/subscriptions/presentation/view/widget/top_section_of_subscriptions.dart';
 
 class SubscriptionsBody extends StatelessWidget {

@@ -4,9 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_attendance_repo_impl.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_report_comment_repo_impl.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_summary_repo_impl.dart';
+import 'package:power_gym/features/report/data/models/repo/subscription_report_repo.dart';
+import 'package:power_gym/features/report/data/models/repo/subscription_report_repo_impl.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_attendance_cubit.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_report_comment_cubit.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_summary_cubit.dart';
+import 'package:power_gym/features/report/presentation/manger/cubit/subscription_report_cubit.dart';
 import 'package:power_gym/features/report/presentation/view/widget/repo_view_body.dart';
 
 class RepoView extends StatelessWidget {
@@ -18,25 +21,37 @@ class RepoView extends StatelessWidget {
   Widget build(BuildContext context) {
     final dateId = _toDateId(selectedDate);
 
-    return MultiBlocProvider(
+    return MultiRepositoryProvider(
       providers: [
-        BlocProvider(
-          create: (_) => DailySummaryCubit(
-            DailySummaryRepoImpl(FirebaseFirestore.instance),
-          )..load(dateId),
-        ),
-        BlocProvider(
-          create: (_) => DailyAttendanceCubit(
-            DailyAttendanceRepoImpl(FirebaseFirestore.instance),
-          )..load(dateId),
-        ),
-        BlocProvider(
-          create: (_) => DailyReportCommentCubit(
-            DailyReportCommentRepoImpl(FirebaseFirestore.instance),
-          ),
+        RepositoryProvider<SubscriptionReportRepo>(
+          create: (_) => SubscriptionReportRepoImpl(FirebaseFirestore.instance),
         ),
       ],
-      child: Scaffold(body: RepoViewBody(selectedDate: selectedDate)),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => DailySummaryCubit(
+              DailySummaryRepoImpl(FirebaseFirestore.instance),
+            )..load(dateId),
+          ),
+          BlocProvider(
+            create: (_) => DailyAttendanceCubit(
+              DailyAttendanceRepoImpl(FirebaseFirestore.instance),
+            )..load(dateId),
+          ),
+          BlocProvider(
+            create: (_) => DailyReportCommentCubit(
+              DailyReportCommentRepoImpl(FirebaseFirestore.instance),
+            ),
+          ),
+          BlocProvider(
+            create: (context) =>
+                SubscriptionReportCubit(context.read<SubscriptionReportRepo>())
+                  ..loadSeparately(dateId),
+          ),
+        ],
+        child: Scaffold(body: RepoViewBody(selectedDate: selectedDate)),
+      ),
     );
   }
 
