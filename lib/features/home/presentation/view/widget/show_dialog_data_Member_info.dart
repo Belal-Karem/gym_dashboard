@@ -175,13 +175,76 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                                   subscription.status ==
                                           SubscriptionStatus.active &&
                                       plan.freezeDays > 0
-                                  ? () {
-                                      context
-                                          .read<MemberSubscriptionCubit>()
-                                          .applyFreeze(
-                                            subscription: subscription,
-                                            freezeDays: plan.freezeDays,
+                                  ? () async {
+                                      // افتح Dialog للاختيار
+                                      final int?
+                                      chosenDays = await showDialog<int>(
+                                        context: context,
+                                        builder: (ctx) {
+                                          int selectedDays = plan
+                                              .freezeDays; // القيمة الافتراضية
+
+                                          return AlertDialog(
+                                            title: const Text(
+                                              'اختر عدد أيام التجميد',
+                                            ),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  'الحد الأقصى المسموح: ${plan.freezeDays} أيام',
+                                                ),
+                                                SizedBox(height: 10),
+                                                // Slider للاختيار
+                                                StatefulBuilder(
+                                                  builder: (context, setState) {
+                                                    return Slider(
+                                                      value: selectedDays
+                                                          .toDouble(),
+                                                      min: 1,
+                                                      max: plan.freezeDays
+                                                          .toDouble(),
+                                                      divisions:
+                                                          plan.freezeDays,
+                                                      label:
+                                                          '$selectedDays يوم',
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          selectedDays = value
+                                                              .toInt();
+                                                        });
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(ctx).pop(null),
+                                                child: const Text('إلغاء'),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () => Navigator.of(
+                                                  ctx,
+                                                ).pop(selectedDays),
+                                                child: const Text('تأكيد'),
+                                              ),
+                                            ],
                                           );
+                                        },
+                                      );
+
+                                      // لو المستخدم اختار أيام
+                                      if (chosenDays != null) {
+                                        context
+                                            .read<MemberSubscriptionCubit>()
+                                            .applyFreeze(
+                                              subscription: subscription,
+                                              freezeDays: chosenDays,
+                                            );
+                                      }
                                     }
                                   : null,
                             ),

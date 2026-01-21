@@ -274,7 +274,6 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
   Future<void> getMemberSubscriptions(String memberId) async {
     final result = await repo.getSubscriptionsByMember(memberId);
-
     result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (list) {
       if (list.isEmpty) {
         _cachedSubscriptions.remove(memberId);
@@ -286,6 +285,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
         ..sort((a, b) => b.endDate.compareTo(a.endDate));
 
       _cachedSubscriptions[memberId] = recalculated.first;
+      checkFrozenSubscriptions();
       _emitCache();
     });
   }
@@ -293,7 +293,6 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
   Future<void> loadMembersActiveSubscriptions(List<MemberModel> members) async {
     for (final member in members) {
       final response = await repo.getSubscriptionsByMember(member.id);
-
       response.fold((_) {}, (subs) {
         if (subs.isEmpty) return;
 
@@ -304,6 +303,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
         if (latest.status != SubscriptionStatus.expired) {
           _cachedSubscriptions[member.id] = latest;
+          checkFrozenSubscriptions();
         }
       });
     }
@@ -360,9 +360,13 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       return;
     }
 
+    // نحدد تاريخ انتهاء الـ freeze
+    final freezeEnd = DateTime.now().add(Duration(days: freezeDays));
+
     final updated = subscription.copyWith(
       endDate: subscription.endDate.add(Duration(days: freezeDays)),
       status: SubscriptionStatus.frozen,
+      freezeEndDate: freezeEnd, // ← مهم
     );
 
     final result = await repo.updateMemberSubscription(updated);
@@ -371,6 +375,29 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       _cachedSubscriptions[subscription.memberId] = updated;
       _emitCache();
     });
+  }
+
+  Future<void> checkFrozenSubscriptions() async {
+    for (var sub in _cachedSubscriptions.values) {
+      if (sub.status == SubscriptionStatus.frozen &&
+          sub.freezeEndDate != null &&
+          DateTime.now().isAfter(sub.freezeEndDate!)) {
+        final updated = sub.copyWith(
+          status: SubscriptionStatus.active,
+          freezeEndDate: null,
+        );
+
+        final result = await repo.updateMemberSubscription(updated);
+
+        result.fold(
+          (f) => print('Failed to update subscription: ${f.message}'),
+          (_) {
+            _cachedSubscriptions[sub.memberId] = updated;
+            _emitCache();
+          },
+        );
+      }
+    }
   }
 
   SubModel? getPlan(String planId) {

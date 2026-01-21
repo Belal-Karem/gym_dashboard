@@ -77,6 +77,7 @@ class MembersDataTable extends StatelessWidget {
                               actionDate: DateTime.now(),
                               isRenewal: false,
                               dateIdForReport: generateDateId(now),
+                              freezeEndDate: DateTime.now(),
                             ),
                       ),
                     );

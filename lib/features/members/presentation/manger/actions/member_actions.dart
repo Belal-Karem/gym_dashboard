@@ -65,6 +65,7 @@ class MemberActions {
             status: status,
             dateId: dateId,
             dateIdForReport: generateDateId(now),
+            freezeEndDate: DateTime.now(), // تاريخ افتراضي عند الإنشاء
           );
 
           await subscriptionsCubit.addSubscription(memberSub);

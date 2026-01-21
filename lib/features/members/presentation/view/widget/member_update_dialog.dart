@@ -186,6 +186,7 @@ class _MemberDialogState extends State<MemberDialog> {
                   dateId: generateDateId(now),
                   status: SubscriptionStatus.active,
                   dateIdForReport: generateDateId(now),
+                  freezeEndDate: DateTime.now(),
                 ),
               );
             } else {
