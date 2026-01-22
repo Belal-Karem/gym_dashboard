@@ -68,6 +68,7 @@ class MemberActions {
             freezeEndDate: DateTime.now(),
             totalInvitations: selectedSub.invitationCount,
             usedInvitations: 0,
+            freeze: selectedSub.freezeDays,
           );
 
           await subscriptionsCubit.addSubscription(memberSub);

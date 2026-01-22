@@ -80,6 +80,7 @@ class MembersDataTable extends StatelessWidget {
                               freezeEndDate: DateTime.now(),
                               totalInvitations: 0,
                               usedInvitations: 0,
+                              freeze: 0,
                             ),
                       ),
                     );
@@ -93,7 +94,7 @@ class MembersDataTable extends StatelessWidget {
                     TableCellWidget('-'), // remainingDays
                     TableCellWidget('-'), // attendance
                     TableCellWidget(
-                      'No subscription',
+                      'لا يوجد اشتراك',
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ],

@@ -189,6 +189,7 @@ class _MemberDialogState extends State<MemberDialog> {
                   freezeEndDate: DateTime.now(),
                   totalInvitations: selectedSub.invitationCount,
                   usedInvitations: 0,
+                  freeze: selectedSub.freezeDays,
                 ),
               );
             } else {

@@ -173,20 +173,30 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     required int freezeDays,
   }) async {
     try {
+      // 1️⃣ الاشتراك لازم يكون نشط
       if (subscription.status != SubscriptionStatus.active) {
         return Left('الاشتراك غير نشط');
       }
 
+      // 2️⃣ تحقق من عدد أيام الفريز المتبقية
+      final availableFreeze = subscription.freeze; // الأيام المتبقية للفريز
+      if (freezeDays > availableFreeze) {
+        return Left('عدد أيام الفريز أكبر من المتاح');
+      }
+
+      // 3️⃣ حساب تاريخ نهاية الفريز
       final freezeEnd = DateTime.now().add(Duration(days: freezeDays));
 
+      // 4️⃣ تحديث الاشتراك
       final updated = subscription.copyWith(
         endDate: subscription.endDate.add(Duration(days: freezeDays)),
-        status: SubscriptionStatus.frozen,
         freezeEndDate: freezeEnd,
+        freeze: availableFreeze - freezeDays, // تحديث الأيام المتبقية
+        status: SubscriptionStatus.frozen,
       );
 
+      // 5️⃣ حفظ التحديث في الريبو
       final result = await repo.updateMemberSubscription(updated);
-
       if (result.isLeft()) {
         return Left(result.fold((f) => f.message, (_) => 'حدث خطأ'));
       }

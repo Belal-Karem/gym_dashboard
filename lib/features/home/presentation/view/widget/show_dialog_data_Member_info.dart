@@ -202,14 +202,13 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                           onPressed:
                               subscription.status ==
                                       SubscriptionStatus.active &&
-                                  plan.freezeDays > 0
+                                  subscription.freeze > 0
                               ? () async {
                                   final TextEditingController daysController =
                                       TextEditingController(
-                                        text: plan.freezeDays.toString(),
+                                        text: subscription.freeze.toString(),
                                       );
 
-                                  // فتح Dialog لاختيار عدد الأيام
                                   final int? chosenDays = await showDialog<int>(
                                     context: context,
                                     builder: (ctx) {
@@ -221,7 +220,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
-                                              'الحد الأقصى المسموح: ${plan.freezeDays} أيام',
+                                              'الحد الأقصى المسموح: ${subscription.freeze} أيام',
                                             ),
                                             const SizedBox(height: 10),
                                             TextField(
