@@ -116,7 +116,7 @@ class SubscriptionDetailsDialog extends StatelessWidget {
                   return ListTile(
                     leading: const Icon(Icons.person),
                     title: Text(item.memberName),
-                    subtitle: Text(item.planName),
+                    subtitle: Text(item.memberPhone),
                     trailing: Text(item.isRenewal ? 'تجديد' : 'جديد'),
                   );
                 },

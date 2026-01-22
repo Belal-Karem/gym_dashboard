@@ -6,25 +6,75 @@ class DailySummary extends StatelessWidget {
 
   final DailySummaryModel s;
 
+  void _showTransactions(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('تفاصيل اليوم'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: s.transactions.length,
+            itemBuilder: (ctx, index) {
+              final t = s.transactions[index];
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 4),
+                child: ListTile(
+                  title: Text('عضو: ${t.memberId}'),
+                  subtitle: Text(
+                    'اشتراك: ${t.plan}\nطريقة الدفع: ${t.paymentMethod}',
+                  ),
+                  trailing: Text(
+                    '${t.status == 'income' ? '+' : '-'}${t.amount}',
+                    style: TextStyle(
+                      color: t.status == 'income' ? Colors.green : Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('اغلاق'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
           children: [
-            Text('الدخل'),
-            SizedBox(width: 40),
-            Text('${s.income}'),
-            SizedBox(width: 50),
-            Text('الخوارج'),
-            SizedBox(width: 40),
-            Text('${s.expense}'),
-            SizedBox(width: 20),
-            ElevatedButton(onPressed: () {}, child: Text('View')),
+            const Text('الدخل'),
+            const SizedBox(width: 40),
+            Text('${s.income}', style: TextStyle(color: Colors.green)),
+            const SizedBox(width: 50),
+            const Text('الخوارج'),
+            const SizedBox(width: 40),
+            Text('${s.expense}', style: TextStyle(color: Colors.red)),
+            const SizedBox(width: 20),
+            ElevatedButton(
+              onPressed: () => _showTransactions(context),
+              child: const Text('View'),
+            ),
           ],
         ),
-        Divider(),
-        Row(children: [Text('total'), SizedBox(width: 40), Text('${s.total}')]),
+        const Divider(),
+        Row(
+          children: [
+            const Text('total'),
+            const SizedBox(width: 40),
+            Text('${s.total}', style: TextStyle(color: Colors.green)),
+          ],
+        ),
       ],
     );
   }

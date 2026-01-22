@@ -12,10 +12,8 @@ class DailySummaryRepoImpl implements DailySummaryRepo {
   Future<DailySummaryModel> getDailySummary(String dateId) async {
     double income = 0;
     double expense = 0;
-    int newSubs = 0;
-    int renewals = 0;
+    List<DailyTransaction> transactions = [];
 
-    /// Payments
     final paymentsSnap = await firestore
         .collection(kpaymentCollections)
         .where('dateId', isEqualTo: dateId)
@@ -24,34 +22,47 @@ class DailySummaryRepoImpl implements DailySummaryRepo {
     for (final doc in paymentsSnap.docs) {
       final data = doc.data();
       final amount = double.tryParse(data['paid'].toString()) ?? 0;
+      final status = data['status'] ?? 'income';
+      final memberId = data['memberId'] ?? '';
+      final plan = data['plan'] ?? '';
+      final paymentMethod = data['payment method'] ?? '';
+      final date = (data['date'] as Timestamp?)?.toDate() ?? DateTime.now();
 
-      if (data['status'] == 'income') {
+      // جلب اسم العضو من collection الأعضاء
+      String memberName = memberId; // افتراضي لو ما لقيناش
+      if (memberId.isNotEmpty) {
+        final memberDoc = await firestore
+            .collection(kMemberCollections)
+            .doc(memberId)
+            .get();
+        if (memberDoc.exists) {
+          memberName = memberDoc.data()?['name'] ?? memberId;
+        }
+      }
+
+      transactions.add(
+        DailyTransaction(
+          id: doc.id,
+          memberId: memberName, // نستخدم الاسم بدل ال ID
+          plan: plan,
+          paymentMethod: paymentMethod,
+          amount: amount,
+          status: status,
+          date: date,
+        ),
+      );
+
+      if (status == 'income') {
         income += amount;
-      } else if (data['status'] == 'expense') {
+      } else if (status == 'expense') {
         expense += amount;
       }
     }
 
-    /// Subscriptions
-    final subsSnap = await firestore
-        .collection(kmembersubscriptionsCollections)
-        .where('dateId', isEqualTo: dateId)
-        .get();
-
-    for (final doc in subsSnap.docs) {
-      final data = doc.data();
-      if (data['isRenewal'] == true) {
-        renewals++;
-      } else {
-        newSubs++;
-      }
-    }
-
     return DailySummaryModel(
-      newSubscriptions: newSubs,
-      renewals: renewals,
       income: income,
       expense: expense,
+      transactions: transactions,
     );
   }
 }
