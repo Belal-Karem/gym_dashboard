@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/constants.dart';
+import 'package:power_gym/core/helper/format_date_helper.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/attendance_cubit.dart';
 import 'package:power_gym/features/home/presentation/view/widget/GuestInvitationDialog.dart';
 import 'package:power_gym/features/home/presentation/view/widget/elevated_boutton_member_info.dart';
 import 'package:power_gym/features/home/presentation/view/widget/list_title_member_info.dart';
 import 'package:power_gym/features/home/presentation/view/widget/text_boutton_member_info.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/model/show_dialog_data_member_Info_model.dart';
 
 class ShowDialogDataMemberInfo extends StatelessWidget {
-  const ShowDialogDataMemberInfo({super.key, required this.member});
+  const ShowDialogDataMemberInfo({
+    super.key,
+    required this.member,
+    required this.subscription,
+  });
   final MemberModel member;
+  final MemberSubscriptionModel subscription;
 
   @override
   Widget build(BuildContext context) {
@@ -49,54 +56,41 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                  title: 'تاريخ الانضمام',
-                  trailing: '15/01/2023',
+                  title: 'تاريخ البدايه',
+                  trailing: FormatDateHelper.formatDate(
+                    subscription.startDate.toString(),
+                  ),
                 ),
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'تاريخ النتهاء',
-                  trailing: '15/01/2023',
-                ),
-              ),
-              ListTitleMemberInfo(
-                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                  title: 'خطة الاشتراكات',
-                  trailing: '3 أشهر',
+                  trailing: FormatDateHelper.formatDate(
+                    subscription.endDate.toString(),
+                  ),
                 ),
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'الحضور',
-                  trailing: '120',
+                  trailing: '${subscription.attendance}',
                 ),
               ),
 
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'دعوه',
-                  trailing: '3',
+                  trailing:
+                      '${subscription.usedInvitations} / ${subscription.totalInvitations}',
                 ),
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'تجميد',
-                  trailing: '10',
+                  trailing: '${subscription.freeze} أيام',
                 ),
               ),
 
-              ListTitleMemberInfo(
-                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                  title: 'مدرب',
-                  trailing: 'أحمد علي',
-                ),
-              ),
-              ListTitleMemberInfo(
-                showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                  title: 'ملحوظات',
-                  trailing: '_',
-                ),
-              ),
               BlocListener<MemberSubscriptionCubit, MemberSubscriptionState>(
                 listenWhen: (_, curr) =>
                     curr is MemberSubscriptionAttendanceSuccess,
@@ -197,7 +191,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                               : null,
                         ),
 
-                        TextBouttonMemberInfo(
+                        ElevatedBouttonMemberInfo(
                           text: 'تجميد',
                           onPressed:
                               subscription.status ==
@@ -220,7 +214,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
-                                              'الحد الأقصى المسموح: ${subscription.freeze} أيام',
+                                              'الحد الأقصى المسموح: ${plan.freezeDays} أيام',
                                             ),
                                             const SizedBox(height: 10),
                                             TextField(

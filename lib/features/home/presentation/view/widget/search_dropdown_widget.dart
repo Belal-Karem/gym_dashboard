@@ -41,7 +41,6 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
     return OverlayEntry(
       builder: (context) => Stack(
         children: [
-          // 👇 الجزء ده بيلقط الضغط برا القائمة
           Positioned.fill(
             child: GestureDetector(
               onTap: _removeOverlay,
@@ -49,7 +48,6 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
               child: const SizedBox.expand(),
             ),
           ),
-          // 👇 القائمة نفسها
           Positioned(
             left: offset.dx,
             top: offset.dy + size.height + 5,
@@ -75,10 +73,12 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
                         filtered.clear();
                         _removeOverlay();
 
+                        // استدعاء Cubit لتحميل الاشتراك
                         context
                             .read<MemberSubscriptionCubit>()
                             .getMemberSubscriptions(member.id);
 
+                        // فتح Dialog مع BlocBuilder داخله
                         showDialog(
                           context: context,
                           builder: (dialogContext) {
@@ -88,7 +88,33 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: ShowDialogDataMemberInfo(member: member),
+                                child:
+                                    BlocBuilder<
+                                      MemberSubscriptionCubit,
+                                      MemberSubscriptionState
+                                    >(
+                                      builder: (context, state) {
+                                        final cubit = context
+                                            .watch<MemberSubscriptionCubit>();
+                                        final subscription = cubit
+                                            .cachedSubscriptions[member.id];
+
+                                        if (subscription == null) {
+                                          return const SizedBox(
+                                            height: 100,
+                                            child: Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ),
+                                          );
+                                        }
+
+                                        return ShowDialogDataMemberInfo(
+                                          member: member,
+                                          subscription: subscription,
+                                        );
+                                      },
+                                    ),
                               ),
                             );
                           },
@@ -125,11 +151,12 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
               ),
             ),
             onChanged: (value) {
-              filtered = members
-                  .where(
-                    (m) => m.name.toLowerCase().startsWith(value.toLowerCase()),
-                  )
-                  .toList();
+              filtered = members.where((m) {
+                final search = value.toLowerCase();
+                return m.memberId.toLowerCase().startsWith(search) ||
+                    m.phone.toLowerCase().startsWith(search) ||
+                    m.name.toLowerCase().startsWith(search);
+              }).toList();
               _updateOverlay();
             },
           ),
