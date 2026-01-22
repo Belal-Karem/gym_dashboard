@@ -107,18 +107,6 @@ class PaymentCubit extends Cubit<PaymentState> {
     final start = DateTime(now.year, now.month, now.day);
     final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
 
-    final todayPayments = _allPayment.where((p) {
-      return p.date.isAfter(start) && p.date.isBefore(end);
-    }).toList();
-
-    final totalIncomeToday = todayPayments
-        .where((p) => p.status == 'income')
-        .fold<double>(0.0, (sum, p) => sum + double.parse(p.paid));
-
-    final totalOutcomeToday = todayPayments
-        .where((p) => p.status == 'expense')
-        .fold<double>(0.0, (sum, p) => sum + double.parse(p.paid));
-
     List<PaymentModel> filtered = List.from(_allPayment);
 
     if (_searchQuery.isNotEmpty) {
@@ -133,9 +121,18 @@ class PaymentCubit extends Cubit<PaymentState> {
       }).toList();
     }
 
+    // حساب اليوم بعد تطبيق الفلاتر
     final todayFilteredPayments = filtered.where((p) {
       return p.date.isAfter(start) && p.date.isBefore(end);
     }).toList();
+
+    final totalIncomeToday = todayFilteredPayments
+        .where((p) => p.status == 'income')
+        .fold<double>(0.0, (sum, p) => sum + double.parse(p.paid));
+
+    final totalOutcomeToday = todayFilteredPayments
+        .where((p) => p.status == 'expense')
+        .fold<double>(0.0, (sum, p) => sum + double.parse(p.paid));
 
     emit(
       PaymentLoaded(
@@ -158,7 +155,8 @@ class PaymentCubit extends Cubit<PaymentState> {
     final result = await repo.addPayment(payment);
 
     result.fold((failure) => emit(AddPaymentError(failure.message)), (_) {
-      _allPayment.add(payment);
+      // أضف الدفع الجديد محليًا مؤقتًا لحساب total فورًا
+      _allPayment = List.from(_allPayment)..add(payment);
       _applyFilters();
       emit(AddPaymentSuccess());
     });

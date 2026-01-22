@@ -27,14 +27,18 @@ class SubscriptionsDataTaple extends StatelessWidget {
             1: FlexColumnWidth(1),
             2: FlexColumnWidth(1),
             3: FlexColumnWidth(1),
-            4: FlexColumnWidth(1.2),
+            4: FlexColumnWidth(1),
+            5: FlexColumnWidth(1),
+            6: FlexColumnWidth(1.2),
           },
           children: [
             TableHelper.buildHeaderRow([
               TableHeaderCellWidget('اسم الخطه'),
               TableHeaderCellWidget('المده'),
               TableHeaderCellWidget('السعر'),
-              TableHeaderCellWidget('المشتركين'),
+              TableHeaderCellWidget('الجلسات'),
+              TableHeaderCellWidget('التجميد'),
+              TableHeaderCellWidget('الدعوة'),
               TableHeaderCellWidget('الحاله'),
             ]),
             ...subs.map(
@@ -49,7 +53,9 @@ class SubscriptionsDataTaple extends StatelessWidget {
                   TableCellWidget(subs.type),
                   TableCellWidget(subs.durationDays.toString()),
                   TableCellWidget(subs.price.toString()),
-                  TableCellWidget('35'),
+                  TableCellWidget('${subs.maxAttendance}'),
+                  TableCellWidget('${subs.freezeDays}'),
+                  TableCellWidget('${subs.invitationCount}'),
                   TableCellWidget(
                     subs.status,
                     style: subs.status == 'نشط'
