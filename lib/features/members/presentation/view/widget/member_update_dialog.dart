@@ -39,6 +39,9 @@ class _MemberDialogState extends State<MemberDialog> {
   late DateTime endDate;
   late DateTime startDate;
   late int remainingDays;
+  late int freeze;
+  late int totalInvitations;
+  late int usedInvitations;
 
   @override
   void initState() {
@@ -50,6 +53,9 @@ class _MemberDialogState extends State<MemberDialog> {
     endDate = widget.subscription.endDate;
     startDate = widget.subscription.startDate;
     remainingDays = widget.subscription.remainingDays;
+    freeze = widget.subscription.freeze;
+    totalInvitations = widget.subscription.totalInvitations;
+    usedInvitations = widget.subscription.usedInvitations;
   }
 
   @override
@@ -96,6 +102,11 @@ class _MemberDialogState extends State<MemberDialog> {
             DisplayData(
               label: 'الايام المتبقيه',
               child2: remainingDays.toString(),
+            ),
+            DisplayData(label: 'التجميد', child2: freeze.toString()),
+            DisplayData(
+              label: 'الدعوات',
+              child2: '$usedInvitations / $totalInvitations',
             ),
 
             Text('تعديل', style: AppStyle.style20),
@@ -208,7 +219,37 @@ class _MemberDialogState extends State<MemberDialog> {
         ),
 
         TextButton(
-          onPressed: deleteMember,
+          onPressed: () async {
+            // اظهار رسالة تأكيد
+            bool? confirm = await showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('تأكيد الحذف'),
+                  content: const Text('هل أنت متأكد من حذف هذا العضو؟'),
+                  actions: [
+                    TextButton(
+                      onPressed: () =>
+                          Navigator.of(context).pop(false), // الغاء
+                      child: const Text('إلغاء'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true), // تأكيد
+                      child: const Text(
+                        'حذف',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+
+            // لو وافق المستخدم
+            if (confirm == true) {
+              deleteMember();
+            }
+          },
           child: const Text('حذف', style: TextStyle(color: Colors.red)),
         ),
 
