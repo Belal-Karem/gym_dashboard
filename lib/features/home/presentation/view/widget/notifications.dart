@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/home_notifications_cubit.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/home_notifications_state.dart';
@@ -26,7 +27,7 @@ class Notifications extends StatelessWidget {
                 const SizedBox(width: 10),
                 Container(
                   decoration: ShapeDecoration(
-                    color: const Color(0xff2A2B30),
+                    color: kprimaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),

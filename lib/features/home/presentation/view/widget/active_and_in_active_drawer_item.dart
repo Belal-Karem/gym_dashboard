@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/model/drawer_item_model.dart';
 
 class ActiveDrawerItem extends StatelessWidget {
@@ -12,7 +13,7 @@ class ActiveDrawerItem extends StatelessWidget {
       padding: const EdgeInsets.all(6),
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xff1F2025),
+          color: kprimaryColor,
           borderRadius: BorderRadius.circular(8),
         ),
         child: ListTile(

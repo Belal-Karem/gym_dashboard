@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/utils/app_style.dart';
-import 'package:power_gym/core/utils/constants.dart';
 
 class ViewClient extends StatelessWidget {
   const ViewClient({super.key});

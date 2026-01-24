@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/core/widget/gradient_scaffold.dart';
 import 'package:power_gym/features/home/presentation/view/widget/home_view_body.dart';
+import 'package:power_gym/core/widget/logo_and_name.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return GradientScaffold(
+      child: Column(
         children: [
-          Row(
-            children: [
-              Image.asset('assets/image/image.png', height: 120, width: 120),
-              Text('Power House Gym', style: TextStyle(fontSize: 20)),
-            ],
-          ),
+          Row(children: [LogoAndName()]),
           HomeViewBody(),
         ],
       ),

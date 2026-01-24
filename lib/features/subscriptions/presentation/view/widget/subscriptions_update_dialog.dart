@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/core/utils/constants.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';

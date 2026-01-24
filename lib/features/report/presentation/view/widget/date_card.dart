@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/features/report/presentation/view/widget/repo_view.dart';
 
 class DateCard extends StatelessWidget {
@@ -10,7 +11,7 @@ class DateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xff1B1C20),
+        color: kprimaryColor,
         borderRadius: BorderRadius.circular(12),
       ),
       padding: const EdgeInsets.all(10),
@@ -37,10 +38,10 @@ class DateCard extends StatelessWidget {
                 );
               },
               child: Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 43, 43, 43),
-                  borderRadius: BorderRadius.circular(16),
+                  color: const Color.fromARGB(255, 25, 25, 25),
+                  borderRadius: BorderRadius.circular(30),
                 ),
                 child: const Text(
                   'عرض التقرير',

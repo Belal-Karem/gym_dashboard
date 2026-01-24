@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/core/widget/gradient_scaffold.dart';
+import 'package:power_gym/core/widget/logo_and_name.dart';
 import 'package:power_gym/features/report/presentation/view/widget/report_view_body.dart';
 
 class ReportView extends StatelessWidget {
@@ -6,15 +8,10 @@ class ReportView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return GradientScaffold(
+      child: Column(
         children: [
-          Row(
-            children: [
-              Image.asset('assets/image/image.png', height: 120, width: 120),
-              Text('Power House Gym', style: TextStyle(fontSize: 20)),
-            ],
-          ),
+          Row(children: [LogoAndName()]),
           Expanded(child: ReportViewBody()),
         ],
       ),

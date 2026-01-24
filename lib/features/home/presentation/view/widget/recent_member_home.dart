@@ -40,7 +40,6 @@ class RecentMemberHomeUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomContainerStatistics(
-      padding: 0,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

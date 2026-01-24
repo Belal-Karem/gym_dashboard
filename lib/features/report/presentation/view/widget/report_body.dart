@@ -15,8 +15,6 @@ class ReportBody extends StatelessWidget {
         children: [
           const CustomDropdownButton(),
           const SizedBox(height: 15),
-
-          /// Grid أيام الشهر
           Expanded(
             child: BlocBuilder<ReportFilterCubit, ReportFilterState>(
               builder: (context, state) {

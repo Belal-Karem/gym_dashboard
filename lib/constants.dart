@@ -45,8 +45,9 @@ const ksession = 'session';
 const ktrainerid = 'trainerId';
 
 // ✅ UI Colors
-const kprimaryColor = Color(0xff1B1C20);
+const kprimaryColor = Colors.black;
 
+// Color(0xff1B1C20)
 enum SubscriptionStatus { active, frozen, expired }
 
 extension SubscriptionStatusX on SubscriptionStatus {

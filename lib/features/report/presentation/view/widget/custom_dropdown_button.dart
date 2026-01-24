@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/report_filter_cubit.dart';
 
 class CustomDropdownButton extends StatelessWidget {
@@ -13,7 +14,7 @@ class CustomDropdownButton extends StatelessWidget {
           children: [
             Expanded(
               child: DropdownButtonFormField<int>(
-                dropdownColor: const Color(0xff1B1C20),
+                dropdownColor: const Color.fromARGB(255, 25, 25, 25),
                 value: state.month,
                 decoration: _decoration('Month'),
                 items: List.generate(12, (index) {
@@ -39,7 +40,7 @@ class CustomDropdownButton extends StatelessWidget {
             /// Year Dropdown
             Expanded(
               child: DropdownButtonFormField<int>(
-                dropdownColor: const Color(0xff1B1C20),
+                dropdownColor: const Color.fromARGB(255, 25, 25, 25),
                 value: state.year,
                 decoration: _decoration('Year'),
                 items: List.generate(5, (index) {
@@ -70,7 +71,7 @@ class CustomDropdownButton extends StatelessWidget {
       labelText: label,
       labelStyle: const TextStyle(color: Colors.white70),
       filled: true,
-      fillColor: const Color(0xff1B1C20),
+      fillColor: kprimaryColor,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide.none,
