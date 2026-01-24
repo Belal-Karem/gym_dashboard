@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:power_gym/core/widget/gradient_scaffold.dart';
 import 'package:power_gym/features/home/presentation/view/widget/home_view_body.dart';
-import 'package:power_gym/core/widget/logo_and_name.dart';
+import 'package:power_gym/features/home/presentation/view/widget/logo_and_name.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});

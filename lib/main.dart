@@ -13,6 +13,7 @@ import 'package:power_gym/features/home/presentation/manger/cubit/get_data_membe
 import 'package:power_gym/features/home/presentation/manger/cubit/recent_member_cubit.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
+import 'package:power_gym/features/members/presentation/manger/cubit/members_count_stats_cubit.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_attendance_repo_impl.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         BlocProvider(create: (_) => sl<DailyReportCommentCubit>()),
+        BlocProvider(create: (context) => sl<MembersCountStatsCubit>()),
       ],
       child: MaterialApp.router(
         locale: Locale('ar'),
