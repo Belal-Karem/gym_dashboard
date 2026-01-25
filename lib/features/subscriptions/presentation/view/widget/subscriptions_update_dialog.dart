@@ -54,6 +54,9 @@ class _SubscriptionsUpdateDialogState extends State<SubscriptionsUpdateDialog> {
     typeController.dispose();
     durationController.dispose();
     priceController.dispose();
+    freezeController.dispose();
+    invitationController.dispose();
+    maxAttendanceController.dispose();
     super.dispose();
   }
 
@@ -61,6 +64,10 @@ class _SubscriptionsUpdateDialogState extends State<SubscriptionsUpdateDialog> {
     final updatedSubscriptions = widget.subModel.copyWith(
       type: typeController.text,
       durationDays: int.parse(durationController.text),
+      price: double.parse(priceController.text),
+      freezeDays: int.parse(freezeController.text),
+      invitationCount: int.parse(invitationController.text),
+      maxAttendance: int.parse(maxAttendanceController.text),
       status: selectedStatus ?? widget.subModel.status,
     );
 
