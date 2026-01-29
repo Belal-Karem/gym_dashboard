@@ -130,7 +130,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
 
                     final canAttend =
                         subscription.status == SubscriptionStatus.active &&
-                        subscription.attendance < plan.maxAttendance;
+                        subscription.attendance < subscription.maxAttendance;
 
                     return Row(
                       mainAxisSize: MainAxisSize.min,
@@ -214,7 +214,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
-                                              'الحد الأقصى المسموح: ${plan.freezeDays} أيام',
+                                              'الحد الأقصى المسموح: ${subscription.freeze} أيام',
                                             ),
                                             const SizedBox(height: 10),
                                             TextField(

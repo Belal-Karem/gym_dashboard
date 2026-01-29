@@ -51,7 +51,6 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     late MemberSubscriptionModel updated;
 
     if (currentSub.status == SubscriptionStatus.expired) {
-      // 🔄 Renew
       updated = currentSub.copyWith(
         startDate: now,
         endDate: now.add(Duration(days: plan.durationDays)),
@@ -97,7 +96,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
         ..sort((a, b) => b.endDate.compareTo(a.endDate));
 
       _cachedSubscriptions[memberId] = recalculated.first;
-      checkFrozenSubscriptions();
+      checkFrozenSubscription(_cachedSubscriptions[memberId]!);
       _emitCache();
     });
   }
@@ -105,17 +104,20 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
   Future<void> loadMembersActiveSubscriptions(List<MemberModel> members) async {
     for (final member in members) {
       final response = await repo.getSubscriptionsByMember(member.id);
-      response.fold((_) {}, (subs) {
+      response.fold((_) {}, (subs) async {
         if (subs.isEmpty) return;
 
+        // إعادة حساب الاشتراكات
         final recalculated = subs.map(_recalculateSubscription).toList()
           ..sort((a, b) => b.endDate.compareTo(a.endDate));
 
-        final latest = recalculated.first;
+        // أحدث اشتراك
+        var latest = recalculated.first;
+
+        latest = await checkFrozenSubscription(latest);
 
         if (latest.status != SubscriptionStatus.expired) {
           _cachedSubscriptions[member.id] = latest;
-          checkFrozenSubscriptions();
         }
       });
     }
@@ -143,13 +145,18 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
         return Left('تم تسجيل الحضور اليوم بالفعل');
       }
 
-      if (subscription.attendance >= plan.maxAttendance) {
-        return Left('تم الوصول للحد الأقصى للحضور');
-      }
+      // حساب الحضور الجديد
+      int newAttendance = subscription.attendance + 1;
+
+      // لو وصل الحد الأقصى، نخلي الاشتراك كأنه انتهى
+      bool reachedMax = newAttendance >= subscription.maxAttendance;
 
       final updated = subscription.copyWith(
-        attendance: subscription.attendance + 1,
+        attendance: newAttendance,
         dateIdAttendance: dateId,
+        status: reachedMax ? SubscriptionStatus.expired : subscription.status,
+        // ممكن كمان تصفر أي متغيرات إضافية لو تحبي زي remainingDays
+        remainingDays: reachedMax ? 0 : subscription.remainingDays,
       );
 
       final result = await repo.updateMemberSubscription(updated);
@@ -173,21 +180,17 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     required int freezeDays,
   }) async {
     try {
-      // 1️⃣ الاشتراك لازم يكون نشط
       if (subscription.status != SubscriptionStatus.active) {
         return Left('الاشتراك غير نشط');
       }
 
-      // 2️⃣ تحقق من عدد أيام الفريز المتبقية
       final availableFreeze = subscription.freeze; // الأيام المتبقية للفريز
       if (freezeDays > availableFreeze) {
         return Left('عدد أيام الفريز أكبر من المتاح');
       }
 
-      // 3️⃣ حساب تاريخ نهاية الفريز
       final freezeEnd = DateTime.now().add(Duration(days: freezeDays));
 
-      // 4️⃣ تحديث الاشتراك
       final updated = subscription.copyWith(
         endDate: subscription.endDate.add(Duration(days: freezeDays)),
         freezeEndDate: freezeEnd,
@@ -195,7 +198,6 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
         status: SubscriptionStatus.frozen,
       );
 
-      // 5️⃣ حفظ التحديث في الريبو
       final result = await repo.updateMemberSubscription(updated);
       if (result.isLeft()) {
         return Left(result.fold((f) => f.message, (_) => 'حدث خطأ'));
@@ -210,29 +212,39 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     }
   }
 
-  Future<void> checkFrozenSubscriptions() async {
-    final subsList = _cachedSubscriptions.values.toList();
+  Future<MemberSubscriptionModel> checkFrozenSubscription(
+    MemberSubscriptionModel sub,
+  ) async {
+    MemberSubscriptionModel updated = sub;
 
-    for (var sub in subsList) {
-      if (sub.status == SubscriptionStatus.frozen &&
-          sub.freezeEndDate != null &&
-          DateTime.now().isAfter(sub.freezeEndDate!)) {
-        final updated = sub.copyWith(
-          status: SubscriptionStatus.active,
-          freezeEndDate: null,
-        );
-
-        final result = await repo.updateMemberSubscription(updated);
-
-        result.fold(
-          (f) => print('Failed to update subscription: ${f.message}'),
-          (_) {
-            _cachedSubscriptions[sub.memberId] = updated;
-            _emitCache();
-          },
-        );
-      }
+    // Check if frozen expired
+    if (sub.status == SubscriptionStatus.frozen &&
+        sub.freezeEndDate != null &&
+        DateTime.now().isAfter(sub.freezeEndDate!)) {
+      updated = updated.copyWith(
+        status: SubscriptionStatus.active,
+        freezeEndDate: null,
+      );
     }
+
+    // Check max attendance
+    if (sub.attendance >= sub.maxAttendance &&
+        sub.status == SubscriptionStatus.active) {
+      updated = updated.copyWith(status: SubscriptionStatus.expired);
+    }
+
+    // Update repo if changed
+    if (updated != sub) {
+      final result = await repo.updateMemberSubscription(updated);
+      result.fold((f) => print('Failed to update subscription: ${f.message}'), (
+        _,
+      ) {
+        _cachedSubscriptions[sub.memberId] = updated;
+        _emitCache();
+      });
+    }
+
+    return updated;
   }
 
   SubModel? getPlan(String planId) {

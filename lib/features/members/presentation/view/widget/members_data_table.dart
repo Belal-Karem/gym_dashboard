@@ -81,6 +81,7 @@ class MembersDataTable extends StatelessWidget {
                               totalInvitations: 0,
                               usedInvitations: 0,
                               freeze: 0,
+                              maxAttendance: 0,
                             ),
                       ),
                     );

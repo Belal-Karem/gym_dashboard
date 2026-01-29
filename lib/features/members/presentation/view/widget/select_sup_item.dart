@@ -44,6 +44,12 @@ class SelectSupItem extends StatelessWidget {
           ),
           ListTileSup(
             showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
+              title: 'الحد الأقصى للحضور',
+              trailing: subs.maxAttendance.toString(),
+            ),
+          ),
+          ListTileSup(
+            showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
               title: 'دعوة',
               trailing: subs.invitationCount.toString(),
             ),

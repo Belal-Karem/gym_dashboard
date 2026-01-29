@@ -201,6 +201,7 @@ class _MemberDialogState extends State<MemberDialog> {
                   totalInvitations: selectedSub.invitationCount,
                   usedInvitations: 0,
                   freeze: selectedSub.freezeDays,
+                  maxAttendance: selectedSub.maxAttendance,
                 ),
               );
             } else {

@@ -12,6 +12,7 @@ class MemberSubscriptionModel {
 
   final int remainingDays;
   final int attendance;
+  final int maxAttendance;
   final int totalInvitations;
   final int usedInvitations;
   final int freeze;
@@ -39,6 +40,7 @@ class MemberSubscriptionModel {
     required this.totalInvitations,
     required this.usedInvitations,
     required this.freeze,
+    required this.maxAttendance,
   });
 
   Map<String, dynamic> toJson() {
@@ -59,6 +61,7 @@ class MemberSubscriptionModel {
       'totalInvitations': totalInvitations,
       'usedInvitations': usedInvitations,
       'freeze': freeze,
+      'maxAttendance': maxAttendance,
     };
   }
 
@@ -87,6 +90,7 @@ class MemberSubscriptionModel {
       totalInvitations: map['totalInvitations'] ?? 0,
       usedInvitations: map['usedInvitations'] ?? 0,
       freeze: map['freeze'] ?? 0,
+      maxAttendance: map['maxAttendance'] ?? 0,
     );
   }
   MemberSubscriptionModel copyWith({
@@ -105,6 +109,7 @@ class MemberSubscriptionModel {
     int? totalInvitations,
     int? usedInvitations,
     int? freeze,
+    int? maxAttendance,
   }) {
     return MemberSubscriptionModel(
       id: id,
@@ -124,6 +129,7 @@ class MemberSubscriptionModel {
       usedInvitations: usedInvitations ?? this.usedInvitations,
       totalInvitations: totalInvitations ?? this.totalInvitations,
       freeze: freeze ?? this.freeze,
+      maxAttendance: maxAttendance ?? this.maxAttendance,
     );
   }
 }

@@ -17,7 +17,6 @@ class MembersData extends StatelessWidget {
           context
               .read<MemberSubscriptionCubit>()
               .loadMembersActiveSubscriptions(state.members);
-          print('SizedBox1');
         }
       },
       child: BlocBuilder<MembersCubit, MembersState>(

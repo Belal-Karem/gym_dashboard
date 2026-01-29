@@ -69,6 +69,7 @@ class MemberActions {
             totalInvitations: selectedSub.invitationCount,
             usedInvitations: 0,
             freeze: selectedSub.freezeDays,
+            maxAttendance: selectedSub.maxAttendance,
           );
 
           await subscriptionsCubit.addSubscription(memberSub);
