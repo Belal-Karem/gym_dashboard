@@ -15,7 +15,6 @@ class MemberRepoImpl implements MemberRepo {
       .collection('counters')
       .doc('memberCounter');
 
-  // تجيب memberId الجديد
   Future<int> getNextMemberId() async {
     final doc = await counterRef.get();
     int lastId = doc.exists ? int.parse(doc['lastId'].toString()) : 0;
@@ -85,18 +84,6 @@ class MemberRepoImpl implements MemberRepo {
   Future<Either<Failure, Unit>> deleteMember(String id) async {
     try {
       await membersRef.doc(id).delete();
-
-      final snapshot = await membersRef.orderBy('memberId').get();
-
-      int lastId = 0;
-      int counter = 1;
-      for (var doc in snapshot.docs) {
-        await doc.reference.update({'memberId': counter.toString()});
-        lastId = counter;
-        counter++;
-      }
-
-      await counterRef.set({'lastId': lastId});
 
       return const Right(unit);
     } catch (e) {

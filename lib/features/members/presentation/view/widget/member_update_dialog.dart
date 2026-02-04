@@ -221,33 +221,13 @@ class _MemberDialogState extends State<MemberDialog> {
 
         TextButton(
           onPressed: () async {
-            // اظهار رسالة تأكيد
-            bool? confirm = await showDialog<bool>(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('تأكيد الحذف'),
-                  content: const Text('هل أنت متأكد من حذف هذا العضو؟'),
-                  actions: [
-                    TextButton(
-                      onPressed: () =>
-                          Navigator.of(context).pop(false), // الغاء
-                      child: const Text('إلغاء'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true), // تأكيد
-                      child: const Text(
-                        'حذف',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                  ],
-                );
-              },
+            final confirm = await showConfirmDialog(
+              context,
+              title: 'تأكيد الحذف',
+              message: 'هل أنت متأكد من حذف هذا العضو؟',
             );
 
-            // لو وافق المستخدم
-            if (confirm == true) {
+            if (confirm) {
               deleteMember();
             }
           },
@@ -322,4 +302,31 @@ class ItemDisplayData extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<bool> showConfirmDialog(
+  BuildContext context, {
+  required String title,
+  required String message,
+}) async {
+  return await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('إلغاء'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('تأكيد', style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          );
+        },
+      ) ??
+      false;
 }
