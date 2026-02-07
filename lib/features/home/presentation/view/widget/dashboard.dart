@@ -3,7 +3,7 @@ import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/features/home/presentation/view/widget/button_shortcuts_session.dart';
 import 'package:power_gym/features/home/presentation/view/widget/notifications.dart';
 import 'package:power_gym/features/home/presentation/view/widget/recent_member_home.dart';
-import 'package:power_gym/features/home/presentation/view/widget/search_dropdown_widget.dart';
+import 'package:power_gym/features/home/presentation/view/widget/search_dropdown.dart';
 import 'package:power_gym/features/home/presentation/view/widget/Statistics.dart';
 import 'package:power_gym/features/home/presentation/view/widget/monthly_in_dashoard.dart';
 
@@ -22,7 +22,7 @@ class Dashboard extends StatelessWidget {
               SizedBox(width: 10),
               ButtonShortcutsSession(),
               Spacer(),
-              Container(width: 300, child: SearchDropdownWidget()),
+              Container(width: 300, child: SearchDropdown()),
             ],
           ),
         ),
