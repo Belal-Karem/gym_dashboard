@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/helper/format_date_helper.dart';
 import 'package:power_gym/core/utils/app_style.dart';
@@ -19,11 +20,13 @@ import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model
 class MemberDialog extends StatefulWidget {
   final MemberModel member;
   final MemberSubscriptionModel subscription;
+  final List<MemberSubscriptionModel> history;
 
   const MemberDialog({
     super.key,
     required this.member,
     required this.subscription,
+    this.history = const [],
   });
 
   @override
@@ -42,6 +45,7 @@ class _MemberDialogState extends State<MemberDialog> {
   late int freeze;
   late int totalInvitations;
   late int usedInvitations;
+  final starDateForAdd = TextEditingController();
 
   @override
   void initState() {
@@ -63,6 +67,10 @@ class _MemberDialogState extends State<MemberDialog> {
     nameController.dispose();
     phoneController.dispose();
     super.dispose();
+    starDateForAdd.text = DateFormat(
+      'yyyy-MM-dd',
+      'en_US',
+    ).format(DateTime.now());
   }
 
   void updateMember() {
@@ -85,164 +93,302 @@ class _MemberDialogState extends State<MemberDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    print('=============== ${widget.subscription}');
+    return Dialog(
       backgroundColor: kprimaryColor,
-      title: const Text(' بيانات العضو'),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            DisplayData(
-              label: 'تاريخ الانضمام',
-              child: affiliationdate.toString(),
-            ),
-            DisplayData(label: 'تاريخ البدء', child: startDate.toString()),
-            DisplayData(label: 'تاريخ النتهاء', child: endDate.toString()),
-
-            DisplayData(
-              label: 'الايام المتبقيه',
-              child2: remainingDays.toString(),
-            ),
-            DisplayData(label: 'التجميد', child2: freeze.toString()),
-            DisplayData(
-              label: 'الدعوات',
-              child2: '$usedInvitations / $totalInvitations',
-            ),
-
-            Text('تعديل', style: AppStyle.style20),
-            FieldLabelAndInputAddWidget(
-              label: 'الاسم',
-              child: TextFieldAddWidget(controller: nameController),
-            ),
-            FieldLabelAndInputAddWidget(
-              label: 'الهاتف',
-              child: TextFieldAddWidget(controller: phoneController),
-            ),
-
-            DoubleFieldRowAddWidget(
-              leftLabel: ' الحالة',
-              leftChild: CustomDropdownWidget(
-                items: const [
-                  DropdownMenuItem(value: 'نشط', child: Text('نشط')),
-                  DropdownMenuItem(value: 'متوقف', child: Text('متوقف')),
-                  DropdownMenuItem(
-                    value: 'توقف مؤقت',
-                    child: Text('توقف مؤقت'),
+      child: SingleChildScrollView(
+        child: SizedBox(
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Expanded(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 400,
+                          child: SubscriptionsMeberList(
+                            history: widget.history,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-                initialValue: selectedStatus,
-                onChanged: (value) {
-                  setState(() => selectedStatus = value);
-                },
+                ),
               ),
-              rightLabel: 'النوع',
-              rightChild: CustomDropdownWidget(
-                items: const [
-                  DropdownMenuItem(value: 'ذكر', child: Text('ذكر')),
-                  DropdownMenuItem(value: 'أنثى', child: Text('أنثى')),
-                  DropdownMenuItem(value: 'طفل', child: Text('طفل')),
-                ],
-                initialValue: selectedGender,
-                onChanged: (value) {
-                  setState(() => selectedGender = value);
-                },
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          ' بيانات العضو',
+                          style: AppStyle.style20W500,
+                        ),
+                        DisplayData(
+                          label: 'تاريخ الانضمام',
+                          child: affiliationdate.toString(),
+                        ),
+                        DisplayData(
+                          label: 'تاريخ البدء',
+                          child: startDate.toString(),
+                        ),
+                        DisplayData(
+                          label: 'تاريخ النتهاء',
+                          child: endDate.toString(),
+                        ),
+
+                        DisplayData(
+                          label: 'الايام المتبقيه',
+                          child2: remainingDays.toString(),
+                        ),
+                        DisplayData(
+                          label: 'التجميد',
+                          child2: freeze.toString(),
+                        ),
+                        DisplayData(
+                          label: 'الدعوات',
+                          child2: '$usedInvitations / $totalInvitations',
+                        ),
+
+                        const Text('تعديل', style: AppStyle.style20W500),
+                        FieldLabelAndInputAddWidget(
+                          label: 'الاسم',
+                          child: TextFieldAddWidget(controller: nameController),
+                        ),
+                        FieldLabelAndInputAddWidget(
+                          label: 'الهاتف',
+                          child: TextFieldAddWidget(
+                            controller: phoneController,
+                          ),
+                        ),
+
+                        DoubleFieldRowAddWidget(
+                          leftLabel: ' الحالة',
+                          leftChild: CustomDropdownWidget(
+                            items: const [
+                              DropdownMenuItem(
+                                value: 'نشط',
+                                child: Text('نشط'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'متوقف',
+                                child: Text('متوقف'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'توقف مؤقت',
+                                child: Text('توقف مؤقت'),
+                              ),
+                            ],
+                            initialValue: selectedStatus,
+                            onChanged: (value) {
+                              setState(() => selectedStatus = value);
+                            },
+                          ),
+                          rightLabel: 'النوع',
+                          rightChild: CustomDropdownWidget(
+                            items: const [
+                              DropdownMenuItem(
+                                value: 'ذكر',
+                                child: Text('ذكر'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'أنثى',
+                                child: Text('أنثى'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'طفل',
+                                child: Text('طفل'),
+                              ),
+                            ],
+                            initialValue: selectedGender,
+                            onChanged: (value) {
+                              setState(() => selectedGender = value);
+                            },
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                openAddPlanDialog(
+                                  context,
+                                  widget.member,
+                                ); // ✅ نبعت العضو
+                              },
+                              child: const Text(
+                                'اشتراك بريفت',
+                                style: TextStyle(color: Colors.green),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                final cubit = context
+                                    .read<MemberSubscriptionCubit>();
+
+                                // 📅 اختيار تاريخ البداية
+                                final DateTime? startDate =
+                                    await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2020),
+                                      lastDate: DateTime(2100),
+                                      builder: (context, child) {
+                                        return Theme(
+                                          data: Theme.of(context).copyWith(
+                                            colorScheme: ColorScheme.dark(
+                                              primary: Color(0xff9D1D1E),
+                                              onPrimary: Colors.white,
+                                              surface: Color(0xff1D1E22),
+                                              onSurface: Colors.white,
+                                            ),
+                                          ),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+
+                                if (startDate == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'يرجى اختيار تاريخ البداية',
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                Navigator.pop(context);
+
+                                final selectedSub =
+                                    await Navigator.push<SubModel>(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => const SelectSupView(),
+                                      ),
+                                    );
+
+                                if (selectedSub == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('يرجى اختيار مدة الاشتراك'),
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                final endDate = startDate.add(
+                                  Duration(days: selectedSub.durationDays),
+                                );
+
+                                final now = DateTime.now();
+
+                                if (widget
+                                    .subscription
+                                    .subscriptionId
+                                    .isEmpty) {
+                                  cubit.addSubscription(
+                                    MemberSubscriptionModel(
+                                      id: '',
+                                      memberId: widget.subscription.memberId,
+                                      subscriptionId: selectedSub.id,
+                                      startDate: startDate,
+                                      endDate: endDate,
+                                      actionDate: now,
+                                      isRenewal: true,
+                                      remainingDays: selectedSub.durationDays,
+                                      attendance: 0,
+                                      dateId: generateDateId(now),
+                                      status: SubscriptionStatus.active,
+                                      dateIdForReport: generateDateId(now),
+                                      freezeEndDate: now,
+                                      totalInvitations:
+                                          selectedSub.invitationCount,
+                                      usedInvitations: 0,
+                                      freeze: selectedSub.freezeDays,
+                                      maxAttendance: selectedSub.maxAttendance,
+                                    ),
+                                  );
+                                } else {
+                                  cubit.renewOrExtendSubscription(
+                                    currentSub: widget.subscription,
+                                    plan: selectedSub,
+                                  );
+                                }
+                              },
+
+                              child: Text(
+                                widget.subscription.status ==
+                                        SubscriptionStatus.expired
+                                    ? 'تجديد الاشتراك'
+                                    : 'تمديد الاشتراك',
+                              ),
+                            ),
+
+                            TextButton(
+                              onPressed: () async {
+                                final confirm = await showConfirmDialog(
+                                  context,
+                                  title: 'تأكيد الحذف',
+                                  message: 'هل أنت متأكد من حذف هذا العضو؟',
+                                );
+
+                                if (confirm) {
+                                  deleteMember();
+                                }
+                              },
+                              child: const Text(
+                                'حذف',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+
+                            TextButton(
+                              onPressed: updateMember,
+                              child: const Text(
+                                'تحديث',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('إغلاق'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-            openAddPlanDialog(context, widget.member); // ✅ نبعت العضو
-          },
-          child: const Text(
-            'اشتراك بريفت',
-            style: TextStyle(color: Colors.green),
+    );
+  }
+}
+
+class SubscriptionsMeberList extends StatelessWidget {
+  const SubscriptionsMeberList({super.key, required this.history});
+  final List<MemberSubscriptionModel> history;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: history.length,
+      itemBuilder: (context, index) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white.withAlpha(150)),
           ),
-        ),
-        TextButton(
-          onPressed: () async {
-            final cubit = context.read<MemberSubscriptionCubit>();
-            Navigator.pop(context);
-
-            final selectedSub = await Navigator.push<SubModel>(
-              context,
-              MaterialPageRoute(builder: (_) => const SelectSupView()),
-            );
-
-            if (selectedSub == null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('يرجى اختيار مدة الاشتراك')),
-              );
-              return;
-            }
-
-            final now = DateTime.now();
-            if (widget.subscription.subscriptionId.isEmpty) {
-              cubit.addSubscription(
-                MemberSubscriptionModel(
-                  id: '',
-                  memberId: widget.subscription.memberId,
-                  subscriptionId: selectedSub.id,
-                  startDate: DateTime.now(),
-                  endDate: DateTime.now().add(
-                    Duration(days: selectedSub.durationDays),
-                  ),
-                  actionDate: DateTime.now(),
-                  isRenewal: true,
-                  remainingDays: selectedSub.durationDays,
-                  attendance: 0,
-                  dateId: generateDateId(now),
-                  status: SubscriptionStatus.active,
-                  dateIdForReport: generateDateId(now),
-                  freezeEndDate: DateTime.now(),
-                  totalInvitations: selectedSub.invitationCount,
-                  usedInvitations: 0,
-                  freeze: selectedSub.freezeDays,
-                  maxAttendance: selectedSub.maxAttendance,
-                ),
-              );
-            } else {
-              // ⚡ لو موجود بالفعل → تجديد / تمديد
-              cubit.renewOrExtendSubscription(
-                currentSub: widget.subscription,
-                plan: selectedSub,
-              );
-            }
-          },
-          child: Text(
-            widget.subscription.status == SubscriptionStatus.expired
-                ? 'تجديد الاشتراك'
-                : 'تمديد الاشتراك',
-          ),
-        ),
-
-        TextButton(
-          onPressed: () async {
-            final confirm = await showConfirmDialog(
-              context,
-              title: 'تأكيد الحذف',
-              message: 'هل أنت متأكد من حذف هذا العضو؟',
-            );
-
-            if (confirm) {
-              deleteMember();
-            }
-          },
-          child: const Text('حذف', style: TextStyle(color: Colors.red)),
-        ),
-
-        TextButton(
-          onPressed: updateMember,
-          child: const Text('تحديث', style: TextStyle(color: Colors.blue)),
-        ),
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('إغلاق'),
-        ),
-      ],
+          child: Column(children: [Text('عدد الاشتراكات: ${history.length}')]),
+        );
+      },
     );
   }
 }

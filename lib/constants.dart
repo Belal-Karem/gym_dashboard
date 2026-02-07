@@ -48,7 +48,7 @@ const ktrainerid = 'trainerId';
 const kprimaryColor = Colors.black;
 
 // Color(0xff1B1C20)
-enum SubscriptionStatus { active, frozen, expired }
+enum SubscriptionStatus { active, frozen, expired, pending }
 
 extension SubscriptionStatusX on SubscriptionStatus {
   String get arabicName {
@@ -59,6 +59,8 @@ extension SubscriptionStatusX on SubscriptionStatus {
         return 'مجمّد';
       case SubscriptionStatus.expired:
         return 'منتهي';
+      case SubscriptionStatus.pending:
+        return 'قيد الانتظار';
     }
   }
 }

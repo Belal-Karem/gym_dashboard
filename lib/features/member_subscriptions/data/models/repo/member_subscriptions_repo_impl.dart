@@ -31,7 +31,10 @@ class MemberSubscriptionsRepoImpl implements MemberSubscriptionsRepo {
   Future<Either<Failure, List<MemberSubscriptionModel>>>
   getSubscriptionsByMember(String memberId) async {
     try {
-      final result = await subsRef.where('memberId', isEqualTo: memberId).get();
+      final result = await subsRef
+          .where('memberId', isEqualTo: memberId)
+          .orderBy('startDate', descending: true)
+          .get();
 
       final list = result.docs.map((doc) {
         return MemberSubscriptionModel.fromJson(

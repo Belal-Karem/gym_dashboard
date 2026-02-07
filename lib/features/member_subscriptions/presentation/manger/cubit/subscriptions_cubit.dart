@@ -20,6 +20,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
   final Map<String, MemberSubscriptionModel> _cachedSubscriptions = {};
   final Map<String, SubModel> _plansCache = {};
+  final Map<String, List<MemberSubscriptionModel>> _historyCache = {};
 
   MemberSubscriptionCubit(this.repo, this.plansRepo, this.guestVisitsRepo)
     : super(MemberSubscriptionInitial());
@@ -85,9 +86,11 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
   Future<void> getMemberSubscriptions(String memberId) async {
     final result = await repo.getSubscriptionsByMember(memberId);
+
     result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (list) {
       if (list.isEmpty) {
         _cachedSubscriptions.remove(memberId);
+        _historyCache.remove(memberId);
         _emitCache();
         return;
       }
@@ -95,34 +98,56 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       final recalculated = list.map(_recalculateSubscription).toList()
         ..sort((a, b) => b.endDate.compareTo(a.endDate));
 
-      _cachedSubscriptions[memberId] = recalculated.first;
-      checkFrozenSubscription(_cachedSubscriptions[memberId]!);
-      _emitCache();
+      final latest = recalculated.first;
+      _cachedSubscriptions[memberId] = latest;
+
+      _historyCache[memberId] = recalculated;
+      print(_historyCache);
+
+      checkFrozenSubscription(latest);
+
+      emit(
+        MembersSubscriptionLoadedWithHistory(
+          active: Map.from(_cachedSubscriptions),
+          history: Map.from(_historyCache),
+        ),
+      );
     });
   }
 
   Future<void> loadMembersActiveSubscriptions(List<MemberModel> members) async {
     for (final member in members) {
       final response = await repo.getSubscriptionsByMember(member.id);
-      response.fold((_) {}, (subs) async {
-        if (subs.isEmpty) return;
 
-        // إعادة حساب الاشتراكات
+      response.fold((_) {}, (subs) async {
+        if (subs.isEmpty) {
+          _historyCache.remove(member.id);
+          _cachedSubscriptions.remove(member.id);
+          return;
+        }
+
         final recalculated = subs.map(_recalculateSubscription).toList()
           ..sort((a, b) => b.endDate.compareTo(a.endDate));
 
-        // أحدث اشتراك
-        var latest = recalculated.first;
+        _historyCache[member.id] = recalculated;
 
+        var latest = recalculated.first;
         latest = await checkFrozenSubscription(latest);
 
         if (latest.status != SubscriptionStatus.expired) {
           _cachedSubscriptions[member.id] = latest;
+        } else {
+          _cachedSubscriptions.remove(member.id);
         }
       });
     }
 
-    _emitCache();
+    emit(
+      MembersSubscriptionLoadedWithHistory(
+        active: Map.from(_cachedSubscriptions),
+        history: Map.from(_historyCache),
+      ),
+    );
   }
 
   Future<Either<String, Unit>> markAttendance({
@@ -194,7 +219,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       final updated = subscription.copyWith(
         endDate: subscription.endDate.add(Duration(days: freezeDays)),
         freezeEndDate: freezeEnd,
-        freeze: availableFreeze - freezeDays, // تحديث الأيام المتبقية
+        freeze: availableFreeze - freezeDays,
         status: SubscriptionStatus.frozen,
       );
 
@@ -290,7 +315,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       final result = await repo.updateMemberSubscription(updated);
 
       if (result.isLeft()) {
-        return Left(result.fold((f) => f.message, (_) => '')); // ⚡ هنا
+        return Left(result.fold((f) => f.message, (_) => ''));
       }
 
       _cachedSubscriptions[subscription.memberId] = updated;
@@ -319,14 +344,28 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
   MemberSubscriptionModel _recalculateSubscription(
     MemberSubscriptionModel sub,
   ) {
-    final remaining = sub.endDate.difference(DateTime.now()).inDays;
+    final now = DateTime.now();
 
-    if (remaining <= 0) {
+    // ⏳ لم يبدأ بعد
+    if (sub.startDate.isAfter(now)) {
+      final fullDuration = sub.endDate.difference(sub.startDate).inDays;
+
+      return sub.copyWith(
+        remainingDays: fullDuration,
+        status: SubscriptionStatus.pending, // أضفها لو مش موجودة
+      );
+    }
+
+    // ❌ انتهى
+    if (sub.endDate.isBefore(now)) {
       return sub.copyWith(remainingDays: 0, status: SubscriptionStatus.expired);
     }
 
+    // ✅ نشط حالياً
+    final remaining = sub.endDate.difference(now).inDays;
+
     return sub.copyWith(
-      remainingDays: remaining,
+      remainingDays: remaining < 0 ? 0 : remaining,
       status: sub.status == SubscriptionStatus.frozen
           ? SubscriptionStatus.frozen
           : SubscriptionStatus.active,

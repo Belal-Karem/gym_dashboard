@@ -8,6 +8,7 @@ import 'package:power_gym/core/widget/elevated_button_to_dialog.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
 import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
+import 'package:power_gym/core/widget/date_picker_function.dart';
 import 'package:power_gym/features/members/presentation/manger/controllers/add_member_controller.dart';
 
 class DialogAddMemberUi extends StatefulWidget {
@@ -23,7 +24,6 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
   @override
   void initState() {
     super.initState();
-    // ✅ Set default start date to today
     controller.startDate.text = DateFormat(
       'yyyy-MM-dd',
       'en_US',
@@ -34,36 +34,6 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
   void dispose() {
     controller.dispose();
     super.dispose();
-  }
-
-  // ✅ ADDED: Date Picker Function
-  Future<void> _selectDate(
-    BuildContext context,
-    TextEditingController controller,
-  ) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2030),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.dark(
-              primary: Color(0xff9D1D1E),
-              onPrimary: Colors.white,
-              surface: Color(0xff1D1E22),
-              onSurface: Colors.white,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (picked != null) {
-      controller.text = DateFormat('yyyy-MM-dd').format(picked);
-    }
   }
 
   @override
@@ -104,7 +74,7 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
               DoubleFieldRowAddWidget(
                 leftLabel: 'تاريخ البدء',
                 leftChild: GestureDetector(
-                  onTap: () => _selectDate(context, controller.startDate),
+                  onTap: () => selectDate(context, controller.startDate),
                   child: AbsorbPointer(
                     child: TextFieldAddWidget(
                       controller: controller.startDate,

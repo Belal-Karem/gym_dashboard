@@ -45,3 +45,13 @@ class MemberSubscriptionAttendanceSuccess extends MemberSubscriptionState {
     required this.plan,
   });
 }
+
+class MembersSubscriptionLoadedWithHistory extends MemberSubscriptionState {
+  final Map<String, MemberSubscriptionModel> active;
+  final Map<String, List<MemberSubscriptionModel>> history;
+
+  MembersSubscriptionLoadedWithHistory({
+    required this.active,
+    required this.history,
+  });
+}

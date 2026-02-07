@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
@@ -6,6 +7,7 @@ import 'package:power_gym/core/utils/date_utils.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
+import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/view/widget/member_update_dialog.dart';
 
@@ -56,6 +58,9 @@ class MembersDataTable extends StatelessWidget {
             ]),
             ...members.map((member) {
               final sub = subscriptions[member.id];
+              print(
+                '============ ${sub?.status.toString() ?? "No subscription"}',
+              );
               if (sub == null) {
                 return TableHelper.buildDataRow(
                   onTap: (cells) {
@@ -107,8 +112,26 @@ class MembersDataTable extends StatelessWidget {
                 onTap: (cells) {
                   showDialog(
                     context: context,
-                    builder: (_) =>
-                        MemberDialog(member: member, subscription: sub),
+                    builder: (context) =>
+                        BlocBuilder<
+                          MemberSubscriptionCubit,
+                          MemberSubscriptionState
+                        >(
+                          builder: (context, state) {
+                            if (state is MembersSubscriptionLoadedWithHistory) {
+                              final history = state.history[member.id] ?? [];
+                              return MemberDialog(
+                                member: member,
+                                subscription: sub,
+                                history: history,
+                              );
+                            }
+                            return MemberDialog(
+                              member: member,
+                              subscription: sub,
+                            );
+                          },
+                        ),
                   );
                 },
                 cells: [
@@ -117,12 +140,19 @@ class MembersDataTable extends StatelessWidget {
                   TableCellWidget(member.phone),
                   TableCellWidget(
                     DateFormat('yyyy-MM-dd', 'en_US').format(sub.startDate),
+                    style: sub.status == SubscriptionStatus.active
+                        ? TextStyle(color: Colors.white)
+                        : const TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
                   ),
                   TableCellWidget(
                     DateFormat('yyyy-MM-dd', 'en_US').format(sub.endDate),
                   ),
                   TableCellWidget(sub.remainingDays.toString()),
                   TableCellWidget(sub.attendance.toString()),
+
                   TableCellWidget(
                     sub.status.arabicName,
                     style: sub.status == SubscriptionStatus.active
