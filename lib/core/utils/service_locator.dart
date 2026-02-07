@@ -14,19 +14,23 @@ import 'package:power_gym/features/member_subscriptions/data/models/repo/member_
 import 'package:power_gym/features/member_subscriptions/data/models/repo/plans_repo.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/plans_repo_impl.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
+import 'package:power_gym/features/members/data/models/repo/member_repo.dart';
 import 'package:power_gym/features/members/data/models/repo/member_repo_impl.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/members_count_stats_cubit.dart';
 import 'package:power_gym/features/payment/data/models/repo/payment_repo.dart';
 import 'package:power_gym/features/payment/data/models/repo/payment_repo_impl.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
+import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo.dart';
 import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo_imlp.dart';
 import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_report_comment_repo.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_report_comment_repo_impl.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_report_comment_cubit.dart';
+import 'package:power_gym/features/subscriptions/data/models/repo/sub_repo.dart';
 import 'package:power_gym/features/subscriptions/data/models/repo/sub_repo_impl.dart';
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_cubit.dart';
+import 'package:power_gym/features/trainers/data/models/repo/trainer_repo.dart';
 import 'package:power_gym/features/trainers/data/models/repo/trainer_repo_impl.dart';
 import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
 
