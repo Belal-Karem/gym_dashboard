@@ -22,37 +22,37 @@ class DrawerItemModel {
     ),
     DrawerItemModel(
       icon: Icon(FontAwesomeIcons.user),
-      title: Text(style: TextStyle(fontSize: 20), 'الاعضاء'),
+      title: Text('الاعضاء', style: TextStyle(fontSize: 20)),
       routerPath: AppRouter.kmemberview,
     ),
     DrawerItemModel(
       icon: Icon(FontAwesomeIcons.userGroup),
-      title: Text(style: TextStyle(fontSize: 20), 'المدربون'),
+      title: Text('المدربون', style: TextStyle(fontSize: 20)),
       routerPath: AppRouter.ktrainerview,
     ),
     DrawerItemModel(
       icon: Icon(FontAwesomeIcons.calendar),
-      title: Text(style: TextStyle(fontSize: 20), 'الاشتراكات'),
+      title: Text('الاشتراكات', style: TextStyle(fontSize: 20)),
       routerPath: AppRouter.ksubscriptionsview,
     ),
     DrawerItemModel(
       icon: Icon(FontAwesomeIcons.moneyCheckDollar),
-      title: Text(style: TextStyle(fontSize: 20), 'المدفوعات'),
+      title: Text('المدفوعات', style: TextStyle(fontSize: 20)),
       routerPath: AppRouter.kpaymentview,
     ),
     DrawerItemModel(
       icon: Icon(FontAwesomeIcons.cube),
-      title: Text(style: TextStyle(fontSize: 20), 'الاشتراكات Pt'),
+      title: Text('الاشتراكات Pt', style: TextStyle(fontSize: 20)),
       routerPath: AppRouter.kplanview,
     ),
     DrawerItemModel(
       icon: Icon(Icons.assignment),
-      title: Text(style: TextStyle(fontSize: 20), 'التقرير اليومي'),
+      title: Text('التقرير اليومي', style: TextStyle(fontSize: 20)),
       routerPath: AppRouter.kreportview,
     ),
     DrawerItemModel(
       icon: Icon(Icons.settings),
-      title: Text(style: TextStyle(fontSize: 20), 'الاعدادات'),
+      title: Text('الاعدادات', style: TextStyle(fontSize: 20)),
       routerPath: AppRouter.ksettingview,
     ),
   ];
