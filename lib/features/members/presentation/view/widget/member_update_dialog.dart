@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:power_gym/constants.dart';
-import 'package:power_gym/core/helper/format_date_helper.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/core/utils/date_utils.dart';
 import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
+import 'package:power_gym/core/widget/show_confirm_dialog.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/members/presentation/view/select_sup_view.dart';
+import 'package:power_gym/features/members/presentation/view/widget/display_data_for_member.dart';
+import 'package:power_gym/features/members/presentation/view/widget/subscriptions_member_list.dart';
 import 'package:power_gym/features/plan_and_packages/presentation/view/widget/dialog_add_plan.dart';
 import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
 
@@ -93,7 +95,6 @@ class _MemberDialogState extends State<MemberDialog> {
 
   @override
   Widget build(BuildContext context) {
-    print('=============== ${widget.subscription}');
     return Dialog(
       backgroundColor: kprimaryColor,
       child: SingleChildScrollView(
@@ -108,7 +109,7 @@ class _MemberDialogState extends State<MemberDialog> {
                       children: [
                         SizedBox(
                           height: 400,
-                          child: SubscriptionsMeberList(
+                          child: SubscriptionsMemberList(
                             history: widget.history,
                           ),
                         ),
@@ -128,28 +129,28 @@ class _MemberDialogState extends State<MemberDialog> {
                           ' بيانات العضو',
                           style: AppStyle.style20W500,
                         ),
-                        DisplayData(
+                        DisplayDataForMember(
                           label: 'تاريخ الانضمام',
                           child: affiliationdate.toString(),
                         ),
-                        DisplayData(
+                        DisplayDataForMember(
                           label: 'تاريخ البدء',
                           child: startDate.toString(),
                         ),
-                        DisplayData(
+                        DisplayDataForMember(
                           label: 'تاريخ النتهاء',
                           child: endDate.toString(),
                         ),
 
-                        DisplayData(
+                        DisplayDataForMember(
                           label: 'الايام المتبقيه',
                           child2: remainingDays.toString(),
                         ),
-                        DisplayData(
+                        DisplayDataForMember(
                           label: 'التجميد',
                           child2: freeze.toString(),
                         ),
-                        DisplayData(
+                        DisplayDataForMember(
                           label: 'الدعوات',
                           child2: '$usedInvitations / $totalInvitations',
                         ),
@@ -372,107 +373,4 @@ class _MemberDialogState extends State<MemberDialog> {
       ),
     );
   }
-}
-
-class SubscriptionsMeberList extends StatelessWidget {
-  const SubscriptionsMeberList({super.key, required this.history});
-  final List<MemberSubscriptionModel> history;
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: history.length,
-      itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white.withAlpha(150)),
-          ),
-          child: Column(children: [Text('عدد الاشتراكات: ${history.length}')]),
-        );
-      },
-    );
-  }
-}
-
-class DisplayData extends StatelessWidget {
-  const DisplayData({super.key, required this.label, this.child, this.child2});
-
-  final String label;
-  final String? child, child2;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white.withAlpha(150)),
-      ),
-      child: Column(
-        children: [
-          ItemDisplayData(label: label, child: child, child2: child2 ?? ''),
-        ],
-      ),
-    );
-  }
-}
-
-class ItemDisplayData extends StatelessWidget {
-  const ItemDisplayData({
-    super.key,
-    required this.label,
-    this.child,
-    this.child2,
-  });
-
-  final String label;
-  final String? child2, child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Text('$label :', style: AppStyle.style20W500),
-          Text(
-            ' ${FormatDateHelper.formatDate(child)}',
-            style: AppStyle.style20.copyWith(
-              color: Colors.white.withAlpha(200),
-            ),
-          ),
-          Text(
-            ' ${child2}',
-            style: AppStyle.style20.copyWith(
-              color: Colors.white.withAlpha(200),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-Future<bool> showConfirmDialog(
-  BuildContext context, {
-  required String title,
-  required String message,
-}) async {
-  return await showDialog<bool>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('إلغاء'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text('تأكيد', style: TextStyle(color: Colors.red)),
-              ),
-            ],
-          );
-        },
-      ) ??
-      false;
 }

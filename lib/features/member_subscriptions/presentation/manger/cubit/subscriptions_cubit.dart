@@ -346,29 +346,24 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
   ) {
     final now = DateTime.now();
 
-    // ⏳ لم يبدأ بعد
     if (sub.startDate.isAfter(now)) {
       final fullDuration = sub.endDate.difference(sub.startDate).inDays;
 
       return sub.copyWith(
         remainingDays: fullDuration,
-        status: SubscriptionStatus.pending, // أضفها لو مش موجودة
+        status: SubscriptionStatus.pending,
       );
     }
 
-    // ❌ انتهى
     if (sub.endDate.isBefore(now)) {
       return sub.copyWith(remainingDays: 0, status: SubscriptionStatus.expired);
     }
 
-    // ✅ نشط حالياً
     final remaining = sub.endDate.difference(now).inDays;
 
     return sub.copyWith(
       remainingDays: remaining < 0 ? 0 : remaining,
-      status: sub.status == SubscriptionStatus.frozen
-          ? SubscriptionStatus.frozen
-          : SubscriptionStatus.active,
+      status: SubscriptionStatus.active,
     );
   }
 
