@@ -62,8 +62,8 @@ class PrivateCubit extends Cubit<PrivateState> {
     }
 
     if (_statusFilter != 'all') {
-      filtered = filtered.where((paln) {
-        return paln.status == _statusFilter;
+      filtered = filtered.where((private) {
+        return private.status == _statusFilter;
       }).toList();
     }
 
@@ -84,7 +84,7 @@ class PrivateCubit extends Cubit<PrivateState> {
 
     final hasActive = await repo.hasActivePrivatePlan(private.member.id);
     if (hasActive) {
-      emit(AddPrivateError('العضو مشترك بالفعل في Private Private نشط'));
+      emit(AddPrivateError('العضو مشترك بالفعل في Private  نشط'));
       return;
     }
 
@@ -100,11 +100,11 @@ class PrivateCubit extends Cubit<PrivateState> {
             id: '',
             memberId: private.member.id,
             type: private.member.name,
-            paid: private.price,
             plan: 'pt',
             paymentMethod: private.method,
             date: DateTime.now(),
             status: 'income',
+            paid: private.paid,
           ),
         );
         emit(AddPrivateSuccess());
@@ -112,10 +112,25 @@ class PrivateCubit extends Cubit<PrivateState> {
     );
   }
 
-  Future<void> updatePrivate(String id, Map<String, dynamic> data) async {
+  Future<void> takePrivateAttendance(PrivateModel plan) async {
+    if (!plan.isActive) return;
+
     emit(UpdatePrivateLoading());
 
-    final result = await repo.updatePrivate(id, data);
+    final now = DateTime.now();
+
+    final newUsedSessions = plan.usedSessions + 1;
+
+    final isExpiredBySessions = newUsedSessions >= plan.totalSessions;
+
+    final isExpiredByDate = now.isAfter(plan.endDate);
+
+    final newIsActive = !(isExpiredBySessions || isExpiredByDate);
+
+    final result = await repo.updatePrivate(plan.id, {
+      'usedSessions': newUsedSessions,
+      'isActive': newIsActive,
+    });
 
     result.fold(
       (failure) => emit(UpdatePrivateError(failure.message)),

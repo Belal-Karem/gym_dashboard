@@ -46,7 +46,7 @@ class PaymentDataTaple extends StatelessWidget {
                 cells: [
                   TableCellWidget(payment.type),
                   TableCellWidget(payment.plan),
-                  TableCellWidget(payment.paid),
+                  TableCellWidget(payment.paid.toString()),
                   TableCellWidget(
                     DateHelper.formatPaymentDate(payment.date.toString()),
                   ),

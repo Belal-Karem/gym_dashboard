@@ -86,7 +86,7 @@ class _DialogAddPaymentUiState extends State<DialogAddPaymentUi> {
                         final addPayment = PaymentModel(
                           id: '',
                           type: typeController.text,
-                          paid: paidController.text,
+                          paid: double.parse(paidController.text),
                           paymentMethod: paymentMethod.toString(),
                           plan: '_',
                           memberId: '',

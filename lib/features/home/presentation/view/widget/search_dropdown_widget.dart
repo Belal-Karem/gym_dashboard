@@ -73,12 +73,10 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
                         filtered.clear();
                         _removeOverlay();
 
-                        // استدعاء Cubit لتحميل الاشتراك
                         context
                             .read<MemberSubscriptionCubit>()
                             .getMemberSubscriptions(member.id);
 
-                        // فتح Dialog مع BlocBuilder داخله
                         showDialog(
                           context: context,
                           builder: (dialogContext) {

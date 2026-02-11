@@ -101,13 +101,31 @@ class PrivateRepoImpl implements PrivateRepo {
       final snapshot = await firestore
           .collection(kplanCollections)
           .where('memberId', isEqualTo: memberId)
-          .where('private', isEqualTo: 'private')
-          .where('status', isEqualTo: 'نشط')
+          .where('type', isEqualTo: 'private')
+          .where('isActive', isEqualTo: true)
           .get();
 
       return snapshot.docs.isNotEmpty;
-    } catch (e) {
+    } catch (_) {
       return false;
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> updatePrivateAttendance({
+    required String planId,
+    required int usedSessions,
+    required bool isActive,
+  }) async {
+    try {
+      await firestore.collection(kplanCollections).doc(planId).update({
+        'usedSessions': usedSessions,
+        'isActive': isActive,
+      });
+
+      return const Right(unit);
+    } catch (e) {
+      return Left(handleFirebaseException(e));
     }
   }
 }

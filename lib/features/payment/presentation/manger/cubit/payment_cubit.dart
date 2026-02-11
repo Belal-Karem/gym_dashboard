@@ -128,12 +128,11 @@ class PaymentCubit extends Cubit<PaymentState> {
 
     final totalIncomeToday = todayFilteredPayments
         .where((p) => p.status == 'income')
-        .fold<double>(0.0, (sum, p) => sum + double.parse(p.paid));
+        .fold<double>(0.0, (sum, p) => sum + p.paid);
 
     final totalOutcomeToday = todayFilteredPayments
         .where((p) => p.status == 'expense')
-        .fold<double>(0.0, (sum, p) => sum + double.parse(p.paid));
-
+        .fold<double>(0.0, (sum, p) => sum + p.paid);
     emit(
       PaymentLoaded(
         payments: todayFilteredPayments,

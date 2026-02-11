@@ -8,8 +8,8 @@ import 'package:power_gym/features/peivate/presentation/manger/cubit/private_att
 
 //   PrivateAttendanceCubit(this.repo) : super(PrivateAttendanceInitial());
 
-//   Future<void> attend(PrivateModel plan) async {
-//     if (plan.isFinished) {
+//   Future<void> attend(PrivateModel private) async {
+//     if (private.isFinished) {
 //       emit(PrivateAttendanceError('الحصص خلصت'));
 //       return;
 //     }

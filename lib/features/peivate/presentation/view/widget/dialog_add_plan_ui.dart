@@ -50,7 +50,11 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
   @override
   Widget build(BuildContext context) {
     final trainers = context.watch<TrainerCubit>().trainersList;
+    final now = DateTime.now();
 
+    final days = int.tryParse(durationController.text.trim()) ?? 0;
+
+    final endDate = now.add(Duration(days: days));
     return Stack(
       children: [
         Form(
@@ -139,13 +143,16 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
                             id: '',
                             member: widget.member,
                             trainer: selectedTrainer!,
-                            session: sessionController.text,
+                            totalSessions: int.parse(sessionController.text),
                             method: selectedMethod.toString(),
-                            price: priceController.text,
-                            attendance: '',
+                            paid: double.parse(priceController.text),
                             duration: durationController.text,
                             status: 'نشط',
                             private: 'private',
+                            usedSessions: 0,
+                            endDate: endDate,
+                            isActive: true,
+                            startDate: now,
                           );
                           context.read<PrivateCubit>().addPrivate(
                             private,

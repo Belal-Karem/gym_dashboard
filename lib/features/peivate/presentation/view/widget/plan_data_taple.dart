@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/core/helper/format_date_helper.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
@@ -35,7 +36,7 @@ class PlanDataTaple extends StatelessWidget {
               TableHeaderCellWidget('الاسم'),
               TableHeaderCellWidget('المدرب'),
               TableHeaderCellWidget('السعر'),
-              TableHeaderCellWidget('المده'),
+              TableHeaderCellWidget('تاريخ النتهاء'),
               TableHeaderCellWidget('الجلسات'),
               TableHeaderCellWidget('الحضور'),
               TableHeaderCellWidget('الحاله'),
@@ -45,12 +46,12 @@ class PlanDataTaple extends StatelessWidget {
                 cells: [
                   TableCellWidget(private.member.name),
                   TableCellWidget(private.trainer.name),
-                  TableCellWidget(private.price),
-                  TableCellWidget(private.duration),
-                  TableCellWidget(private.session),
+                  TableCellWidget(private.paid.toString()),
                   TableCellWidget(
-                    private.attendance.isEmpty ? '0' : private.attendance,
+                    FormatDateHelper.formatDate(private.endDate.toString()),
                   ),
+                  TableCellWidget(private.totalSessions.toString()),
+                  TableCellWidget(private.usedSessions.toString()),
                   TableCellWidget(
                     private.status,
                     style: private.status == 'نشط'

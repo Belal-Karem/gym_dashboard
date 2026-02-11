@@ -4,7 +4,7 @@ import 'package:power_gym/constants.dart';
 class PaymentModel {
   final String id;
   final String type;
-  final String paid;
+  final double paid;
   final String paymentMethod;
   final String plan;
   final DateTime date;
@@ -46,7 +46,9 @@ class PaymentModel {
           ? (map[kdate] as Timestamp).toDate()
           : DateTime.now(),
       type: map[ktype] ?? '',
-      paid: map[kpaid] ?? '',
+      paid: (map['paid'] is num)
+          ? (map['paid'] as num).toDouble()
+          : double.tryParse(map['paid'].toString()) ?? 0.0,
       paymentMethod: map[kpaymentMethod] ?? '',
       plan: map[kplan] ?? '',
       status: map[kstatus] ?? '',
@@ -59,7 +61,7 @@ class PaymentModel {
     String? type,
     String? paymentDate,
     String? paymentMethod,
-    String? paid,
+    double? paid,
     String? plan,
     DateTime? date,
     String? memberId,

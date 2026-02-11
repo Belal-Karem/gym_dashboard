@@ -75,7 +75,7 @@ class AddMemberController {
           PaymentModel(
             id: '',
             memberId: memberId,
-            paid: selectedSub.price.toString(),
+            paid: selectedSub.price,
             plan: selectedSub.type,
             date: DateTime.now(),
             paymentMethod: paymentMethod,

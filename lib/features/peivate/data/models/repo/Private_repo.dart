@@ -15,4 +15,9 @@ abstract class PrivateRepo {
   Future<Either<Failure, Unit>> deletePrivate(String id);
 
   Future<bool> hasActivePrivatePlan(String memberId);
+  Future<Either<Failure, Unit>> updatePrivateAttendance({
+    required String planId,
+    required int usedSessions,
+    required bool isActive,
+  });
 }
