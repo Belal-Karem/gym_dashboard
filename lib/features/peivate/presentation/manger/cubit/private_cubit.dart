@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/features/payment/data/models/model/payment_model.dart';
 import 'package:power_gym/features/payment/data/models/repo/payment_repo.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
@@ -113,7 +114,7 @@ class PrivateCubit extends Cubit<PrivateState> {
   }
 
   Future<void> takePrivateAttendance(PrivateModel plan) async {
-    if (!plan.isActive) return;
+    if (plan.status != PrivateStatus.active) return;
 
     emit(UpdatePrivateLoading());
 
@@ -125,11 +126,13 @@ class PrivateCubit extends Cubit<PrivateState> {
 
     final isExpiredByDate = now.isAfter(plan.endDate);
 
-    final newIsActive = !(isExpiredBySessions || isExpiredByDate);
+    final newStatus = (isExpiredBySessions || isExpiredByDate)
+        ? PrivateStatus.expired
+        : PrivateStatus.active;
 
     final result = await repo.updatePrivate(plan.id, {
       'usedSessions': newUsedSessions,
-      'isActive': newIsActive,
+      'status': newStatus.name,
     });
 
     result.fold(

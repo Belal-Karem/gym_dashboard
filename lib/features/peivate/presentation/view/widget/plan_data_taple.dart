@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/helper/format_date_helper.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
@@ -53,8 +54,8 @@ class PlanDataTaple extends StatelessWidget {
                   TableCellWidget(private.totalSessions.toString()),
                   TableCellWidget(private.usedSessions.toString()),
                   TableCellWidget(
-                    private.status,
-                    style: private.status == 'نشط'
+                    private.status.arabicNameForPrivate,
+                    style: private.status == PrivateStatus.active
                         ? const TextStyle(
                             color: Colors.green,
                             fontWeight: FontWeight.bold,

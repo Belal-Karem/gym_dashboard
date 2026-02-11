@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
 
@@ -15,22 +16,20 @@ class PrivateModel {
   final String method;
   final double paid;
   final String duration;
-  final String status;
   final String private;
-  final bool isActive;
+  final PrivateStatus status;
 
   PrivateModel({
     required this.totalSessions,
     required this.usedSessions,
     required this.endDate,
-    required this.isActive,
+    required this.status,
     required this.id,
     required this.member,
     required this.trainer,
     required this.method,
     required this.paid,
     required this.duration,
-    required this.status,
     required this.private,
     required this.startDate,
   });
@@ -45,9 +44,9 @@ class PrivateModel {
       'usedSessions': usedSessions,
       'endDate': Timestamp.fromDate(endDate),
       'duration': duration,
-      'status': status,
       'private': private,
-      'isActive': isActive,
+      'status': status.name,
+
       'type': 'private',
       'startDate': Timestamp.fromDate(startDate),
     };
@@ -69,9 +68,11 @@ class PrivateModel {
       method: map['method'] ?? '',
       paid: map['paid'] ?? '',
       duration: map['duration'] ?? '',
-      status: map['status'] ?? 'نشط',
+      status: PrivateStatus.values.firstWhere(
+        (e) => e.name == map['status'],
+        orElse: () => PrivateStatus.active,
+      ),
       private: map['private'] ?? 'private',
-      isActive: map['isActive'] ?? true,
       startDate: (map['startDate'] as Timestamp).toDate(),
     );
   }
@@ -85,10 +86,9 @@ class PrivateModel {
     double? paid,
     String? attendance,
     String? duration,
-    String? status,
+    PrivateStatus? status,
     String? private,
     int? usedSessions,
-    bool? isActive,
   }) {
     return PrivateModel(
       id: id ?? this.id,
@@ -102,7 +102,6 @@ class PrivateModel {
       totalSessions: totalSessions,
       usedSessions: usedSessions ?? this.usedSessions,
       endDate: endDate,
-      isActive: isActive ?? this.isActive,
       startDate: startDate,
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
@@ -147,11 +148,10 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
                             method: selectedMethod.toString(),
                             paid: double.parse(priceController.text),
                             duration: durationController.text,
-                            status: 'نشط',
+                            status: PrivateStatus.active,
                             private: 'private',
                             usedSessions: 0,
                             endDate: endDate,
-                            isActive: true,
                             startDate: now,
                           );
                           context.read<PrivateCubit>().addPrivate(

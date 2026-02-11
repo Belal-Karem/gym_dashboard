@@ -64,3 +64,16 @@ extension SubscriptionStatusX on SubscriptionStatus {
     }
   }
 }
+
+enum PrivateStatus { active, expired }
+
+extension PrivateStatusX on PrivateStatus {
+  String get arabicNameForPrivate {
+    switch (this) {
+      case PrivateStatus.active:
+        return 'نشط';
+      case PrivateStatus.expired:
+        return 'منتهي';
+    }
+  }
+}

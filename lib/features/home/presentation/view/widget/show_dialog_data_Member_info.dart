@@ -11,9 +11,10 @@ import 'package:power_gym/features/home/presentation/view/widget/text_boutton_me
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
+import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 import 'package:power_gym/model/show_dialog_data_member_Info_model.dart';
 
-class ShowDialogDataMemberInfo extends StatelessWidget {
+class ShowDialogDataMemberInfo extends StatefulWidget {
   const ShowDialogDataMemberInfo({
     super.key,
     required this.member,
@@ -21,6 +22,18 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
   });
   final MemberModel member;
   final MemberSubscriptionModel subscription;
+
+  @override
+  State<ShowDialogDataMemberInfo> createState() =>
+      _ShowDialogDataMemberInfoState();
+}
+
+class _ShowDialogDataMemberInfoState extends State<ShowDialogDataMemberInfo> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<PrivateCubit>().loadPrivate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,26 +52,26 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'اسم',
-                  trailing: member.name,
+                  trailing: widget.member.name,
                 ),
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'هاتف',
-                  trailing: member.phone,
+                  trailing: widget.member.phone,
                 ),
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'النوع',
-                  trailing: member.gender,
+                  trailing: widget.member.gender,
                 ),
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'تاريخ البدايه',
                   trailing: FormatDateHelper.formatDate(
-                    subscription.startDate.toString(),
+                    widget.subscription.startDate.toString(),
                   ),
                 ),
               ),
@@ -66,14 +79,14 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'تاريخ النتهاء',
                   trailing: FormatDateHelper.formatDate(
-                    subscription.endDate.toString(),
+                    widget.subscription.endDate.toString(),
                   ),
                 ),
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'الحضور',
-                  trailing: '${subscription.attendance}',
+                  trailing: '${widget.subscription.attendance}',
                 ),
               ),
 
@@ -81,13 +94,13 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'دعوه',
                   trailing:
-                      '${subscription.usedInvitations} / ${subscription.totalInvitations}',
+                      '${widget.subscription.usedInvitations} / ${widget.subscription.totalInvitations}',
                 ),
               ),
               ListTitleMemberInfo(
                 showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
                   title: 'تجميد',
-                  trailing: '${subscription.freeze} أيام',
+                  trailing: '${widget.subscription.freeze} أيام',
                 ),
               ),
 
@@ -100,13 +113,14 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                   context.read<AttendanceCubit>().markPresent(
                     subscription: s.subscription,
                     plan: s.plan,
-                    member: member,
+                    member: widget.member,
                   );
                 },
                 child: BlocBuilder<MemberSubscriptionCubit, MemberSubscriptionState>(
                   builder: (context, state) {
                     final cubit = context.watch<MemberSubscriptionCubit>();
-                    final subscription = cubit.cachedSubscriptions[member.id];
+                    final subscription =
+                        cubit.cachedSubscriptions[widget.member.id];
 
                     if (subscription == null) {
                       return const Text(
@@ -135,19 +149,39 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                     return Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (plan.type == 'pt')
-                          ElevatedBouttonMemberInfo(
-                            text: 'حضور PT',
-                            onPressed: canAttend
-                                ? () {
-                                    context
-                                        .read<MemberSubscriptionCubit>()
-                                        .markAttendance(
-                                          subscription: subscription,
-                                        );
-                                  }
-                                : null,
-                          ),
+                        BlocBuilder<PrivateCubit, PrivateState>(
+                          builder: (context, privateState) {
+                            if (privateState is PrivateLoaded) {
+                              final hasActivePrivate = privateState.private.any(
+                                (plan) =>
+                                    plan.member.id == widget.member.id &&
+                                    plan.status == PrivateStatus.active,
+                              );
+
+                              if (!hasActivePrivate) {
+                                return const SizedBox();
+                              }
+
+                              return ElevatedBouttonMemberInfo(
+                                text: 'حصة Private',
+                                onPressed: () {
+                                  // هنا تنادي takePrivateAttendance
+                                  final plan = privateState.private.firstWhere(
+                                    (plan) =>
+                                        plan.member.id == widget.member.id &&
+                                        plan.status == PrivateStatus.active,
+                                  );
+
+                                  context
+                                      .read<PrivateCubit>()
+                                      .takePrivateAttendance(plan);
+                                },
+                              );
+                            }
+
+                            return const SizedBox();
+                          },
+                        ),
 
                         ElevatedBouttonMemberInfo(
                           text: 'يقبل',
@@ -162,7 +196,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
                                   context.read<AttendanceCubit>().markPresent(
                                     subscription: subscription,
                                     plan: plan,
-                                    member: member,
+                                    member: widget.member,
                                   );
 
                                   result.fold(
