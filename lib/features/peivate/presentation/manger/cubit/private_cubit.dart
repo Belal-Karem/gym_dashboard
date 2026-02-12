@@ -116,14 +116,28 @@ class PrivateCubit extends Cubit<PrivateState> {
   Future<void> takePrivateAttendance(PrivateModel plan) async {
     if (plan.status != PrivateStatus.active) return;
 
-    emit(UpdatePrivateLoading());
-
     final now = DateTime.now();
+
+    /// 🔒 منع التكرار اليومي
+    if (plan.dateIdAttendance != null) {
+      final last = plan.dateIdAttendance!;
+
+      final isSameDay =
+          last.year == now.year &&
+          last.month == now.month &&
+          last.day == now.day;
+
+      if (isSameDay) {
+        emit(UpdatePrivateError('تم تسجيل حضور Private اليوم بالفعل'));
+        return;
+      }
+    }
+
+    emit(UpdatePrivateLoading());
 
     final newUsedSessions = plan.usedSessions + 1;
 
     final isExpiredBySessions = newUsedSessions >= plan.totalSessions;
-
     final isExpiredByDate = now.isAfter(plan.endDate);
 
     final newStatus = (isExpiredBySessions || isExpiredByDate)
@@ -133,6 +147,7 @@ class PrivateCubit extends Cubit<PrivateState> {
     final result = await repo.updatePrivate(plan.id, {
       'usedSessions': newUsedSessions,
       'status': newStatus.name,
+      'dateIdAttendance': now,
     });
 
     result.fold(

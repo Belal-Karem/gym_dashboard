@@ -163,18 +163,60 @@ class _ShowDialogDataMemberInfoState extends State<ShowDialogDataMemberInfo> {
                               }
 
                               return ElevatedBouttonMemberInfo(
-                                text: 'حصة Private',
-                                onPressed: () {
-                                  // هنا تنادي takePrivateAttendance
-                                  final plan = privateState.private.firstWhere(
-                                    (plan) =>
-                                        plan.member.id == widget.member.id &&
-                                        plan.status == PrivateStatus.active,
+                                text: 'حصة Pt',
+                                onPressed: () async {
+                                  final privateCubit = context
+                                      .read<PrivateCubit>();
+                                  final subscriptionCubit = context
+                                      .read<MemberSubscriptionCubit>();
+                                  final attendanceCubit = context
+                                      .read<AttendanceCubit>();
+
+                                  final privatePlan = privateState.private
+                                      .firstWhere(
+                                        (plan) =>
+                                            plan.member.id ==
+                                                widget.member.id &&
+                                            plan.status == PrivateStatus.active,
+                                      );
+
+                                  await privateCubit.takePrivateAttendance(
+                                    privatePlan,
                                   );
 
-                                  context
-                                      .read<PrivateCubit>()
-                                      .takePrivateAttendance(plan);
+                                  final result = await subscriptionCubit
+                                      .markAttendance(
+                                        subscription: subscription,
+                                      );
+
+                                  attendanceCubit.markPresent(
+                                    subscription: subscription,
+                                    plan: plan,
+                                    member: widget.member,
+                                  );
+
+                                  result.fold(
+                                    (error) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text('حدث خطأ: $error'),
+                                        ),
+                                      );
+                                    },
+                                    (_) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'تم تسجيل حضور pt + عادي',
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
                                 },
                               );
                             }

@@ -18,8 +18,10 @@ class PrivateModel {
   final String duration;
   final String private;
   final PrivateStatus status;
+  final DateTime? dateIdAttendance;
 
   PrivateModel({
+    this.dateIdAttendance,
     required this.totalSessions,
     required this.usedSessions,
     required this.endDate,
@@ -46,9 +48,9 @@ class PrivateModel {
       'duration': duration,
       'private': private,
       'status': status.name,
-
       'type': 'private',
       'startDate': Timestamp.fromDate(startDate),
+      'dateIdAttendance': dateIdAttendance,
     };
   }
 
@@ -74,6 +76,9 @@ class PrivateModel {
       ),
       private: map['private'] ?? 'private',
       startDate: (map['startDate'] as Timestamp).toDate(),
+      dateIdAttendance: map['dateIdAttendance'] != null
+          ? (map['dateIdAttendance'] as Timestamp).toDate()
+          : null,
     );
   }
 
