@@ -157,14 +157,9 @@ class PrivateCubit extends Cubit<PrivateState> {
   }
 
   Future<void> deletePrivate(String id) async {
-    emit(DeletePrivateLoading());
-
     final result = await repo.deletePrivate(id);
 
-    result.fold(
-      (failure) => emit(DeletePrivateError(failure.message)),
-      (_) => emit(DeletePrivateSuccess()),
-    );
+    result.fold((failure) => emit(DeletePrivateError(failure.message)), (_) {});
   }
 
   @override
