@@ -5,11 +5,12 @@ import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
 import 'package:power_gym/features/peivate/data/models/private_model/private_model.dart';
+import 'package:power_gym/features/peivate/presentation/view/widget/private_update_dialog.dart';
 
-class PlanDataTaple extends StatelessWidget {
-  const PlanDataTaple({super.key, required this.plan});
+class PrivateDataTaple extends StatelessWidget {
+  const PrivateDataTaple({super.key, required this.private});
 
-  final List<PrivateModel> plan;
+  final List<PrivateModel> private;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +43,14 @@ class PlanDataTaple extends StatelessWidget {
               TableHeaderCellWidget('الحضور'),
               TableHeaderCellWidget('الحاله'),
             ]),
-            ...plan.map(
+            ...private.map(
               (private) => TableHelper.buildDataRow(
+                onTap: (cells) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => PrivateUpdateDialog(privateModel: private),
+                  );
+                },
                 cells: [
                   TableCellWidget(private.member.name),
                   TableCellWidget(private.trainer.name),

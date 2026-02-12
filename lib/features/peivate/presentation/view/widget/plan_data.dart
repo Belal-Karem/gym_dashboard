@@ -15,7 +15,7 @@ class PlanData extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (state is PrivateLoaded) {
           final private = state.private;
-          return PlanDataTaple(plan: private);
+          return PrivateDataTaple(private: private);
         } else if (state is PrivateError) {
           return CustomErrorWidget(errMessage: state.message);
         } else {
