@@ -64,7 +64,7 @@ class PrivateCubit extends Cubit<PrivateState> {
 
     if (_statusFilter != 'all') {
       filtered = filtered.where((private) {
-        return private.status == _statusFilter;
+        return private.status.arabicNameForPrivate == _statusFilter;
       }).toList();
     }
 
