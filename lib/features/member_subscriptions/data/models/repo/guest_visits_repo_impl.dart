@@ -47,7 +47,7 @@ class GuestVisitsRepoImpl implements GuestVisitsRepo {
 
     await docRef.set({
       'id': member.id,
-      'memberId': ':دعوه من ${member.name}',
+      'memberId': 'دعوه من: ${member.name}',
       'subscriptionId': subscription.id,
       'attendanceCount': 0,
       'name': guestName,

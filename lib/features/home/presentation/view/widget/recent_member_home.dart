@@ -73,24 +73,57 @@ class RecentMemberHomeUi extends StatelessWidget {
                 ]),
 
                 ...members.map(
-                  (members) => TableHelper.buildDataRow(
-                    cells: [
-                      TableCellWidget(
-                        members.memberId.isEmpty ? '---' : members.memberId,
-                      ),
-                      TableCellWidget(
-                        members.name.isEmpty ? '---' : members.name,
-                      ),
-                      TableCellWidget(
-                        members.attendanceCount.toString().isEmpty
-                            ? '---'
-                            : members.attendanceCount.toString(),
-                      ),
-                      TableCellWidget(
-                        DateFormat('hh:mm a', 'en_US').format(members.time),
-                      ),
-                    ],
-                  ),
+                  (members) => members.isGuest == false
+                      ? TableHelper.buildDataRow(
+                          cells: [
+                            TableCellWidget(
+                              members.memberId.isEmpty
+                                  ? '---'
+                                  : members.memberId,
+                            ),
+                            TableCellWidget(
+                              members.name.isEmpty ? '---' : members.name,
+                            ),
+                            TableCellWidget(
+                              members.attendanceCount.toString().isEmpty
+                                  ? '---'
+                                  : members.attendanceCount.toString(),
+                            ),
+                            TableCellWidget(
+                              DateFormat(
+                                'hh:mm a',
+                                'en_US',
+                              ).format(members.time),
+                            ),
+                          ],
+                        )
+                      : TableHelper.buildDataRow(
+                          cells: [
+                            TableCellWidget(
+                              members.memberId.isEmpty
+                                  ? '---'
+                                  : members.memberId,
+                              style: TextStyle(color: Colors.amber),
+                            ),
+                            TableCellWidget(
+                              members.name.isEmpty ? '---' : members.name,
+                              style: TextStyle(color: Colors.amber),
+                            ),
+                            TableCellWidget(
+                              members.phone.toString().isEmpty
+                                  ? '---'
+                                  : members.phone.toString(),
+                              style: TextStyle(color: Colors.amber),
+                            ),
+                            TableCellWidget(
+                              DateFormat(
+                                'hh:mm a',
+                                'en_US',
+                              ).format(members.time),
+                              style: TextStyle(color: Colors.amber),
+                            ),
+                          ],
+                        ),
                 ),
               ],
             ),
