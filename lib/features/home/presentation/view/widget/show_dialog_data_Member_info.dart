@@ -380,6 +380,7 @@ class _ShowDialogDataMemberInfoState extends State<ShowDialogDataMemberInfo> {
                                     context: context,
                                     builder: (_) => GuestInvitationDialog(
                                       subscription: subscription,
+                                      member: widget.member,
                                     ),
                                   );
 
@@ -394,6 +395,7 @@ class _ShowDialogDataMemberInfoState extends State<ShowDialogDataMemberInfo> {
                                         subscription: subscription,
                                         guestName: result.name,
                                         guestPhone: result.phone,
+                                        member: widget.member,
                                       );
 
                                   // 3️⃣ عرض Feedback

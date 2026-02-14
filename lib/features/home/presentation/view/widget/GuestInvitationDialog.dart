@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
+import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 
 class GuestInvitationDialog extends StatefulWidget {
   final MemberSubscriptionModel subscription;
+  final MemberModel member;
 
-  const GuestInvitationDialog({super.key, required this.subscription});
+  const GuestInvitationDialog({
+    super.key,
+    required this.subscription,
+    required this.member,
+  });
 
   @override
   State<GuestInvitationDialog> createState() => _GuestInvitationDialogState();
@@ -71,6 +77,7 @@ class _GuestInvitationDialogState extends State<GuestInvitationDialog> {
                         subscription: subscription,
                         guestName: name,
                         guestPhone: phoneController.text.trim(),
+                        member: widget.member,
                       );
 
                   setState(() => isLoading = false);

@@ -7,8 +7,10 @@ class RecentMemberModel {
   final DateTime time;
   final String status;
   final int attendanceCount;
+  final bool isGuest;
 
   RecentMemberModel({
+    required this.isGuest,
     required this.memberId,
     required this.name,
     required this.time,
@@ -25,6 +27,7 @@ class RecentMemberModel {
       time: (json['time'] as Timestamp).toDate(),
       attendanceCount: json['attendanceCount'] as int,
       status: json['status'] as String,
+      isGuest: json['isGuest'] as bool,
     );
   }
 }

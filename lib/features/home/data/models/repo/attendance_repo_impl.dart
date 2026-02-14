@@ -38,6 +38,7 @@ class AttendanceRepoImpl implements AttendanceRepo {
       'name': member.name,
       'phone': member.phone,
       'status': subscription.status.name,
+      'isGuest': false,
       'time': FieldValue.serverTimestamp(),
     });
   }

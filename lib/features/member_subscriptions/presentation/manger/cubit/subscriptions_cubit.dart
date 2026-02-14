@@ -291,6 +291,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
   Future<Either<String, Unit>> useInvitation({
     required MemberSubscriptionModel subscription,
+    required MemberModel member,
     required String guestName,
     String? guestPhone,
   }) async {
@@ -321,6 +322,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
       final now = DateTime.now();
 
+      // 3️⃣ إنشاء guest visit
       final guestVisit = GuestVisitModel(
         id: '',
         hostMemberId: subscription.memberId,
@@ -333,7 +335,20 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
       final visitResult = await guestVisitsRepo.addGuestVisit(guestVisit);
 
-      return visitResult.fold((f) => Left(f.message), (_) => const Right(unit));
+      // تحقق من نجاح حفظ guest visit
+      if (visitResult.isLeft()) {
+        return Left(visitResult.fold((f) => f.message, (_) => ''));
+      }
+
+      // 4️⃣ تسجيل حضور العضو باستخدام markAttendance
+      await guestVisitsRepo.markAttendance(
+        member,
+        updated,
+        guestName,
+        guestPhone,
+      );
+
+      return const Right(unit);
     } catch (e) {
       return Left(e.toString());
     }
