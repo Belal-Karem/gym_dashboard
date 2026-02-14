@@ -121,7 +121,6 @@ class PaymentCubit extends Cubit<PaymentState> {
       }).toList();
     }
 
-    // حساب اليوم بعد تطبيق الفلاتر
     final todayFilteredPayments = filtered.where((p) {
       return p.date.isAfter(start) && p.date.isBefore(end);
     }).toList();
@@ -149,16 +148,12 @@ class PaymentCubit extends Cubit<PaymentState> {
   }
 
   Future<void> addPayment(PaymentModel payment) async {
-    emit(AddPaymentLoading());
-
     final result = await repo.addPayment(payment);
 
-    result.fold((failure) => emit(AddPaymentError(failure.message)), (_) {
-      // أضف الدفع الجديد محليًا مؤقتًا لحساب total فورًا
-      _allPayment = List.from(_allPayment)..add(payment);
-      _applyFilters();
-      emit(AddPaymentSuccess());
-    });
+    result.fold(
+      (failure) => emit(AddPaymentError(failure.message)),
+      (_) => emit(AddPaymentSuccess()),
+    );
   }
 
   @override

@@ -82,7 +82,8 @@ void setupLocator() {
 
   sl.registerLazySingleton<PlansRepo>(() => PlansRepoImpl());
   sl.registerLazySingleton<PaymentRepo>(() => PaymentRepoImpl());
-  sl.registerFactory<PaymentCubit>(
+
+  sl.registerLazySingleton<PaymentCubit>(
     () => PaymentCubit(sl<PaymentRepo>())..loadPayment(),
   );
 

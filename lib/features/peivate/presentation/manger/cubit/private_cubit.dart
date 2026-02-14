@@ -118,7 +118,6 @@ class PrivateCubit extends Cubit<PrivateState> {
 
     final now = DateTime.now();
 
-    /// 🔒 منع التكرار اليومي
     if (plan.dateIdAttendance != null) {
       final last = plan.dateIdAttendance!;
 

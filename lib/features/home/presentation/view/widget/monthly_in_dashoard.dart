@@ -5,31 +5,52 @@ import 'package:power_gym/features/home/presentation/view/widget/signal_like_cha
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_state.dart';
 
-class MonthlyInDashoard extends StatelessWidget {
+class MonthlyInDashoard extends StatefulWidget {
   const MonthlyInDashoard({super.key});
+
+  @override
+  State<MonthlyInDashoard> createState() => _MonthlyInDashoardState();
+}
+
+class _MonthlyInDashoardState extends State<MonthlyInDashoard> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<PaymentCubit>().loadPayment();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PaymentCubit, PaymentState>(
       builder: (context, state) {
-        if (state is PaymentLoading) {
-          return const CircularProgressIndicator();
-        } else if (state is PaymentLoaded) {
-          return MonthlyInDashoardUi(totalToday: state.totalIncomeToday);
-        } else if (state is PaymentError) {
-          return Text(state.message);
-        } else {
-          return const SizedBox();
+        bool isLoading = false;
+        if (state is PaymentLoaded) {
+          return MonthlyInDashoardUi(
+            totalToday: state.totalIncomeToday,
+            isLoading: isLoading,
+          );
         }
+
+        if (state is PaymentLoading) {
+          // return const CircularProgressIndicator();
+          isLoading = true;
+        }
+
+        return const SizedBox();
       },
     );
   }
 }
 
 class MonthlyInDashoardUi extends StatelessWidget {
-  const MonthlyInDashoardUi({super.key, required this.totalToday});
+  const MonthlyInDashoardUi({
+    super.key,
+    required this.totalToday,
+    required this.isLoading,
+  });
 
   final double totalToday;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +61,19 @@ class MonthlyInDashoardUi extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                totalToday.toStringAsFixed(0),
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),
+              isLoading
+                  ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(
+                      totalToday.toStringAsFixed(0),
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
               Text('الإيرادات اليوميا', style: TextStyle(fontSize: 15)),
             ],
           ),
