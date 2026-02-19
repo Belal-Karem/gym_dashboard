@@ -91,6 +91,7 @@ class _MemberDialogState extends State<MemberDialog> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.subscription.status);
     return Dialog(
       backgroundColor: kprimaryColor,
       child: SingleChildScrollView(

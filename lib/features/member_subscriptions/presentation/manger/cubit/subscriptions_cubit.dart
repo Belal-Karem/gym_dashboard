@@ -76,20 +76,6 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     });
   }
 
-  // Future<void> addSubscription(MemberSubscriptionModel model) async {
-  //   final updated = _recalculateSubscription(model);
-
-  //   final result = await repo.addMemberSubscription(updated);
-
-  //   result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
-  //     _cachedSubscriptions[model.memberId] = updated;
-
-  //     emit(MembersSubscriptionLoaded(Map.from(_cachedSubscriptions)));
-
-  //     emit(MemberSubscriptionAddSuccess());
-  //   });
-  // }
-
   Future<void> renewOrExtendSubscription({
     required MemberSubscriptionModel currentSub,
     required SubModel plan,
@@ -175,98 +161,6 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     });
   }
 
-  // Future<void> getMemberSubscriptions(String memberId) async {
-  //   final result = await repo.getSubscriptionsByMember(memberId);
-
-  //   result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (list) {
-  //     if (list.isEmpty) {
-  //       _cachedSubscriptions.remove(memberId);
-  //       _historyCache.remove(memberId);
-  //       _emitCache();
-  //       return;
-  //     }
-
-  //     final recalculated = list.map(_recalculateSubscription).toList()
-  //       ..sort((a, b) => b.endDate.compareTo(a.endDate));
-
-  //     MemberSubscriptionModel? activeSub;
-
-  //     try {
-  //       activeSub = recalculated.firstWhere(
-  //         (s) => s.status == SubscriptionStatus.active,
-  //       );
-  //     } catch (_) {
-  //       activeSub = null;
-  //     }
-
-  //     if (activeSub != null) {
-  //       _cachedSubscriptions[memberId] = activeSub;
-  //     } else {
-  //       _cachedSubscriptions.remove(memberId);
-  //     }
-
-  //     _historyCache[memberId] = recalculated;
-
-  //     checkFrozenSubscription(latest);
-  //     emit(
-  //       MembersSubscriptionLoadedWithHistory(
-  //         active: Map.from(_cachedSubscriptions),
-  //         history: Map.from(_historyCache),
-  //       ),
-  //     );
-  //   });
-  // }
-
-  // Future<void> loadMembersActiveSubscriptions(List<MemberModel> members) async {
-  //   for (final member in members) {
-  //     final response = await repo.getSubscriptionsByMember(member.id);
-
-  //     response.fold((_) {}, (subs) async {
-  //       if (subs.isEmpty) {
-  //         _historyCache.remove(member.id);
-  //         _cachedSubscriptions.remove(member.id);
-  //         return;
-  //       }
-
-  //       final recalculated = subs.map(_recalculateSubscription).toList()
-  //         ..sort((a, b) => b.endDate.compareTo(a.endDate));
-
-  //       _historyCache[member.id] = recalculated;
-
-  //       MemberSubscriptionModel? activeSub;
-
-  //       try {
-  //         activeSub = recalculated.firstWhere(
-  //           (s) => s.status == SubscriptionStatus.active,
-  //         );
-  //       } catch (_) {
-  //         activeSub = null;
-  //       }
-
-  //       if (activeSub != null) {
-  //         _cachedSubscriptions[member.id] = activeSub;
-  //       } else {
-  //         _cachedSubscriptions.remove(member.id);
-  //       }
-
-  //       latest = await checkFrozenSubscription(latest);
-
-  //       if (latest.status != SubscriptionStatus.expired) {
-  //         _cachedSubscriptions[member.id] = latest;
-  //       } else {
-  //         _cachedSubscriptions.remove(member.id);
-  //       }
-  //     });
-  //   }
-
-  //   emit(
-  //     MembersSubscriptionLoadedWithHistory(
-  //       active: Map.from(_cachedSubscriptions),
-  //       history: Map.from(_historyCache),
-  //     ),
-  //   );
-  // }
-
   Future<void> loadMembersActiveSubscriptions(List<MemberModel> members) async {
     for (final member in members) {
       final response = await repo.getSubscriptionsByMember(member.id);
@@ -345,7 +239,6 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
         attendance: newAttendance,
         dateIdAttendance: dateId,
         status: reachedMax ? SubscriptionStatus.expired : subscription.status,
-        // ممكن كمان تصفر أي متغيرات إضافية لو تحبي زي remainingDays
         remainingDays: reachedMax ? 0 : subscription.remainingDays,
       );
 

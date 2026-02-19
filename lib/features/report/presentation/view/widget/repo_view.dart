@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/core/utils/service_locator.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_attendance_repo_impl.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_report_comment_repo_impl.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_summary_repo_impl.dart';
@@ -42,8 +43,9 @@ class RepoView extends StatelessWidget {
           BlocProvider(
             create: (_) => DailyReportCommentCubit(
               DailyReportCommentRepoImpl(FirebaseFirestore.instance),
-            ),
+            )..load(dateId),
           ),
+
           BlocProvider(
             create: (context) =>
                 SubscriptionReportCubit(context.read<SubscriptionReportRepo>())

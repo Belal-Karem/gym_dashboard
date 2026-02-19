@@ -42,7 +42,7 @@ class _CommentAddDialogState extends State<CommentAddDialog> {
             final comment = state.comment;
             final String dateId =
                 comment?.date ??
-                DateFormat('yyyy-MM-dd').format(DateTime.now());
+                DateFormat('yyyy-MM-dd', 'en_US').format(DateTime.now());
 
             if (comment != null && commentController.text.isEmpty) {
               commentController.text = comment.comment;

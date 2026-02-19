@@ -12,7 +12,8 @@ class DailyReportCommentCubit extends Cubit<DailyReportCommentState> {
     loadCurrentDate();
   }
 
-  String get currentDateId => DateFormat('yyyy-MM-dd').format(DateTime.now());
+  String get currentDateId =>
+      DateFormat('yyyy-MM-dd', 'en_US').format(DateTime.now());
 
   Future<void> load(String date) async {
     emit(DailyReportCommentStateLoading());
