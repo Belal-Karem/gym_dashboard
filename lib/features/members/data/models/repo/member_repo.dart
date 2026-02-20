@@ -15,4 +15,6 @@ abstract class MemberRepo {
 
   Future<Either<Failure, Unit>> deleteMember(String id);
   Future<Either<Failure, String>> addMemberAndReturnId(MemberModel member);
+  Future<Either<Failure, Unit>> addOrUpdateNote(String memberId, String note);
+  Future<Either<Failure, Unit>> deleteNote(String memberId);
 }

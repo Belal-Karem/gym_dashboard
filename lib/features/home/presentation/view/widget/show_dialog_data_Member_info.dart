@@ -11,6 +11,7 @@ import 'package:power_gym/features/home/presentation/view/widget/text_boutton_me
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
+import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 import 'package:power_gym/model/show_dialog_data_member_Info_model.dart';
 
@@ -423,6 +424,86 @@ class _ShowDialogDataMemberInfoState extends State<ShowDialogDataMemberInfo> {
                                   );
                                 }
                               : null,
+                        ),
+                        ElevatedBouttonMemberInfo(
+                          text: widget.member.note == null
+                              ? 'تسجيل ملاحظة'
+                              : 'تعديل ملاحظة',
+                          onPressed: () async {
+                            final controller = TextEditingController(
+                              text: widget.member.note ?? '',
+                            );
+
+                            final result = await showDialog<String>(
+                              context: context,
+                              builder: (ctx) {
+                                return AlertDialog(
+                                  title: Text(
+                                    widget.member.note == null
+                                        ? 'إضافة ملاحظة'
+                                        : 'تعديل الملاحظة',
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (widget.member.noteCreatedAt != null)
+                                        Text(
+                                          'تاريخ الحفظ: '
+                                          '${FormatDateHelper.formatDate(widget.member.noteCreatedAt.toString())}',
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
+                                      const SizedBox(height: 10),
+                                      TextField(
+                                        controller: controller,
+                                        maxLines: 3,
+                                        decoration: const InputDecoration(
+                                          hintText: 'اكتب الملاحظة هنا',
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    if (widget.member.note != null)
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(ctx, 'delete'),
+                                        child: const Text(
+                                          'حذف',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(ctx),
+                                      child: const Text('إلغاء'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(
+                                          ctx,
+                                          controller.text.trim(),
+                                        );
+                                      },
+                                      child: const Text('حفظ'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+
+                            if (result == null) return;
+
+                            final cubit = context.read<MembersCubit>();
+
+                            if (result == 'delete') {
+                              await cubit.deleteNote(widget.member.id);
+                            } else {
+                              await cubit.addOrUpdateNote(
+                                widget.member.id,
+                                result,
+                              );
+                            }
+                          },
                         ),
                       ],
                     );

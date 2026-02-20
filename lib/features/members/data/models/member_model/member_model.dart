@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MemberModel {
   final String id;
   final String memberId;
   final String name;
   final String phone;
   final String gender;
-  final String note;
+  final String? note;
+  final DateTime? noteCreatedAt;
   final DateTime affiliationDate;
 
   MemberModel({
@@ -13,7 +16,8 @@ class MemberModel {
     required this.name,
     required this.phone,
     required this.gender,
-    required this.note,
+    this.note,
+    this.noteCreatedAt,
     required this.affiliationDate,
   });
 
@@ -24,6 +28,7 @@ class MemberModel {
       'phone': phone,
       'gender': gender,
       'note': note,
+      'noteCreatedAt': noteCreatedAt,
       'affiliationDate': affiliationDate.toIso8601String(),
     };
   }
@@ -35,7 +40,10 @@ class MemberModel {
       name: map['name'] ?? '',
       phone: map['phone'] ?? '',
       gender: map['gender'] ?? '',
-      note: map['note'] ?? '',
+      note: map['note'],
+      noteCreatedAt: map['noteCreatedAt'] != null
+          ? (map['noteCreatedAt'] as Timestamp).toDate()
+          : null,
       affiliationDate: DateTime.parse(map['affiliationDate']),
     );
   }

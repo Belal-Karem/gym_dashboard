@@ -164,6 +164,18 @@ class MembersCubit extends Cubit<MembersState> {
     });
   }
 
+  Future<void> addOrUpdateNote(String id, String note) async {
+    final result = await repo.addOrUpdateNote(id, note);
+
+    result.fold((failure) => emit(MembersError(failure.message)), (_) {});
+  }
+
+  Future<void> deleteNote(String id) async {
+    final result = await repo.deleteNote(id);
+
+    result.fold((failure) => emit(MembersError(failure.message)), (_) {});
+  }
+
   @override
   Future<void> close() {
     _membersSubscription?.cancel();

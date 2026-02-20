@@ -90,6 +90,36 @@ class MemberRepoImpl implements MemberRepo {
       return Left(handleFirebaseException(e));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> addOrUpdateNote(
+    String memberId,
+    String note,
+  ) async {
+    try {
+      await membersRef.doc(memberId).update({
+        'note': note,
+        'noteCreatedAt': FieldValue.serverTimestamp(),
+      });
+
+      return const Right(unit);
+    } catch (e) {
+      return Left(handleFirebaseException(e));
+    }
+  }
+
+  Future<Either<Failure, Unit>> deleteNote(String memberId) async {
+    try {
+      await membersRef.doc(memberId).update({
+        'note': FieldValue.delete(),
+        'noteCreatedAt': FieldValue.delete(),
+      });
+
+      return const Right(unit);
+    } catch (e) {
+      return Left(handleFirebaseException(e));
+    }
+  }
 }
 
 // class MemberRepoImpl implements MemberRepo {
