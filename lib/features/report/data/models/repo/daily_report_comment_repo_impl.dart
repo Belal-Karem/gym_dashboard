@@ -32,4 +32,16 @@ class DailyReportCommentRepoImpl implements DailyReportCommentRepo {
   Future<void> delete(String date) async {
     await firestore.collection('daily_report_notes').doc(date).delete();
   }
+
+  @override
+  Future<List<DailyReportComment>> getAllComments() async {
+    final snapshot = await firestore
+        .collection('daily_report_notes')
+        .orderBy('date', descending: true)
+        .get();
+
+    return snapshot.docs
+        .map((doc) => DailyReportComment.fromMap(doc.data()))
+        .toList();
+  }
 }

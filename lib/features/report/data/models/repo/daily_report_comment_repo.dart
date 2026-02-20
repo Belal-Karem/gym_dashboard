@@ -4,4 +4,5 @@ abstract class DailyReportCommentRepo {
   Future<DailyReportComment?> getByDate(String date);
   Future<void> upsert(String date, String comment);
   Future<void> delete(String date);
+  Future<List<DailyReportComment>> getAllComments();
 }
