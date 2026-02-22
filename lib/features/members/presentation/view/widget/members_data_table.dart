@@ -78,6 +78,8 @@ class MembersDataTable extends StatelessWidget {
                               isRenewal: false,
                               dateIdForReport: generateDateId(now),
                               freezeEndDate: DateTime.now(),
+                              totalInvitations: 0,
+                              usedInvitations: 0,
                             ),
                       ),
                     );

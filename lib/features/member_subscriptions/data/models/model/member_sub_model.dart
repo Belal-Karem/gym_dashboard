@@ -12,6 +12,8 @@ class MemberSubscriptionModel {
 
   final int remainingDays;
   final int attendance;
+  final int totalInvitations;
+  final int usedInvitations;
   final SubscriptionStatus status;
   final String? dateId;
   final String dateIdForReport;
@@ -33,6 +35,8 @@ class MemberSubscriptionModel {
     this.dateId,
     required this.dateIdForReport,
     required this.freezeEndDate,
+    required this.totalInvitations,
+    required this.usedInvitations,
   });
 
   Map<String, dynamic> toJson() {
@@ -50,6 +54,8 @@ class MemberSubscriptionModel {
       'dateIdAttendance': dateIdAttendance,
       'dateIdForReport': dateIdForReport,
       'freezeEndDate': freezeEndDate.toIso8601String(),
+      'totalInvitations': totalInvitations,
+      'usedInvitations': usedInvitations,
     };
   }
 
@@ -75,6 +81,8 @@ class MemberSubscriptionModel {
       dateIdAttendance: map['dateIdAttendance'] as String?,
       dateIdForReport: map['dateIdForReport'] as String,
       freezeEndDate: DateTime.parse(map['freezeEndDate']),
+      totalInvitations: map['totalInvitations'] ?? 0,
+      usedInvitations: map['usedInvitations'] ?? 0,
     );
   }
   MemberSubscriptionModel copyWith({
@@ -90,6 +98,8 @@ class MemberSubscriptionModel {
     SubscriptionStatus? status,
     String? dateIdForReport,
     DateTime? freezeEndDate,
+    int? totalInvitations,
+    int? usedInvitations,
   }) {
     return MemberSubscriptionModel(
       id: id,
@@ -106,6 +116,8 @@ class MemberSubscriptionModel {
       dateIdAttendance: dateIdAttendance ?? this.dateIdAttendance,
       dateIdForReport: dateIdForReport ?? this.dateIdForReport,
       freezeEndDate: freezeEndDate ?? this.freezeEndDate,
+      usedInvitations: usedInvitations ?? this.usedInvitations,
+      totalInvitations: totalInvitations ?? this.totalInvitations,
     );
   }
 }

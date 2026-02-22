@@ -65,7 +65,9 @@ class MemberActions {
             status: status,
             dateId: dateId,
             dateIdForReport: generateDateId(now),
-            freezeEndDate: DateTime.now(), // تاريخ افتراضي عند الإنشاء
+            freezeEndDate: DateTime.now(),
+            totalInvitations: selectedSub.invitationCount,
+            usedInvitations: 0,
           );
 
           await subscriptionsCubit.addSubscription(memberSub);

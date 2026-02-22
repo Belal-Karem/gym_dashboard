@@ -7,6 +7,7 @@ const ktrainerCollections = 'trainers';
 const kpaymentCollections = 'payment';
 const kmembersubscriptionsCollections = 'member_subscriptions';
 const kplanCollections = 'planAndPackages';
+const kguestvisitsCollections = 'guest_visits';
 
 // ✅ Member Fields
 const kmemberid = 'memberId';

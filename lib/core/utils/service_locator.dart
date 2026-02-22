@@ -7,6 +7,8 @@ import 'package:power_gym/features/home/presentation/manger/cubit/attendance_cub
 import 'package:power_gym/features/home/presentation/manger/cubit/dashboard_cubit.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/get_data_member_cubit.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/recent_member_cubit.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/repo/guest_visits_repo.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/repo/guest_visits_repo_impl.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo_impl.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/plans_repo.dart';
@@ -66,9 +68,16 @@ void setupLocator() {
   sl.registerLazySingleton<MemberSubscriptionsRepo>(
     () => MemberSubscriptionsRepoImpl(),
   );
+
+  sl.registerLazySingleton<GuestVisitsRepo>(
+    () => GuestVisitsRepoImpl(FirebaseFirestore.instance),
+  );
   sl.registerFactory<MemberSubscriptionCubit>(
-    () =>
-        MemberSubscriptionCubit(sl<MemberSubscriptionsRepo>(), sl<PlansRepo>()),
+    () => MemberSubscriptionCubit(
+      sl<MemberSubscriptionsRepo>(),
+      sl<PlansRepo>(),
+      sl<GuestVisitsRepo>(),
+    ),
   );
 
   sl.registerLazySingleton<PlansRepo>(() => PlansRepoImpl());

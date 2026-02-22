@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/utils/date_utils.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/model/guest_visit_model.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
+import 'package:power_gym/features/member_subscriptions/data/models/repo/guest_visits_repo.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/member_subscriptions_repo.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/repo/plans_repo.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
@@ -10,199 +13,15 @@ import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model
 
 part 'subscriptions_state.dart';
 
-//
-// class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
-//   final MemberSubscriptionsRepo repo;
-//   final PlansRepo plansRepo;
-
-//   final Map<String, MemberSubscriptionModel> _cachedSubscriptions = {};
-//   final Map<String, SubModel> _plansCache = {};
-
-//   MemberSubscriptionCubit(this.repo, this.plansRepo)
-//     : super(MemberSubscriptionInitial());
-
-//   void _emitCache() {
-//     emit(MembersSubscriptionLoaded(Map.from(_cachedSubscriptions)));
-//   }
-
-//   Future<void> addSubscription(MemberSubscriptionModel model) async {
-//     final updated = _recalculateSubscription(model);
-
-//     final result = await repo.addMemberSubscription(updated);
-
-//     result.fold(
-//       (f) => emit(MemberSubscriptionFailure(f.message)),
-//       (_) => emit(MemberSubscriptionAddSuccess()),
-//     );
-//   }
-
-//   Future<void> getMemberSubscriptions(String memberId) async {
-//     final result = await repo.getSubscriptionsByMember(memberId);
-
-//     result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (list) {
-//       final valid = list
-//           .map(_recalculateSubscription)
-//           .where(
-//             (s) =>
-//                 s.status == SubscriptionStatus.active ||
-//                 s.status == SubscriptionStatus.frozen,
-//           )
-//           .toList();
-
-//       if (valid.isEmpty) {
-//         _cachedSubscriptions.remove(memberId);
-//       } else {
-//         _cachedSubscriptions[memberId] = valid.first;
-//       }
-
-//       _emitCache();
-//     });
-//   }
-
-//   Future<void> markAttendance({
-//     required MemberSubscriptionModel subscription,
-//   }) async {
-//     final plan = await getPlan(subscription.subscriptionId);
-//     if (plan == null) return;
-
-//     final today = DateUtils.dateOnly(DateTime.now());
-//     final dateId = today.toIso8601String().split('T').first;
-
-//     if (subscription.dateIdAttendance == dateId) {
-//       emit(MemberSubscriptionFailure('تم تسجيل الحضور اليوم بالفعل'));
-//       return;
-//     }
-
-//     if (subscription.attendance >= plan.maxAttendance) {
-//       emit(MemberSubscriptionFailure('تم الوصول للحد الأقصى للحضور'));
-//       return;
-//     }
-
-//     final updated = subscription.copyWith(
-//       attendance: subscription.attendance + 1,
-//       dateIdAttendance: dateId,
-//     );
-
-//     final result = await repo.updateMemberSubscription(updated);
-
-//     result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
-//       _cachedSubscriptions[subscription.memberId] = updated;
-//       _emitCache();
-
-//       emit(
-//         MemberSubscriptionAttendanceSuccess(subscription: updated, plan: plan),
-//       );
-//     });
-//   }
-
-//   Future<void> applyFreeze({
-//     required MemberSubscriptionModel subscription,
-//     required int freezeDays,
-//   }) async {
-//     if (subscription.status != SubscriptionStatus.active) {
-//       emit(MemberSubscriptionFailure('الاشتراك غير نشط'));
-//       return;
-//     }
-
-//     final updated = subscription.copyWith(
-//       endDate: subscription.endDate.add(Duration(days: freezeDays)),
-//       status: SubscriptionStatus.frozen,
-//     );
-
-//     final result = await repo.updateMemberSubscription(updated);
-
-//     result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
-//       _cachedSubscriptions[subscription.memberId] = updated;
-//       _emitCache();
-//     });
-//   }
-
-// Future<void> useInvitation(MemberSubscriptionModel subscription) async {
-//   final updated = subscription.copyWith(
-//     // TODO: invitation logic
-//   );
-
-//   final result = await repo.updateMemberSubscription(updated);
-
-//   result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
-//     _cachedSubscriptions[subscription.memberId] = updated;
-//     _emitCache();
-//   });
-// }
-
-//   Future<void> loadMembersActiveSubscriptions(List<MemberModel> members) async {
-//     for (final member in members) {
-//       final response = await repo.getSubscriptionsByMember(member.id);
-
-//       response.fold((_) {}, (subs) {
-//         final valid = subs
-//             .map(_recalculateSubscription)
-//             .where(
-//               (s) =>
-//                   s.status == SubscriptionStatus.active ||
-//                   s.status == SubscriptionStatus.frozen,
-//             )
-//             .toList();
-
-//         if (valid.isNotEmpty) {
-//           _cachedSubscriptions[member.id] = valid.first;
-//         }
-//       });
-//     }
-
-//     _emitCache();
-//   }
-
-//   SubModel? getPlan(String planId) {
-//     if (_plansCache.containsKey(planId)) {
-//       return _plansCache[planId];
-//     }
-
-//     _loadPlan(planId);
-//     return null;
-//   }
-
-//   Future<void> _loadPlan(String planId) async {
-//     if (_plansCache.containsKey(planId)) return;
-
-//     final result = await plansRepo.getPlanById(planId);
-
-//     result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (plan) {
-//       _plansCache[planId] = plan;
-
-//       emit(MembersSubscriptionLoaded(Map.from(_cachedSubscriptions)));
-//     });
-//   }
-
-//   MemberSubscriptionModel _recalculateSubscription(
-//     MemberSubscriptionModel sub,
-//   ) {
-//     final remaining = sub.endDate.difference(DateTime.now()).inDays;
-
-//     if (remaining <= 0) {
-//       return sub.copyWith(remainingDays: 0, status: SubscriptionStatus.expired);
-//     }
-
-//     return sub.copyWith(
-//       remainingDays: remaining,
-//       status: sub.status == SubscriptionStatus.frozen
-//           ? SubscriptionStatus.frozen
-//           : SubscriptionStatus.active,
-//     );
-//   }
-
-//   Map<String, MemberSubscriptionModel> get cachedSubscriptions =>
-//       _cachedSubscriptions;
-// }
-
 class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
   final MemberSubscriptionsRepo repo;
+  final GuestVisitsRepo guestVisitsRepo;
   final PlansRepo plansRepo;
 
   final Map<String, MemberSubscriptionModel> _cachedSubscriptions = {};
   final Map<String, SubModel> _plansCache = {};
 
-  MemberSubscriptionCubit(this.repo, this.plansRepo)
+  MemberSubscriptionCubit(this.repo, this.plansRepo, this.guestVisitsRepo)
     : super(MemberSubscriptionInitial());
 
   void _emitCache() {
@@ -215,13 +34,10 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     final result = await repo.addMemberSubscription(updated);
 
     result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
-      // ⚡ حدث الـ cache فورًا
       _cachedSubscriptions[model.memberId] = updated;
 
-      // ⚡ emit جديد لتحديث Table
       emit(MembersSubscriptionLoaded(Map.from(_cachedSubscriptions)));
 
-      // ⚡ optional: success للDialog
       emit(MemberSubscriptionAddSuccess());
     });
   }
@@ -247,7 +63,6 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
         isRenewal: true,
       );
     } else {
-      // ⚡ Extend
       updated = currentSub.copyWith(
         endDate: currentSub.endDate.add(Duration(days: plan.durationDays)),
         subscriptionId: plan.id,
@@ -257,17 +72,14 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       );
     }
 
-    // ⚡ حساب remainingDays و status بعد التعديل
     final recalculated = _recalculateSubscription(updated);
 
     final result = await repo.updateMemberSubscription(recalculated);
 
     result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
-      // ⚡ حدث الـ cache بعد نجاح العملية
       _cachedSubscriptions[currentSub.memberId] = recalculated;
       _emitCache();
 
-      // ⚡ success emit للDialog أو أي listener
       emit(MemberSubscriptionAddSuccess());
     });
   }
@@ -311,74 +123,87 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     _emitCache();
   }
 
-  Future<void> markAttendance({
+  Future<Either<String, Unit>> markAttendance({
     required MemberSubscriptionModel subscription,
   }) async {
-    final plan = await getPlan(subscription.subscriptionId);
-    if (plan == null) return;
+    try {
+      final plan = await getPlan(subscription.subscriptionId);
+      if (plan == null) {
+        return Left('خطة الاشتراك غير موجودة');
+      }
 
-    if (subscription.status != SubscriptionStatus.active) {
-      emit(MemberSubscriptionFailure('الاشتراك غير نشط'));
-      return;
-    }
+      if (subscription.status != SubscriptionStatus.active) {
+        return Left('الاشتراك غير نشط');
+      }
 
-    final today = DateUtils.dateOnly(DateTime.now());
-    final dateId = today.toIso8601String().split('T').first;
+      final today = DateUtils.dateOnly(DateTime.now());
+      final dateId = today.toIso8601String().split('T').first;
 
-    if (subscription.dateIdAttendance == dateId) {
-      emit(MemberSubscriptionFailure('تم تسجيل الحضور اليوم بالفعل'));
-      return;
-    }
+      if (subscription.dateIdAttendance == dateId) {
+        return Left('تم تسجيل الحضور اليوم بالفعل');
+      }
 
-    if (subscription.attendance >= plan.maxAttendance) {
-      emit(MemberSubscriptionFailure('تم الوصول للحد الأقصى للحضور'));
-      return;
-    }
+      if (subscription.attendance >= plan.maxAttendance) {
+        return Left('تم الوصول للحد الأقصى للحضور');
+      }
 
-    final updated = subscription.copyWith(
-      attendance: subscription.attendance + 1,
-      dateIdAttendance: dateId,
-    );
+      final updated = subscription.copyWith(
+        attendance: subscription.attendance + 1,
+        dateIdAttendance: dateId,
+      );
 
-    final result = await repo.updateMemberSubscription(updated);
+      final result = await repo.updateMemberSubscription(updated);
 
-    result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
+      if (result.isLeft()) {
+        return Left(result.fold((f) => f.message, (_) => 'حدث خطأ'));
+      }
+
+      // تحديث الـ cache
       _cachedSubscriptions[subscription.memberId] = updated;
       _emitCache();
-      emit(
-        MemberSubscriptionAttendanceSuccess(subscription: updated, plan: plan),
-      );
-    });
+
+      return const Right(unit);
+    } catch (e) {
+      return Left(e.toString());
+    }
   }
 
-  Future<void> applyFreeze({
+  Future<Either<String, Unit>> applyFreeze({
     required MemberSubscriptionModel subscription,
     required int freezeDays,
   }) async {
-    if (subscription.status != SubscriptionStatus.active) {
-      emit(MemberSubscriptionFailure('الاشتراك غير نشط'));
-      return;
-    }
+    try {
+      if (subscription.status != SubscriptionStatus.active) {
+        return Left('الاشتراك غير نشط');
+      }
 
-    // نحدد تاريخ انتهاء الـ freeze
-    final freezeEnd = DateTime.now().add(Duration(days: freezeDays));
+      final freezeEnd = DateTime.now().add(Duration(days: freezeDays));
 
-    final updated = subscription.copyWith(
-      endDate: subscription.endDate.add(Duration(days: freezeDays)),
-      status: SubscriptionStatus.frozen,
-      freezeEndDate: freezeEnd, // ← مهم
-    );
+      final updated = subscription.copyWith(
+        endDate: subscription.endDate.add(Duration(days: freezeDays)),
+        status: SubscriptionStatus.frozen,
+        freezeEndDate: freezeEnd,
+      );
 
-    final result = await repo.updateMemberSubscription(updated);
+      final result = await repo.updateMemberSubscription(updated);
 
-    result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
+      if (result.isLeft()) {
+        return Left(result.fold((f) => f.message, (_) => 'حدث خطأ'));
+      }
+
       _cachedSubscriptions[subscription.memberId] = updated;
       _emitCache();
-    });
+
+      return const Right(unit);
+    } catch (e) {
+      return Left(e.toString());
+    }
   }
 
   Future<void> checkFrozenSubscriptions() async {
-    for (var sub in _cachedSubscriptions.values) {
+    final subsList = _cachedSubscriptions.values.toList();
+
+    for (var sub in subsList) {
       if (sub.status == SubscriptionStatus.frozen &&
           sub.freezeEndDate != null &&
           DateTime.now().isAfter(sub.freezeEndDate!)) {
@@ -419,15 +244,54 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     });
   }
 
-  Future<void> useInvitation(MemberSubscriptionModel subscription) async {
-    final updated = subscription.copyWith();
+  Future<Either<String, Unit>> useInvitation({
+    required MemberSubscriptionModel subscription,
+    required String guestName,
+    String? guestPhone,
+  }) async {
+    try {
+      if (subscription.status != SubscriptionStatus.active) {
+        return Left('الاشتراك غير نشط');
+      }
 
-    final result = await repo.updateMemberSubscription(updated);
+      final remaining =
+          subscription.totalInvitations - subscription.usedInvitations;
 
-    result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
+      if (remaining <= 0) {
+        return Left('لا يوجد دعوات متبقية');
+      }
+
+      final updated = subscription.copyWith(
+        usedInvitations: subscription.usedInvitations + 1,
+      );
+
+      final result = await repo.updateMemberSubscription(updated);
+
+      if (result.isLeft()) {
+        return Left(result.fold((f) => f.message, (_) => '')); // ⚡ هنا
+      }
+
       _cachedSubscriptions[subscription.memberId] = updated;
       _emitCache();
-    });
+
+      final now = DateTime.now();
+
+      final guestVisit = GuestVisitModel(
+        id: '',
+        hostMemberId: subscription.memberId,
+        subscriptionId: subscription.id,
+        guestName: guestName,
+        guestPhone: guestPhone,
+        checkInTime: now,
+        dateId: generateDateId(now),
+      );
+
+      final visitResult = await guestVisitsRepo.addGuestVisit(guestVisit);
+
+      return visitResult.fold((f) => Left(f.message), (_) => const Right(unit));
+    } catch (e) {
+      return Left(e.toString());
+    }
   }
 
   MemberSubscriptionModel _recalculateSubscription(
