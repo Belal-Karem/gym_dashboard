@@ -33,7 +33,6 @@ class InfoCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /// 🏷 Title
                   Text(
                     title,
                     style: const TextStyle(

@@ -22,7 +22,6 @@ class SubscriptionActions extends StatelessWidget {
         final s = state as MemberSubscriptionAttendanceSuccess;
         context.read<AttendanceCubit>().markPresent(
           subscription: s.subscription,
-          plan: s.plan,
           member: member,
         );
       },

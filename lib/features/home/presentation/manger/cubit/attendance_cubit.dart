@@ -14,7 +14,6 @@ class AttendanceCubit extends Cubit<AttendanceState> {
   Future<void> markPresent({
     required MemberSubscriptionModel subscription,
     required MemberModel member,
-    required SubModel plan,
   }) async {
     try {
       await repo.markAttendance(member, subscription);

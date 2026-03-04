@@ -4,6 +4,7 @@ import 'package:power_gym/features/home/presentation/manger/cubit/get_data_membe
 import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
+import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 
 class SearchDropdownWidget extends StatefulWidget {
   const SearchDropdownWidget({super.key});
@@ -12,6 +13,12 @@ class SearchDropdownWidget extends StatefulWidget {
 }
 
 class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<PrivateCubit>().loadPrivate();
+  }
+
   final LayerLink _layerLink = LayerLink();
   final TextEditingController _controller = TextEditingController();
 
