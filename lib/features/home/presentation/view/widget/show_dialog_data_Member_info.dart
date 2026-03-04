@@ -24,6 +24,8 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
       {'اسم': member.name},
       {'هاتف': member.phone},
       {'النوع': member.gender},
+    ];
+    final subscriptionInfo = [
       {
         'تاريخ البداية': FormatDateHelper.formatDate(
           subscription.startDate.toString(),
@@ -53,15 +55,37 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
           child: Column(
             children: [
               Text('معلومات العضو', style: AppStyle.style20W500),
-              const SizedBox(height: 20),
 
-              /// Dynamic Info List
-              ...memberInfo.map(
-                (item) => ListTitleMemberInfo(
-                  showDialogDataMemberInfoModel: ShowDialogDataMemberInfoModel(
-                    title: item.keys.first,
-                    trailing: item.values.first,
-                  ),
+              Card(
+                child: Column(
+                  children: [
+                    ...memberInfo.map(
+                      (item) => ListTitleMemberInfo(
+                        showDialogDataMemberInfoModel:
+                            ShowDialogDataMemberInfoModel(
+                              title: item.keys.first,
+                              trailing: item.values.first,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text('معلومات الشتراك', style: AppStyle.style20W500),
+              Card(
+                child: Column(
+                  children: [
+                    ...subscriptionInfo.map(
+                      (item) => ListTitleMemberInfo(
+                        showDialogDataMemberInfoModel:
+                            ShowDialogDataMemberInfoModel(
+                              title: item.keys.first,
+                              trailing: item.values.first,
+                            ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
