@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/core/widget/info_card.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/all_comments_cubit.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/all_comments_state.dart';
 
@@ -29,15 +30,14 @@ class AllCommentsDialog extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final comment = state.comments[index];
 
-                  return ListTile(
-                    title: Text(comment.comment),
-                    subtitle: Text(comment.date),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () {
-                        context.read<AllCommentsCubit>().delete(comment.date);
-                      },
-                    ),
+                  return InfoCard(
+                    title: comment.comment,
+                    description: '',
+                    date: comment.date,
+                    onDelete: () {
+                      context.read<AllCommentsCubit>().delete(comment.date);
+                    },
+                    leading: const Icon(Icons.comment, color: Colors.green),
                   );
                 },
               );

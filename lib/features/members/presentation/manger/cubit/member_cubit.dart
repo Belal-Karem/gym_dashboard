@@ -176,6 +176,10 @@ class MembersCubit extends Cubit<MembersState> {
     result.fold((failure) => emit(MembersError(failure.message)), (_) {});
   }
 
+  Stream<List<MemberModel>> getMembersWithNotes() {
+    return repo.getMembersWithNotes();
+  }
+
   @override
   Future<void> close() {
     _membersSubscription?.cancel();

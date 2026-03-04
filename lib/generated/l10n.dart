@@ -53,16 +53,6 @@ class S {
   static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
-
-  /// `flutter Localization `
-  String get title {
-    return Intl.message(
-      'flutter Localization ',
-      name: 'title',
-      desc: '',
-      args: [],
-    );
-  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

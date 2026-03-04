@@ -108,6 +108,7 @@ class MemberRepoImpl implements MemberRepo {
     }
   }
 
+  @override
   Future<Either<Failure, Unit>> deleteNote(String memberId) async {
     try {
       await membersRef.doc(memberId).update({
@@ -119,6 +120,15 @@ class MemberRepoImpl implements MemberRepo {
     } catch (e) {
       return Left(handleFirebaseException(e));
     }
+  }
+
+  @override
+  Stream<List<MemberModel>> getMembersWithNotes() {
+    return membersRef.where('note', isNull: false).snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return MemberModel.fromJson(doc.data() as Map<String, dynamic>, doc.id);
+      }).toList();
+    });
   }
 }
 

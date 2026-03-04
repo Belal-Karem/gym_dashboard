@@ -6,6 +6,7 @@ import 'package:power_gym/features/home/presentation/manger/cubit/all_comments_c
 import 'package:power_gym/features/home/presentation/view/widget/all_comments_dialog.dart';
 import 'package:power_gym/features/home/presentation/view/widget/button_shortcuts.dart';
 import 'package:power_gym/features/home/presentation/view/widget/comment_add_dialog.dart';
+import 'package:power_gym/features/home/presentation/view/widget/members_notes_dialog.dart';
 import 'package:power_gym/features/members/presentation/view/widget/dialog_add_member.dart';
 
 class ButtonShortcutsSession extends StatelessWidget {
@@ -26,7 +27,7 @@ class ButtonShortcutsSession extends StatelessWidget {
             );
           },
         ),
-        SizedBox(width: 30),
+        SizedBox(width: 5),
         ButtonShortcuts(
           fontAwesomeIcons: Icons.add_comment_outlined,
           onTap: () {
@@ -38,7 +39,7 @@ class ButtonShortcutsSession extends StatelessWidget {
             );
           },
         ),
-        SizedBox(width: 5),
+        SizedBox(width: 60),
         ButtonShortcuts(
           fontAwesomeIcons: Icons.comment,
           onTap: () {
@@ -50,6 +51,16 @@ class ButtonShortcutsSession extends StatelessWidget {
               ),
             );
           },
+        ),
+        SizedBox(width: 5),
+        ElevatedButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (_) => const MembersNotesDialog(),
+            );
+          },
+          child: const Text('كل الملاحظات'),
         ),
       ],
     );
