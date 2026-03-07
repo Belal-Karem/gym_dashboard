@@ -9,6 +9,7 @@ import 'package:power_gym/features/members/data/models/member_model/member_model
 import 'package:power_gym/features/peivate/data/models/private_model/private_model.dart';
 import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 
+import '../../../../../core/helper/show_message.dart';
 import '../../../../members/presentation/manger/cubit/member_cubit.dart';
 import 'GuestInvitationDialog.dart';
 import 'text_boutton_member_info.dart';
@@ -107,10 +108,7 @@ class MemberActionButtons extends StatelessWidget {
     );
   }
 
-  ElevatedBouttonMemberInfo privateAttendance(
-    BuildContext context,
-    PrivateModel privatePlan,
-  ) {
+  Widget privateAttendance(BuildContext context, PrivateModel privatePlan) {
     return ElevatedBouttonMemberInfo(
       text: 'حصة PT',
       onPressed: () async {
@@ -122,15 +120,15 @@ class MemberActionButtons extends StatelessWidget {
 
         final subscription = subscriptionCubit.cachedSubscriptions[member.id];
 
-        final plan = subscriptionCubit.getPlan(subscription!.subscriptionId);
+        // final plan = subscriptionCubit.getPlan(subscription!.subscriptionId);
 
         final result = await subscriptionCubit.markAttendance(
-          subscription: subscription,
+          subscription: subscription!,
         );
 
         attendanceCubit.markPresent(subscription: subscription, member: member);
 
-        _handleResult(context, result, 'تم تسجيل حضور pt + عادي');
+        handleResult(context, result, 'تم تسجيل حضور pt + عادي');
       },
     );
   }
@@ -155,7 +153,7 @@ class MemberActionButtons extends StatelessWidget {
                 member: member,
               );
 
-              _handleResult(context, result, 'تم تسجيل الحضور بنجاح');
+              handleResult(context, result, 'تم تسجيل الحضور بنجاح');
             }
           : null,
     );
@@ -180,7 +178,7 @@ class MemberActionButtons extends StatelessWidget {
                   .read<MemberSubscriptionCubit>()
                   .applyFreeze(subscription: subscription, freezeDays: days);
 
-              _handleResult(context, result, 'تم تجميد الاشتراك بنجاح');
+              handleResult(context, result, 'تم تجميد الاشتراك بنجاح');
             }
           : null,
     );
@@ -216,7 +214,7 @@ class MemberActionButtons extends StatelessWidget {
                     member: member,
                   );
 
-              _handleResult(context, invitationResult, 'تم تسجيل الدعوة بنجاح');
+              handleResult(context, invitationResult, 'تم تسجيل الدعوة بنجاح');
             }
           : null,
     );
@@ -261,7 +259,7 @@ class MemberActionButtons extends StatelessWidget {
             onPressed: () {
               final input = int.tryParse(controller.text.trim());
               if (input == null || input < 1 || input > maxDays) {
-                _showMessage(ctx, 'من فضلك أدخل قيمة بين 1 و $maxDays');
+                showMessage(ctx, 'من فضلك أدخل قيمة بين 1 و $maxDays');
                 return;
               }
               Navigator.pop(ctx, input);
@@ -298,22 +296,5 @@ class MemberActionButtons extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void _handleResult(
-    BuildContext context,
-    dynamic result,
-    String successMessage,
-  ) {
-    result.fold(
-      (error) => _showMessage(context, 'حدث خطأ: $error'),
-      (_) => _showMessage(context, successMessage),
-    );
-  }
-
-  void _showMessage(BuildContext context, String message) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }
