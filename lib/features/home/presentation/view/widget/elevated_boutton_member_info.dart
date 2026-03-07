@@ -15,7 +15,9 @@ class ElevatedBouttonMemberInfo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xff1D1B20),
+        ),
         onPressed: onPressed,
         child: Text(text, style: TextStyle(color: Colors.white, fontSize: 15)),
       ),

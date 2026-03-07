@@ -24,6 +24,7 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
       {'اسم': member.name},
       {'هاتف': member.phone},
       {'النوع': member.gender},
+      {' الملاحظة': member.note},
     ];
     final subscriptionInfo = [
       {
@@ -51,49 +52,58 @@ class ShowDialogDataMemberInfo extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(15),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Text('معلومات العضو', style: AppStyle.style20W500),
-
-              Card(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    ...memberInfo.map(
-                      (item) => ListTitleMemberInfo(
-                        showDialogDataMemberInfoModel:
-                            ShowDialogDataMemberInfoModel(
-                              title: item.keys.first,
-                              trailing: item.values.first,
+                    Text('معلومات العضو', style: AppStyle.style20W500),
+
+                    Card(
+                      child: Column(
+                        children: [
+                          ...memberInfo.map(
+                            (item) => ListTitleMemberInfo(
+                              showDialogDataMemberInfoModel:
+                                  ShowDialogDataMemberInfoModel(
+                                    title: item.keys.first,
+                                    trailing: item.values.first ?? '',
+                                  ),
                             ),
+                          ),
+                        ],
                       ),
                     ),
+
+                    const SizedBox(height: 20),
+
+                    Text('معلومات الاشتراك', style: AppStyle.style20W500),
+
+                    Card(
+                      child: Column(
+                        children: [
+                          ...subscriptionInfo.map(
+                            (item) => ListTitleMemberInfo(
+                              showDialogDataMemberInfoModel:
+                                  ShowDialogDataMemberInfoModel(
+                                    title: item.keys.first,
+                                    trailing: item.values.first,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
-              Text('معلومات الشتراك', style: AppStyle.style20W500),
-              Card(
-                child: Column(
-                  children: [
-                    ...subscriptionInfo.map(
-                      (item) => ListTitleMemberInfo(
-                        showDialogDataMemberInfoModel:
-                            ShowDialogDataMemberInfoModel(
-                              title: item.keys.first,
-                              trailing: item.values.first,
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            ),
 
-              const SizedBox(height: 20),
-
-              MemberActionButtons(member: member),
-            ],
-          ),
+            MemberActionButtons(member: member),
+          ],
         ),
       ),
     );

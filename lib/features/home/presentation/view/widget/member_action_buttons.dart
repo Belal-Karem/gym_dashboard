@@ -6,6 +6,7 @@ import 'package:power_gym/features/home/presentation/view/widget/elevated_boutto
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
+import 'package:power_gym/features/peivate/data/models/private_model/private_model.dart';
 import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 
 import '../../../../members/presentation/manger/cubit/member_cubit.dart';
@@ -51,12 +52,10 @@ class MemberActionButtons extends StatelessWidget {
             subscription.status == SubscriptionStatus.active &&
             subscription.attendance < subscription.maxAttendance;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        return Wrap(
           children: [
             BlocBuilder<PrivateCubit, PrivateState>(
               builder: (context, privateState) {
-                /// ✅ حالة التحميل
                 if (privateState is PrivateLoading) {
                   return const SizedBox(
                     width: 24,
@@ -65,12 +64,10 @@ class MemberActionButtons extends StatelessWidget {
                   );
                 }
 
-                /// ❌ حالة الخطأ
                 if (privateState is PrivateError) {
-                  return const SizedBox(); // أو Text('حدث خطأ')
+                  return const SizedBox();
                 }
 
-                /// ✅ حالة البيانات جاهزة
                 if (privateState is PrivateLoaded) {
                   final hasActivePrivate = privateState.private.any(
                     (plan) =>
@@ -86,35 +83,7 @@ class MemberActionButtons extends StatelessWidget {
                         plan.status == PrivateStatus.active,
                   );
 
-                  return ElevatedBouttonMemberInfo(
-                    text: 'حصة PT',
-                    onPressed: () async {
-                      final privateCubit = context.read<PrivateCubit>();
-                      final subscriptionCubit = context
-                          .read<MemberSubscriptionCubit>();
-                      final attendanceCubit = context.read<AttendanceCubit>();
-
-                      await privateCubit.takePrivateAttendance(privatePlan);
-
-                      final subscription =
-                          subscriptionCubit.cachedSubscriptions[member.id];
-
-                      final plan = subscriptionCubit.getPlan(
-                        subscription!.subscriptionId,
-                      );
-
-                      final result = await subscriptionCubit.markAttendance(
-                        subscription: subscription,
-                      );
-
-                      attendanceCubit.markPresent(
-                        subscription: subscription,
-                        member: member,
-                      );
-
-                      _handleResult(context, result, 'تم تسجيل حضور pt + عادي');
-                    },
-                  );
+                  return privateAttendance(context, privatePlan);
                 }
 
                 return const SizedBox();
@@ -122,12 +91,11 @@ class MemberActionButtons extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            /// ✅ باقي الأزرار
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
-                _acceptButton(context, subscription, plan, canAttend),
+                _acceptButton(context, subscription, canAttend),
                 _freezeButton(context, subscription, plan),
                 _invitationButton(context, subscription, remainingInvitations),
                 _noteButton(context),
@@ -139,10 +107,37 @@ class MemberActionButtons extends StatelessWidget {
     );
   }
 
+  ElevatedBouttonMemberInfo privateAttendance(
+    BuildContext context,
+    PrivateModel privatePlan,
+  ) {
+    return ElevatedBouttonMemberInfo(
+      text: 'حصة PT',
+      onPressed: () async {
+        final privateCubit = context.read<PrivateCubit>();
+        final subscriptionCubit = context.read<MemberSubscriptionCubit>();
+        final attendanceCubit = context.read<AttendanceCubit>();
+
+        await privateCubit.takePrivateAttendance(privatePlan);
+
+        final subscription = subscriptionCubit.cachedSubscriptions[member.id];
+
+        final plan = subscriptionCubit.getPlan(subscription!.subscriptionId);
+
+        final result = await subscriptionCubit.markAttendance(
+          subscription: subscription,
+        );
+
+        attendanceCubit.markPresent(subscription: subscription, member: member);
+
+        _handleResult(context, result, 'تم تسجيل حضور pt + عادي');
+      },
+    );
+  }
+
   Widget _acceptButton(
     BuildContext context,
     MemberSubscriptionModel subscription,
-    dynamic plan,
     bool canAttend,
   ) {
     return ElevatedBouttonMemberInfo(
@@ -245,8 +240,6 @@ class MemberActionButtons extends StatelessWidget {
       },
     );
   }
-
-  /// ================== HELPERS ==================
 
   Future<int?> _showFreezeDialog(BuildContext context, int maxDays) async {
     final controller = TextEditingController(text: maxDays.toString());

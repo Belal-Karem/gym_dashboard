@@ -77,6 +77,7 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
                       title: Text(member.name),
                       onTap: () {
                         _controller.text = member.name;
+
                         filtered.clear();
                         _removeOverlay();
 

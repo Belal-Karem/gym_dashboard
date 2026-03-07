@@ -14,7 +14,7 @@ class ListTitleMemberInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // width: 350,
+      width: MediaQuery.sizeOf(context).width * 0.4,
       child: ListTile(
         titleTextStyle: TextStyle(fontSize: 20),
         leadingAndTrailingTextStyle:
