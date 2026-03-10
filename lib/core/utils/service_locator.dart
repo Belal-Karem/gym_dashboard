@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:power_gym/features/home/data/models/repo/attendance_repo.dart';
 import 'package:power_gym/features/home/data/models/repo/attendance_repo_impl.dart';
 import 'package:power_gym/features/home/data/models/repo/get_data_member_repo_impl.dart';
+import 'package:power_gym/features/home/data/models/repo/notifications_repo_impl.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/attendance_cubit.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/dashboard_cubit.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/get_data_member_cubit.dart';
@@ -33,45 +34,43 @@ import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cu
 final sl = GetIt.instance;
 
 void setupLocator() {
-  // سجل الـ Repo مرة واحدة فقط
-  sl.registerLazySingleton<MemberRepoImpl>(() => MemberRepoImpl());
-  sl.registerLazySingleton<AttendanceRepo>(
-    () => AttendanceRepoImpl(FirebaseFirestore.instance),
+  final firestore = FirebaseFirestore.instance;
+
+  // ── Infrastructure / shared ───────────────────────────────────────────────
+
+  sl.registerLazySingleton<AttendanceRepo>(() => AttendanceRepoImpl(firestore));
+
+  // ── Notifications ─────────────────────────────────────────────────────────
+  // Registered so HomeViewBody no longer needs to `new` it directly.
+  sl.registerLazySingleton<NotificationsRepoImpl>(
+    () => NotificationsRepoImpl(),
   );
 
-  // سجل Cubit الخاص بالأعضاء
+  // ── Members ───────────────────────────────────────────────────────────────
+  sl.registerLazySingleton<MemberRepoImpl>(() => MemberRepoImpl());
+
   sl.registerFactory<MembersCubit>(
     () => MembersCubit(sl<MemberRepoImpl>())..loadMembers(),
   );
 
-  // سجل Cubit الخاص بالإحصائيات
   sl.registerFactory<MembersCountStatsCubit>(
     () => MembersCountStatsCubit(
       sl<MemberRepoImpl>(),
       sl<MemberSubscriptionsRepo>(),
     )..loadStats(),
   );
-  // Repository
-  sl.registerLazySingleton<SubRepoImpl>(() => SubRepoImpl());
 
-  // Cubit
-  sl.registerFactory<SubCubit>(() => SubCubit(sl<SubRepoImpl>())..loadSub());
-
-  // Repository
-  sl.registerLazySingleton<TrainerRepoImpl>(() => TrainerRepoImpl());
-
-  // Cubit
-  sl.registerFactory<TrainerCubit>(
-    () => TrainerCubit(sl<TrainerRepoImpl>())..loadTrainer(),
-  );
-
+  // ── Member subscriptions ──────────────────────────────────────────────────
   sl.registerLazySingleton<MemberSubscriptionsRepo>(
     () => MemberSubscriptionsRepoImpl(),
   );
 
+  sl.registerLazySingleton<PlansRepo>(() => PlansRepoImpl());
+
   sl.registerLazySingleton<GuestVisitsRepo>(
-    () => GuestVisitsRepoImpl(FirebaseFirestore.instance),
+    () => GuestVisitsRepoImpl(firestore),
   );
+
   sl.registerFactory<MemberSubscriptionCubit>(
     () => MemberSubscriptionCubit(
       sl<MemberSubscriptionsRepo>(),
@@ -80,23 +79,37 @@ void setupLocator() {
     ),
   );
 
-  sl.registerLazySingleton<PlansRepo>(() => PlansRepoImpl());
+  // ── Subscriptions (plan catalogue) ────────────────────────────────────────
+  sl.registerLazySingleton<SubRepoImpl>(() => SubRepoImpl());
+
+  sl.registerFactory<SubCubit>(() => SubCubit(sl<SubRepoImpl>())..loadSub());
+
+  // ── Trainers ──────────────────────────────────────────────────────────────
+  sl.registerLazySingleton<TrainerRepoImpl>(() => TrainerRepoImpl());
+
+  sl.registerFactory<TrainerCubit>(
+    () => TrainerCubit(sl<TrainerRepoImpl>())..loadTrainer(),
+  );
+
+  // ── Payments ──────────────────────────────────────────────────────────────
   sl.registerLazySingleton<PaymentRepo>(() => PaymentRepoImpl());
 
   sl.registerLazySingleton<PaymentCubit>(
     () => PaymentCubit(sl<PaymentRepo>())..loadPayment(),
   );
 
-  sl.registerLazySingleton<PrivateRepoImpl>(
-    () => PrivateRepoImpl(FirebaseFirestore.instance),
-  );
+  // ── Private (PT) plans ────────────────────────────────────────────────────
+  sl.registerLazySingleton<PrivateRepoImpl>(() => PrivateRepoImpl(firestore));
+
   sl.registerFactory<PrivateCubit>(
     () => PrivateCubit(sl<PrivateRepoImpl>(), sl<PaymentRepo>())..loadPrivate(),
   );
 
+  // ── Home / dashboard ──────────────────────────────────────────────────────
   sl.registerLazySingleton<GetDataMemberRepoImpl>(
     () => GetDataMemberRepoImpl(),
   );
+
   sl.registerFactory<GetDataMemberCubit>(
     () => GetDataMemberCubit(sl<GetDataMemberRepoImpl>())..loadData(),
   );
@@ -113,9 +126,11 @@ void setupLocator() {
     () => RecentMemberCubit(sl<AttendanceRepo>())..loadRecent(),
   );
 
+  // ── Daily report comments ─────────────────────────────────────────────────
   sl.registerLazySingleton<DailyReportCommentRepo>(
-    () => DailyReportCommentRepoImpl(FirebaseFirestore.instance),
+    () => DailyReportCommentRepoImpl(firestore),
   );
+
   sl.registerFactory<DailyReportCommentCubit>(
     () => DailyReportCommentCubit(sl<DailyReportCommentRepo>()),
   );

@@ -5,12 +5,13 @@ import 'package:power_gym/features/home/presentation/manger/cubit/home_notificat
 import 'package:power_gym/features/home/presentation/view/widget/custom_drawer.dart';
 import 'package:power_gym/features/home/presentation/view/widget/dashboard.dart';
 
+import '../../../../../core/utils/service_locator.dart';
+
 class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final notificationsRepo = NotificationsRepoImpl();
     return Expanded(
       child: Row(
         children: [
@@ -18,7 +19,8 @@ class HomeViewBody extends StatelessWidget {
           Expanded(
             flex: 3,
             child: BlocProvider(
-              create: (_) => HomeNotificationsCubit(notificationsRepo)..start(),
+              create: (_) =>
+                  HomeNotificationsCubit(sl<NotificationsRepoImpl>())..start(),
               child: const Dashboard(),
             ),
           ),
