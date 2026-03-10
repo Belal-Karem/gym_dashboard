@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/core/widget/custom_error_widget.dart';
+import 'package:power_gym/core/helper/build_error_bar.dart';
 // import 'package:power_gym/features/members/presentation/manger/cubit/member_state.dart';
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_cubit.dart';
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_state.dart';
@@ -22,7 +22,8 @@ class DialogAddSubscriptions extends StatelessWidget {
         } else if (state is AddSubSuccess) {
           Navigator.pop(context);
           Navigator.pop(context);
-          CustomErrorWidget(errMessage: 'تم إضافة العضو الشتراك!');
+          buildErrorBar(context, 'تم إضافة العضو الشتراك!');
+
           context.read<SubCubit>().loadSub();
         } else if (state is AddSubError) {
           Navigator.pop(context);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/core/widget/custom_error_widget.dart';
+import 'package:power_gym/core/helper/build_error_bar.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_state.dart';
 import 'package:power_gym/features/payment/presentation/view/widget/dialog_add_payment_ui.dart';
@@ -21,7 +21,8 @@ class DialogAddPayment extends StatelessWidget {
         } else if (state is AddPaymentSuccess) {
           Navigator.pop(context);
           Navigator.pop(context);
-          CustomErrorWidget(errMessage: 'تم إضافة الدفع !');
+          buildErrorBar(context, 'تم إضافة الدفع !');
+
           context.read<PaymentCubit>().loadPayment();
         } else if (state is AddPaymentError) {
           Navigator.pop(context);

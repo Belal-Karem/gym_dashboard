@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/core/widget/custom_error_widget.dart';
+import 'package:power_gym/core/helper/build_error_bar.dart';
 import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 import 'package:power_gym/features/peivate/presentation/view/widget/plan_data_taple.dart';
 
@@ -17,10 +17,11 @@ class PlanData extends StatelessWidget {
           final private = state.private;
           return PrivateDataTaple(private: private);
         } else if (state is PrivateError) {
-          return CustomErrorWidget(errMessage: state.message);
+          buildErrorBar(context, state.message);
         } else {
           return const SizedBox.shrink();
         }
+        return const SizedBox.shrink();
       },
     );
   }

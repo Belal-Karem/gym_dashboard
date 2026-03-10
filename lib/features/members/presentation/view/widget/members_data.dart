@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:power_gym/core/widget/custom_error_widget.dart';
+import 'package:power_gym/core/helper/build_error_bar.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_state.dart';
@@ -48,7 +48,7 @@ class MembersData extends StatelessWidget {
           }
 
           if (state is MembersError) {
-            return CustomErrorWidget(errMessage: state.message);
+            buildErrorBar(context, state.message);
           }
 
           return const SizedBox.shrink();

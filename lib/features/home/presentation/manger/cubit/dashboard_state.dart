@@ -1,18 +1,18 @@
 part of 'dashboard_cubit.dart';
 
-abstract class DashboardState {}
+abstract class GetTodayAttendanceState {}
 
-class DashboardInitial extends DashboardState {}
+class GetTodayAttendanceInitial extends GetTodayAttendanceState {}
 
-class DashboardLoading extends DashboardState {}
+class GetTodayAttendanceLoading extends GetTodayAttendanceState {}
 
-class DashboardLoaded extends DashboardState {
+class GetTodayAttendanceLoaded extends GetTodayAttendanceState {
   final int todayAttendanceCount;
 
-  DashboardLoaded(this.todayAttendanceCount);
+  GetTodayAttendanceLoaded(this.todayAttendanceCount);
 }
 
-class DashboardError extends DashboardState {
+class GetTodayAttendanceError extends GetTodayAttendanceState {
   final String message;
-  DashboardError(this.message);
+  GetTodayAttendanceError(this.message);
 }

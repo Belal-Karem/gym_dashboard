@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:power_gym/features/home/presentation/manger/cubit/get_data_member_cubit.dart';
 import 'package:power_gym/features/home/presentation/view/widget/show_member_dialog.dart';
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 
 import 'search_dropdown_overlay.dart';
-import 'search_dropdown_widget.dart';
 
 class SearchDropdown extends StatefulWidget {
   const SearchDropdown({super.key});
@@ -23,7 +23,6 @@ class _SearchDropdownState extends State<SearchDropdown> {
 
   List<MemberModel> members = [];
   List<MemberModel> filtered = [];
-  final FocusNode _focusNode = FocusNode();
 
   OverlayEntry? _overlayEntry;
   Timer? _debounce;
@@ -31,11 +30,7 @@ class _SearchDropdownState extends State<SearchDropdown> {
   @override
   void initState() {
     super.initState();
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus) {
-        _removeOverlay();
-      }
-    });
+
     context.read<PrivateCubit>().loadPrivate();
   }
 
@@ -118,13 +113,26 @@ class _SearchDropdownState extends State<SearchDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return SearchDropdownWidget(
-      layerLink: _layerLink,
-      focusNode: _focusNode,
-      controller: _controller,
-      onChanged: _onSearchChanged,
-      onMembersLoaded: (data) {
-        members = data;
+    return BlocBuilder<GetDataMemberCubit, GetDataMemberState>(
+      builder: (context, state) {
+        if (state is GetDataMemberLoaded) {
+          members = state.members;
+        }
+
+        return CompositedTransformTarget(
+          link: _layerLink,
+          child: TextField(
+            controller: _controller,
+            decoration: InputDecoration(
+              labelText: 'بحث',
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onChanged: _onSearchChanged,
+          ),
+        );
       },
     );
   }
@@ -133,7 +141,6 @@ class _SearchDropdownState extends State<SearchDropdown> {
   void dispose() {
     _debounce?.cancel();
     _controller.dispose();
-    _focusNode.dispose();
     _removeOverlay();
     super.dispose();
   }

@@ -114,8 +114,9 @@ void setupLocator() {
     () => GetDataMemberCubit(sl<GetDataMemberRepoImpl>())..loadData(),
   );
 
-  sl.registerFactory<DashboardCubit>(
-    () => DashboardCubit(sl<AttendanceRepo>())..loadDashboard(),
+  sl.registerFactory<GetTodayAttendanceCubit>(
+    () =>
+        GetTodayAttendanceCubit(sl<AttendanceRepo>())..loadGetTodayAttendance(),
   );
 
   sl.registerFactory<AttendanceCubit>(

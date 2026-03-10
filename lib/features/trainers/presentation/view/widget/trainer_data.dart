@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/core/widget/custom_error_widget.dart';
+import 'package:power_gym/core/helper/build_error_bar.dart';
 import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
 import 'package:power_gym/features/trainers/presentation/view/widget/trainer_data_table.dart';
 
@@ -17,10 +17,11 @@ class TrainerData extends StatelessWidget {
           final trainer = state.trainer;
           return TrainerDataTable(trainer: trainer);
         } else if (state is TrainerError) {
-          return CustomErrorWidget(errMessage: state.message);
+          buildErrorBar(context, state.message);
         } else {
           return const SizedBox.shrink();
         }
+        return const SizedBox.shrink();
       },
     );
   }

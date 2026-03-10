@@ -5,22 +5,22 @@ import 'package:power_gym/features/home/data/models/repo/attendance_repo.dart';
 
 part 'dashboard_state.dart';
 
-class DashboardCubit extends Cubit<DashboardState> {
+class GetTodayAttendanceCubit extends Cubit<GetTodayAttendanceState> {
   final AttendanceRepo repo;
   StreamSubscription<int>? _sub;
 
-  DashboardCubit(this.repo) : super(DashboardInitial());
+  GetTodayAttendanceCubit(this.repo) : super(GetTodayAttendanceInitial());
 
-  void loadDashboard() {
-    emit(DashboardLoading());
+  void loadGetTodayAttendance() {
+    emit(GetTodayAttendanceLoading());
 
     _sub?.cancel();
     _sub = repo.getTodayAttendanceCount().listen(
       (count) {
-        emit(DashboardLoaded(count));
+        emit(GetTodayAttendanceLoaded(count));
       },
       onError: (e) {
-        emit(DashboardError(e.toString()));
+        emit(GetTodayAttendanceError(e.toString()));
       },
     );
   }

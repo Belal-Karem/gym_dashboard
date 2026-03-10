@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/custom_dropdown_widget.dart';
-import 'package:power_gym/core/widget/custom_error_widget.dart';
+import 'package:power_gym/core/helper/build_error_bar.dart';
 import 'package:power_gym/core/widget/double_field_row_add_widget.dart';
 import 'package:power_gym/core/widget/elevated_button_to_dialog.dart';
 import 'package:power_gym/core/widget/elevated_button_widget.dart';
@@ -83,8 +83,9 @@ class _DialogAddTrainerUiState extends State<DialogAddTrainerUi> {
                         );
                         context.read<TrainerCubit>().addTrainer(addTainer);
                       } else {
-                        CustomErrorWidget(
-                          errMessage: 'يرجى تصحيح الأخطاء الموجودة في النموذج',
+                        buildErrorBar(
+                          context,
+                          'يرجى تصحيح الأخطاء الموجودة في النموذج',
                         );
                       }
                     },

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/core/widget/custom_error_widget.dart';
+import 'package:power_gym/core/helper/build_error_bar.dart';
 import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
 import 'package:power_gym/features/trainers/presentation/view/widget/dialog_add_trainer_ui.dart';
 
@@ -26,7 +26,7 @@ class DialogAddTrainer extends StatelessWidget {
           context.read<TrainerCubit>().loadTrainer();
         } else if (state is AddTrainerError) {
           Navigator.pop(context);
-          CustomErrorWidget(errMessage: state.message);
+          buildErrorBar(context, state.message);
         }
       },
       child: DialogAddTrainerUi(),

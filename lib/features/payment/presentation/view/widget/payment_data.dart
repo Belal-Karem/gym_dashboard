@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/core/widget/custom_error_widget.dart';
+import 'package:power_gym/core/helper/build_error_bar.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_state.dart';
 import 'package:power_gym/features/payment/presentation/view/widget/payment_data_taple.dart';
@@ -18,10 +18,11 @@ class PaymentData extends StatelessWidget {
           final payment = state.payments;
           return PaymentDataTaple(payment: payment);
         } else if (state is PaymentError) {
-          return CustomErrorWidget(errMessage: state.message);
+          buildErrorBar(context, state.message);
         } else {
           return const SizedBox.shrink();
         }
+        return const SizedBox.shrink();
       },
     );
   }

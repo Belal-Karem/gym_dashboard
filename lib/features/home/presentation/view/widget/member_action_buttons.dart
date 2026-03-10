@@ -9,6 +9,7 @@ import 'package:power_gym/features/members/data/models/member_model/member_model
 import 'package:power_gym/features/peivate/data/models/private_model/private_model.dart';
 import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 
+import '../../../../../core/helper/build_error_bar.dart';
 import '../../../../../core/helper/show_message.dart';
 import '../../../../members/presentation/manger/cubit/member_cubit.dart';
 import 'GuestInvitationDialog.dart';
@@ -259,7 +260,7 @@ class MemberActionButtons extends StatelessWidget {
             onPressed: () {
               final input = int.tryParse(controller.text.trim());
               if (input == null || input < 1 || input > maxDays) {
-                showMessage(ctx, 'من فضلك أدخل قيمة بين 1 و $maxDays');
+                buildErrorBar(context, 'من فضلك أدخل قيمة بين 1 و $maxDays');
                 return;
               }
               Navigator.pop(ctx, input);
