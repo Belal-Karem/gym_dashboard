@@ -96,10 +96,7 @@ class _MembersNotesErrorState extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
 
-  const _MembersNotesErrorState({
-    required this.message,
-    required this.onRetry,
-  });
+  const _MembersNotesErrorState({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -115,10 +112,7 @@ class _MembersNotesErrorState extends StatelessWidget {
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 8),
-          TextButton(
-            onPressed: onRetry,
-            child: const Text('إعادة المحاولة'),
-          ),
+          TextButton(onPressed: onRetry, child: const Text('إعادة المحاولة')),
         ],
       ),
     );

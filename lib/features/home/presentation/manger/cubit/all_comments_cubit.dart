@@ -19,6 +19,6 @@ class AllCommentsCubit extends Cubit<AllCommentsState> {
 
   Future<void> delete(String dateId) async {
     await repo.delete(dateId);
-    load(); // reload بعد الحذف
+    load();
   }
 }

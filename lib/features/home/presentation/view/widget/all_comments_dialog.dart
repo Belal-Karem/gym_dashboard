@@ -24,23 +24,7 @@ class AllCommentsDialog extends StatelessWidget {
                 return const Text("لا يوجد تعليقات");
               }
 
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: state.comments.length,
-                itemBuilder: (context, index) {
-                  final comment = state.comments[index];
-
-                  return InfoCard(
-                    title: comment.comment,
-                    description: '',
-                    date: comment.date,
-                    onDelete: () {
-                      context.read<AllCommentsCubit>().delete(comment.date);
-                    },
-                    leading: const Icon(Icons.comment, color: Colors.green),
-                  );
-                },
-              );
+              return AllCommentsDialogUi(comments: state.comments);
             }
 
             return const SizedBox();
@@ -53,6 +37,33 @@ class AllCommentsDialog extends StatelessWidget {
           child: const Text("إغلاق"),
         ),
       ],
+    );
+  }
+}
+
+class AllCommentsDialogUi extends StatelessWidget {
+  const AllCommentsDialogUi({super.key, required this.comments});
+
+  final List comments;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: comments.length,
+      itemBuilder: (context, index) {
+        final comment = comments[index];
+
+        return InfoCard(
+          title: comment.comment,
+          description: '',
+          date: comment.date,
+          onDelete: () {
+            context.read<AllCommentsCubit>().delete(comment.date);
+          },
+          leading: const Icon(Icons.comment, color: Colors.green),
+        );
+      },
     );
   }
 }
