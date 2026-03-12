@@ -4,6 +4,8 @@ import 'package:power_gym/features/member_subscriptions/data/models/model/member
 import 'package:power_gym/features/member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class GuestInvitationDialog extends StatefulWidget {
   final MemberSubscriptionModel subscription;
   final MemberModel member;
@@ -47,7 +49,7 @@ class _GuestInvitationDialogState extends State<GuestInvitationDialog> {
           ),
           const SizedBox(height: 10),
           if (isLoading)
-            const Center(child: CircularProgressIndicator())
+            const Center(child: AppLoadingWidget())
           else
             Text('عدد الدعوات المتبقية: $remainingInvitations'),
         ],

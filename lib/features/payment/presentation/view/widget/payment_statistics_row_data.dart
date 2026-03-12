@@ -4,6 +4,8 @@ import 'package:power_gym/core/widget/members_statistics_card.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_state.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class PaymentStatisticsRow extends StatelessWidget {
   const PaymentStatisticsRow({super.key});
 
@@ -12,7 +14,7 @@ class PaymentStatisticsRow extends StatelessWidget {
     return BlocBuilder<PaymentCubit, PaymentState>(
       builder: (context, state) {
         if (state is PaymentLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return AppLoadingWidget();
         } else if (state is PaymentLoaded) {
           return PaymentStatisticsRowData(
             todayIncome: state.totalIncomeToday,

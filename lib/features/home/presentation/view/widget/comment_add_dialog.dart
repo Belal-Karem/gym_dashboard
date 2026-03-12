@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:power_gym/features/home/presentation/view/widget/comment_add_dialog_ui.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_report_comment_cubit.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class CommentAddDialog extends StatefulWidget {
   const CommentAddDialog({super.key});
 
@@ -34,7 +36,7 @@ class _CommentAddDialogState extends State<CommentAddDialog> {
           if (state is DailyReportCommentStateLoading) {
             return const SizedBox(
               height: 150,
-              child: Center(child: CircularProgressIndicator()),
+              child: Center(child: AppLoadingWidget()),
             );
           }
 

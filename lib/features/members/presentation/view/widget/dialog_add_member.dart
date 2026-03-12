@@ -4,6 +4,8 @@ import 'package:power_gym/features/members/presentation/manger/cubit/member_cubi
 import 'package:power_gym/features/members/presentation/manger/cubit/member_state.dart';
 import 'package:power_gym/features/members/presentation/view/widget/dialog_add_member_ui.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class DialogAddMember extends StatelessWidget {
   const DialogAddMember({super.key});
 
@@ -15,7 +17,7 @@ class DialogAddMember extends StatelessWidget {
           showDialog(
             context: context,
             barrierDismissible: true,
-            builder: (_) => const Center(child: CircularProgressIndicator()),
+            builder: (_) => const Center(child: AppLoadingWidget()),
           );
         } else if (state is AddMemberSuccess) {
           Navigator.pop(context);

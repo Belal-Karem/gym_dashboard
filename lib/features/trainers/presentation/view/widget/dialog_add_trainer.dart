@@ -4,6 +4,8 @@ import 'package:power_gym/core/helper/build_error_bar.dart';
 import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
 import 'package:power_gym/features/trainers/presentation/view/widget/dialog_add_trainer_ui.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class DialogAddTrainer extends StatelessWidget {
   const DialogAddTrainer({super.key});
 
@@ -15,7 +17,7 @@ class DialogAddTrainer extends StatelessWidget {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) => const Center(child: CircularProgressIndicator()),
+            builder: (_) => const Center(child: AppLoadingWidget()),
           );
         } else if (state is AddTrainerSuccess) {
           Navigator.pop(context);

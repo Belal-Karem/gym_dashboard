@@ -4,6 +4,8 @@ import 'package:power_gym/core/widget/info_card.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/all_comments_cubit.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/all_comments_state.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class AllCommentsDialog extends StatelessWidget {
   const AllCommentsDialog({super.key});
 
@@ -16,7 +18,7 @@ class AllCommentsDialog extends StatelessWidget {
         child: BlocBuilder<AllCommentsCubit, AllCommentsState>(
           builder: (context, state) {
             if (state is AllCommentsLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return AppLoadingWidget();
             }
 
             if (state is AllCommentsLoaded) {

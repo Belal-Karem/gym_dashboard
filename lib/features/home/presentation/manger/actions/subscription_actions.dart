@@ -9,6 +9,8 @@ import 'package:power_gym/features/member_subscriptions/presentation/manger/cubi
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class SubscriptionActions extends StatelessWidget {
   const SubscriptionActions({required this.member});
 
@@ -38,7 +40,7 @@ class SubscriptionActions extends StatelessWidget {
 
         final plan = cubit.getPlan(subscription.subscriptionId);
         if (plan == null) {
-          return const CircularProgressIndicator(strokeWidth: 2);
+          return AppLoadingWidget();
         }
 
         final remainingInvites =

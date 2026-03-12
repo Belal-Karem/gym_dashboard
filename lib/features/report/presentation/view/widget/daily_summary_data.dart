@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_summary_cubit.dart';
 import 'package:power_gym/features/report/presentation/view/widget/daily_summary.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class DailySummaryData extends StatelessWidget {
   const DailySummaryData({super.key});
 
@@ -11,7 +13,7 @@ class DailySummaryData extends StatelessWidget {
     return BlocBuilder<DailySummaryCubit, DailySummaryState>(
       builder: (context, state) {
         if (state is DailySummaryLoading) {
-          return const CircularProgressIndicator();
+          return AppLoadingWidget();
         }
         if (state is DailySummaryLoaded) {
           final s = state.summary;

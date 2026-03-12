@@ -5,6 +5,8 @@ import 'package:power_gym/features/home/presentation/view/widget/signal_like_cha
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_state.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class MonthlyInDashoard extends StatefulWidget {
   const MonthlyInDashoard({super.key});
 
@@ -32,7 +34,6 @@ class _MonthlyInDashoardState extends State<MonthlyInDashoard> {
         }
 
         if (state is PaymentLoading) {
-          // return const CircularProgressIndicator();
           isLoading = true;
         }
 
@@ -62,11 +63,7 @@ class MonthlyInDashoardUi extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               isLoading
-                  ? SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
+                  ? AppLoadingWidget()
                   : Text(
                       totalToday.toStringAsFixed(0),
                       style: TextStyle(

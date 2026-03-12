@@ -5,6 +5,8 @@ import 'package:power_gym/features/members/data/models/member_model/members_coun
 import 'package:power_gym/features/members/presentation/manger/cubit/members_count_stats_cubit.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/members_count_state_state.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class MembersStatisticsRow extends StatelessWidget {
   const MembersStatisticsRow({super.key});
 
@@ -13,7 +15,7 @@ class MembersStatisticsRow extends StatelessWidget {
     return BlocBuilder<MembersCountStatsCubit, MembersCountStatsState>(
       builder: (context, state) {
         if (state is MembersCountStatsLoading) {
-          return CircularProgressIndicator();
+          return AppLoadingWidget();
         } else if (state is MembersCountStatsLoaded) {
           final count = state.count;
           return MembersStatisticsRowData(count: count);

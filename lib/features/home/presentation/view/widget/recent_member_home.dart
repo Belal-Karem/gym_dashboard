@@ -7,6 +7,8 @@ import 'package:power_gym/core/widget/table_cell_widget.dart';
 import 'package:power_gym/features/home/data/models/model/recent_member_model.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/recent_member_cubit.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class RecentMemberHome extends StatelessWidget {
   const RecentMemberHome({super.key});
 
@@ -15,7 +17,7 @@ class RecentMemberHome extends StatelessWidget {
     return BlocBuilder<RecentMemberCubit, RecentMemberState>(
       builder: (context, state) {
         if (state is RecentMemberLoading) {
-          return const CircularProgressIndicator();
+          return AppLoadingWidget();
         }
 
         if (state is RecentMemberLoaded) {

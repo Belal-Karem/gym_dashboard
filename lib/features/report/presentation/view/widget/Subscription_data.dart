@@ -5,6 +5,8 @@ import 'package:power_gym/features/report/presentation/manger/cubit/subscription
 import 'package:power_gym/features/report/presentation/manger/cubit/subscription_report_state.dart';
 import 'package:power_gym/features/report/presentation/view/widget/Subscriptions.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class SubscriptionData extends StatelessWidget {
   const SubscriptionData({super.key, required this.date});
   final DateTime date;
@@ -14,7 +16,7 @@ class SubscriptionData extends StatelessWidget {
     return BlocBuilder<SubscriptionReportCubit, SubscriptionReportState>(
       builder: (context, state) {
         if (state is SubscriptionReportLoading) {
-          return const CircularProgressIndicator();
+          return AppLoadingWidget();
         }
 
         if (state is SubscriptionReportLoaded) {

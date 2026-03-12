@@ -4,6 +4,8 @@ import 'package:power_gym/core/helper/build_error_bar.dart';
 import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
 import 'package:power_gym/features/trainers/presentation/view/widget/trainer_data_table.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class TrainerData extends StatelessWidget {
   const TrainerData({super.key});
 
@@ -12,7 +14,7 @@ class TrainerData extends StatelessWidget {
     return BlocBuilder<TrainerCubit, TrainerState>(
       builder: (context, state) {
         if (state is TrainerLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: AppLoadingWidget());
         } else if (state is TrainerLoaded) {
           final trainer = state.trainer;
           return TrainerDataTable(trainer: trainer);

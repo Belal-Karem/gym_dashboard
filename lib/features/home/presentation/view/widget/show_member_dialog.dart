@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/features/home/presentation/view/widget/show_dialog_data_Member_info.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
 import '../../../../member_subscriptions/presentation/manger/cubit/subscriptions_cubit.dart';
 
 class ShowMemberDialog extends StatelessWidget {
@@ -22,10 +23,7 @@ class ShowMemberDialog extends StatelessWidget {
             final subscription = cubit.cachedSubscriptions[member.id];
 
             if (subscription == null) {
-              return const SizedBox(
-                height: 100,
-                child: Center(child: CircularProgressIndicator()),
-              );
+              return AppLoadingWidget();
             }
 
             return ShowDialogDataMemberInfo(

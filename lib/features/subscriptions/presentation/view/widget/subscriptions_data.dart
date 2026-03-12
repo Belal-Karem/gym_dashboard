@@ -5,6 +5,8 @@ import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_c
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_state.dart';
 import 'package:power_gym/features/subscriptions/presentation/view/widget/subscriptions_data_taple.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class SubscriptionsData extends StatelessWidget {
   const SubscriptionsData({super.key});
 
@@ -13,7 +15,7 @@ class SubscriptionsData extends StatelessWidget {
     return BlocBuilder<SubCubit, SubState>(
       builder: (context, state) {
         if (state is SubLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: AppLoadingWidget());
         } else if (state is SubLoaded) {
           final subs = state.sub;
           return SubscriptionsDataTaple(subs: subs);

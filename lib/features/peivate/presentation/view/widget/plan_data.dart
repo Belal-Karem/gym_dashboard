@@ -4,6 +4,8 @@ import 'package:power_gym/core/helper/build_error_bar.dart';
 import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 import 'package:power_gym/features/peivate/presentation/view/widget/plan_data_taple.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class PlanData extends StatelessWidget {
   const PlanData({super.key});
 
@@ -12,7 +14,7 @@ class PlanData extends StatelessWidget {
     return BlocBuilder<PrivateCubit, PrivateState>(
       builder: (context, state) {
         if (state is PrivateLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return AppLoadingWidget();
         } else if (state is PrivateLoaded) {
           final private = state.private;
           return PrivateDataTaple(private: private);

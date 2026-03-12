@@ -15,6 +15,8 @@ import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cub
 import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
 import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class DialogAddPlanUi extends StatefulWidget {
   const DialogAddPlanUi({super.key, required this.member});
 
@@ -178,7 +180,7 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
             if (state is AddPrivateLoading) {
               return Container(
                 color: Colors.black.withOpacity(0.3),
-                child: const Center(child: CircularProgressIndicator()),
+                child: const Center(child: AppLoadingWidget()),
               );
             }
             return const SizedBox();

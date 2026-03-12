@@ -6,6 +6,8 @@ import 'package:power_gym/features/home/presentation/manger/cubit/home_notificat
 import 'package:power_gym/features/home/presentation/manger/cubit/home_notifications_state.dart';
 import 'package:power_gym/features/home/presentation/view/widget/custom_dot.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class Notifications extends StatelessWidget {
   const Notifications({super.key});
 
@@ -49,7 +51,7 @@ class Notifications extends StatelessWidget {
           BlocBuilder<HomeNotificationsCubit, HomeNotificationsState>(
             builder: (context, state) {
               if (state is HomeNotificationsLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return AppLoadingWidget();
               }
               if (state is HomeNotificationsLoaded) {
                 if (state.notifications.isEmpty) {

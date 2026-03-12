@@ -5,6 +5,8 @@ import 'package:power_gym/core/widget/info_card.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class MembersNotesDialog extends StatefulWidget {
   const MembersNotesDialog({super.key});
 
@@ -40,7 +42,7 @@ class _MembersNotesDialogState extends State<MembersNotesDialog> {
           stream: _notesStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return AppLoadingWidget();
             }
 
             if (snapshot.hasError) {

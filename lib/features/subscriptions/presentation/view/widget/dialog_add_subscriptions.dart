@@ -6,6 +6,8 @@ import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_c
 import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_state.dart';
 import 'package:power_gym/features/subscriptions/presentation/view/widget/dialog_add_subscriptions_ui.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class DialogAddSubscriptions extends StatelessWidget {
   const DialogAddSubscriptions({super.key});
 
@@ -17,7 +19,7 @@ class DialogAddSubscriptions extends StatelessWidget {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) => const Center(child: CircularProgressIndicator()),
+            builder: (_) => const Center(child: AppLoadingWidget()),
           );
         } else if (state is AddSubSuccess) {
           Navigator.pop(context);

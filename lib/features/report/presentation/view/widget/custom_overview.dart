@@ -7,6 +7,8 @@ import 'package:power_gym/features/report/presentation/view/widget/expandable_no
 import 'package:power_gym/features/report/presentation/view/widget/list_title_item.dart';
 import 'package:power_gym/model/list_title_overview_model.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class CustomOverview extends StatelessWidget {
   const CustomOverview({super.key});
 
@@ -39,7 +41,7 @@ class CustomOverview extends StatelessWidget {
         BlocBuilder<DailyReportCommentCubit, DailyReportCommentState>(
           builder: (context, state) {
             if (state is DailyReportCommentStateLoading) {
-              return const CircularProgressIndicator();
+              return AppLoadingWidget();
             }
             if (state is DailyReportCommentStateLoaded) {
               return CommentSesstion(data: state.comment?.comment ?? '_');

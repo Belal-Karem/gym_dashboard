@@ -6,6 +6,8 @@ import 'package:power_gym/features/members/presentation/manger/cubit/member_stat
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/features/members/presentation/view/widget/members_data_table.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class MembersData extends StatelessWidget {
   const MembersData({super.key});
 
@@ -22,7 +24,7 @@ class MembersData extends StatelessWidget {
       child: BlocBuilder<MembersCubit, MembersState>(
         builder: (context, state) {
           if (state is MembersLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return AppLoadingWidget();
           }
 
           if (state is MembersLoaded) {

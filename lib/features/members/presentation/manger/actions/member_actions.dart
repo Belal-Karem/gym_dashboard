@@ -9,6 +9,8 @@ import 'package:power_gym/features/members/data/models/member_model/member_model
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class MemberActions {
   static Future<String?> saveMemberAndSubscription({
     required BuildContext context,
@@ -25,7 +27,7 @@ class MemberActions {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (_) => const Center(child: CircularProgressIndicator()),
+        builder: (_) => const Center(child: AppLoadingWidget()),
       );
 
       final result = await membersCubit.addMemberAndReturnId(member);

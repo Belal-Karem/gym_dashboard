@@ -6,6 +6,8 @@ import 'package:power_gym/features/report/data/models/repo/subscription_report_r
 import 'package:power_gym/features/report/presentation/manger/cubit/subscription_list_cubit.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/subscription_list_state.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class Subscriptions extends StatelessWidget {
   final int newSubsCount;
   final int renewalsCount;
@@ -99,7 +101,7 @@ class SubscriptionDetailsDialog extends StatelessWidget {
         child: BlocBuilder<SubscriptionListCubit, SubscriptionListState>(
           builder: (context, state) {
             if (state is SubscriptionListLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: AppLoadingWidget());
             }
 
             if (state is SubscriptionListLoaded) {

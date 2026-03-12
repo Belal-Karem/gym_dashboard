@@ -11,6 +11,7 @@ import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cub
 
 import '../../../../../core/helper/build_error_bar.dart';
 import '../../../../../core/helper/show_message.dart';
+import '../../../../../core/widget/app_loading_widget.dart';
 import '../../../../members/presentation/manger/cubit/member_cubit.dart';
 import 'GuestInvitationDialog.dart';
 import 'text_boutton_member_info.dart';
@@ -43,7 +44,7 @@ class MemberActionButtons extends StatelessWidget {
           return const SizedBox(
             width: 24,
             height: 24,
-            child: CircularProgressIndicator(strokeWidth: 2),
+            child: AppLoadingWidget(),
           );
         }
 
@@ -59,11 +60,7 @@ class MemberActionButtons extends StatelessWidget {
             BlocBuilder<PrivateCubit, PrivateState>(
               builder: (context, privateState) {
                 if (privateState is PrivateLoading) {
-                  return const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  );
+                  return AppLoadingWidget();
                 }
 
                 if (privateState is PrivateError) {

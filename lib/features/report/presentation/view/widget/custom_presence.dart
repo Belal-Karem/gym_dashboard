@@ -8,6 +8,8 @@ import 'package:power_gym/core/widget/table_cell_widget.dart';
 import 'package:power_gym/features/report/data/models/model/attendance_report_mode.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_attendance_cubit.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class CustomPresence extends StatelessWidget {
   const CustomPresence({super.key});
 
@@ -16,7 +18,7 @@ class CustomPresence extends StatelessWidget {
     return BlocBuilder<DailyAttendanceCubit, DailyAttendanceState>(
       builder: (context, state) {
         if (state is DailyAttendanceLoading) {
-          return const CircularProgressIndicator();
+          return AppLoadingWidget();
         }
         if (state is DailyAttendanceLoaded) {
           final a = state.attendance;

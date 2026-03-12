@@ -5,6 +5,8 @@ import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cub
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_state.dart';
 import 'package:power_gym/features/payment/presentation/view/widget/dialog_add_payment_ui.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class DialogAddPayment extends StatelessWidget {
   const DialogAddPayment({super.key});
 
@@ -16,7 +18,7 @@ class DialogAddPayment extends StatelessWidget {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) => const Center(child: CircularProgressIndicator()),
+            builder: (_) => const Center(child: AppLoadingWidget()),
           );
         } else if (state is AddPaymentSuccess) {
           Navigator.pop(context);

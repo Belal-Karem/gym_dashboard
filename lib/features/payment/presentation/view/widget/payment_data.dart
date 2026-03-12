@@ -5,6 +5,8 @@ import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cub
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_state.dart';
 import 'package:power_gym/features/payment/presentation/view/widget/payment_data_taple.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class PaymentData extends StatelessWidget {
   const PaymentData({super.key});
 
@@ -13,7 +15,7 @@ class PaymentData extends StatelessWidget {
     return BlocBuilder<PaymentCubit, PaymentState>(
       builder: (context, state) {
         if (state is PaymentLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return AppLoadingWidget();
         } else if (state is PaymentLoaded) {
           final payment = state.payments;
           return PaymentDataTaple(payment: payment);

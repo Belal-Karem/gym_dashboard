@@ -5,6 +5,8 @@ import 'package:power_gym/features/subscriptions/presentation/manger/cubit/sub_s
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/helper/build_error_bar.dart';
 
+import '../../../../../core/widget/app_loading_widget.dart';
+
 class SelectSup extends StatelessWidget {
   const SelectSup({super.key});
 
@@ -13,7 +15,7 @@ class SelectSup extends StatelessWidget {
     return BlocBuilder<SubCubit, SubState>(
       builder: (context, state) {
         if (state is SubLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return AppLoadingWidget();
         } else if (state is SubLoaded) {
           final subs = state.sub;
           return SelectSupBody(subs: subs);
