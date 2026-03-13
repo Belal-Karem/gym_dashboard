@@ -102,10 +102,8 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       _cachedSubscriptions[memberId] = latest;
 
       _historyCache[memberId] = recalculated;
-      print(_historyCache);
 
       checkFrozenSubscription(latest);
-
       emit(
         MembersSubscriptionLoadedWithHistory(
           active: Map.from(_cachedSubscriptions),

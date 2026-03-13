@@ -58,9 +58,7 @@ class MembersDataTable extends StatelessWidget {
             ]),
             ...members.map((member) {
               final sub = subscriptions[member.id];
-              print(
-                '============ ${sub?.status.toString() ?? "No subscription"}',
-              );
+
               if (sub == null) {
                 return TableHelper.buildDataRow(
                   onTap: (cells) {

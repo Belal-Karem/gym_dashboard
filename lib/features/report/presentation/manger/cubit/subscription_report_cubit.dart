@@ -31,7 +31,6 @@ class SubscriptionReportCubit extends Cubit<SubscriptionReportState> {
     try {
       final newSubs = await repo.getNewSubscriptions(dateId);
       final renewals = await repo.getRenewedSubscriptions(dateId);
-      print('newSubs: $newSubs');
       emit(
         SubscriptionReportLoaded(newSubscriptions: newSubs, renewals: renewals),
       );

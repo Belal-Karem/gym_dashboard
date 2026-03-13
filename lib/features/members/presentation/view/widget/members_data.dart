@@ -21,7 +21,6 @@ class MembersData extends StatelessWidget {
       },
       child: BlocBuilder<MembersCubit, MembersState>(
         builder: (context, state) {
-          print('SizedBox2');
           if (state is MembersLoading) {
             return const Center(child: CircularProgressIndicator());
           }
