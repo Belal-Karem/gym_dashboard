@@ -4,7 +4,7 @@ import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/utils/app_style.dart';
 import 'package:power_gym/core/widget/custom_dropdown_button_widget.dart';
 import 'package:power_gym/core/widget/custom_search_widget.dart';
-import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
+import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 
 class TopSectionOfPlan extends StatelessWidget {
   const TopSectionOfPlan({super.key});
@@ -26,7 +26,7 @@ class TopSectionOfPlan extends StatelessWidget {
             ),
             child: CustomSearchWidget(
               onChanged: (value) {
-                context.read<PlanCubit>().searchMembers(value);
+                context.read<PrivateCubit>().searchMembers(value);
               },
             ),
           ),
@@ -49,12 +49,12 @@ class _CustomDropdownButtonWidgetSessionState
   @override
   void initState() {
     super.initState();
-    context.read<PlanCubit>().resetFilters();
+    context.read<PrivateCubit>().resetFilters();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlanCubit, PlanState>(
+    return BlocBuilder<PrivateCubit, PrivateState>(
       builder: (context, state) {
         return CustomDropdownButtonWidget(
           items: const [
@@ -63,7 +63,7 @@ class _CustomDropdownButtonWidgetSessionState
             DropdownMenuItem(value: 'متوقف', child: Text('متوقف')),
           ],
           onChanged: (value) {
-            context.read<PlanCubit>().filterByStatus(value!);
+            context.read<PrivateCubit>().filterByStatus(value!);
           },
         );
       },

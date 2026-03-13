@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:power_gym/features/plan_and_packages/presentation/view/widget/plan_data.dart';
-import 'package:power_gym/features/plan_and_packages/presentation/view/widget/top_section_of_plan.dart';
+import 'package:power_gym/features/peivate/presentation/view/widget/plan_data.dart';
+import 'package:power_gym/features/peivate/presentation/view/widget/top_section_of_plan.dart';
 
 class PlanBody extends StatelessWidget {
   const PlanBody({super.key});

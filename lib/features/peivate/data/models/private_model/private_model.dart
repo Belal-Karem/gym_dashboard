@@ -1,7 +1,7 @@
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
 
-class PlanModel {
+class PrivateModel {
   final String id;
   final MemberModel member;
   final TrainerModel trainer;
@@ -13,7 +13,7 @@ class PlanModel {
   final String status;
   final String private;
 
-  PlanModel({
+  PrivateModel({
     required this.id,
     required this.member,
     required this.trainer,
@@ -40,13 +40,13 @@ class PlanModel {
     };
   }
 
-  factory PlanModel.fromJson(
+  factory PrivateModel.fromJson(
     Map<String, dynamic> map,
     String docId,
     MemberModel member,
     TrainerModel trainer,
   ) {
-    return PlanModel(
+    return PrivateModel(
       id: docId,
       member: member,
       trainer: trainer,
@@ -60,7 +60,7 @@ class PlanModel {
     );
   }
 
-  PlanModel copyWith({
+  PrivateModel copyWith({
     String? id,
     MemberModel? member,
     TrainerModel? trainer,
@@ -72,7 +72,7 @@ class PlanModel {
     String? status,
     String? private,
   }) {
-    return PlanModel(
+    return PrivateModel(
       id: id ?? this.id,
       member: member ?? this.member,
       trainer: trainer ?? this.trainer,

@@ -16,7 +16,7 @@ import 'package:power_gym/features/members/presentation/manger/cubit/member_cubi
 import 'package:power_gym/features/members/presentation/view/select_sup_view.dart';
 import 'package:power_gym/features/members/presentation/view/widget/display_data_for_member.dart';
 import 'package:power_gym/features/members/presentation/view/widget/subscriptions_member_list.dart';
-import 'package:power_gym/features/plan_and_packages/presentation/view/widget/dialog_add_plan.dart';
+import 'package:power_gym/features/peivate/presentation/view/widget/dialog_add_plan.dart';
 import 'package:power_gym/features/subscriptions/data/models/sub_model/sub_model.dart';
 
 class MemberDialog extends StatefulWidget {

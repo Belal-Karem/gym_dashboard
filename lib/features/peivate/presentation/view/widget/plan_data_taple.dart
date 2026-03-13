@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
-import 'package:power_gym/features/plan_and_packages/data/models/plan_model/plan_model.dart';
+import 'package:power_gym/features/peivate/data/models/private_model/private_model.dart';
 
 class PlanDataTaple extends StatelessWidget {
   const PlanDataTaple({super.key, required this.plan});
 
-  final List<PlanModel> plan;
+  final List<PrivateModel> plan;
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +41,19 @@ class PlanDataTaple extends StatelessWidget {
               TableHeaderCellWidget('الحاله'),
             ]),
             ...plan.map(
-              (plan) => TableHelper.buildDataRow(
+              (private) => TableHelper.buildDataRow(
                 cells: [
-                  TableCellWidget(plan.member.name),
-                  TableCellWidget(plan.trainer.name),
-                  TableCellWidget(plan.price),
-                  TableCellWidget(plan.duration),
-                  TableCellWidget(plan.session),
+                  TableCellWidget(private.member.name),
+                  TableCellWidget(private.trainer.name),
+                  TableCellWidget(private.price),
+                  TableCellWidget(private.duration),
+                  TableCellWidget(private.session),
                   TableCellWidget(
-                    plan.attendance.isEmpty ? '0' : plan.attendance,
+                    private.attendance.isEmpty ? '0' : private.attendance,
                   ),
                   TableCellWidget(
-                    plan.status,
-                    style: plan.status == 'نشط'
+                    private.status,
+                    style: private.status == 'نشط'
                         ? const TextStyle(
                             color: Colors.green,
                             fontWeight: FontWeight.bold,

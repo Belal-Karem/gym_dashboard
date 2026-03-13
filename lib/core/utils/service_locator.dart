@@ -20,8 +20,8 @@ import 'package:power_gym/features/members/presentation/manger/cubit/members_cou
 import 'package:power_gym/features/payment/data/models/repo/payment_repo.dart';
 import 'package:power_gym/features/payment/data/models/repo/payment_repo_impl.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
-import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo_imlp.dart';
-import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
+import 'package:power_gym/features/peivate/data/models/repo/private_repo_imlp.dart';
+import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_report_comment_repo.dart';
 import 'package:power_gym/features/report/data/models/repo/daily_report_comment_repo_impl.dart';
 import 'package:power_gym/features/report/presentation/manger/cubit/daily_report_comment_cubit.dart';
@@ -86,11 +86,11 @@ void setupLocator() {
     () => PaymentCubit(sl<PaymentRepo>())..loadPayment(),
   );
 
-  sl.registerLazySingleton<PlanRepoImpl>(
-    () => PlanRepoImpl(FirebaseFirestore.instance),
+  sl.registerLazySingleton<PrivateRepoImpl>(
+    () => PrivateRepoImpl(FirebaseFirestore.instance),
   );
-  sl.registerFactory<PlanCubit>(
-    () => PlanCubit(sl<PlanRepoImpl>(), sl<PaymentRepo>())..loadPlan(),
+  sl.registerFactory<PrivateCubit>(
+    () => PrivateCubit(sl<PrivateRepoImpl>(), sl<PaymentRepo>())..loadPrivate(),
   );
 
   sl.registerLazySingleton<GetDataMemberRepoImpl>(

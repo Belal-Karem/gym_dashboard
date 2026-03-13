@@ -4,23 +4,23 @@ import 'package:power_gym/constants.dart';
 import 'package:power_gym/core/errors/failure.dart';
 import 'package:power_gym/core/errors/firebase_error_mapper.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
-import 'package:power_gym/features/plan_and_packages/data/models/plan_model/plan_model.dart';
-import 'package:power_gym/features/plan_and_packages/data/models/repo/plan_repo.dart';
+import 'package:power_gym/features/peivate/data/models/private_model/private_model.dart';
+import 'package:power_gym/features/peivate/data/models/repo/Private_repo.dart';
 import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
 
-class PlanRepoImpl implements PlanRepo {
+class PrivateRepoImpl implements PrivateRepo {
   final FirebaseFirestore firestore;
 
-  PlanRepoImpl(this.firestore);
+  PrivateRepoImpl(this.firestore);
 
   @override
-  Future<Either<Failure, Stream<List<PlanModel>>>> getAllPlan() async {
+  Future<Either<Failure, Stream<List<PrivateModel>>>> getAllPrivate() async {
     try {
       final stream = firestore
           .collection(kplanCollections)
           .snapshots()
           .asyncMap((snapshot) async {
-            List<PlanModel> plans = [];
+            List<PrivateModel> plans = [];
 
             for (var doc in snapshot.docs) {
               final data = doc.data();
@@ -48,7 +48,7 @@ class PlanRepoImpl implements PlanRepo {
                   trainerDoc.id,
                 );
 
-                plans.add(PlanModel.fromJson(data, doc.id, member, trainer));
+                plans.add(PrivateModel.fromJson(data, doc.id, member, trainer));
               }
             }
 
@@ -62,7 +62,7 @@ class PlanRepoImpl implements PlanRepo {
   }
 
   @override
-  Future<Either<Failure, Unit>> addPlan(PlanModel plan) async {
+  Future<Either<Failure, Unit>> addPrivate(PrivateModel plan) async {
     try {
       final docRef = firestore.collection(kplanCollections).doc();
       await docRef.set(plan.toJson());
@@ -73,7 +73,7 @@ class PlanRepoImpl implements PlanRepo {
   }
 
   @override
-  Future<Either<Failure, Unit>> updatePlan(
+  Future<Either<Failure, Unit>> updatePrivate(
     String id,
     Map<String, dynamic> data,
   ) async {
@@ -86,7 +86,7 @@ class PlanRepoImpl implements PlanRepo {
   }
 
   @override
-  Future<Either<Failure, Unit>> deletePlan(String id) async {
+  Future<Either<Failure, Unit>> deletePrivate(String id) async {
     try {
       await firestore.collection(kplanCollections).doc(id).delete();
       return const Right(unit);

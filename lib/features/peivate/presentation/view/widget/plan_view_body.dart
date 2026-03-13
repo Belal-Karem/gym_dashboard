@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:power_gym/features/home/presentation/view/widget/custom_drawer.dart';
-import 'package:power_gym/features/plan_and_packages/presentation/view/widget/plan_body.dart';
+import 'package:power_gym/features/peivate/presentation/view/widget/plan_body.dart';
 
 class PlanViewBody extends StatelessWidget {
   const PlanViewBody({super.key});

@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:power_gym/features/home/presentation/view/home_view.dart';
 import 'package:power_gym/features/members/presentation/view/member_view.dart';
 import 'package:power_gym/features/payment/presentation/view/payment_view.dart';
-import 'package:power_gym/features/plan_and_packages/presentation/view/plan_view.dart';
+import 'package:power_gym/features/peivate/presentation/view/plan_view.dart';
 import 'package:power_gym/features/report/presentation/view/report_view.dart';
 import 'package:power_gym/features/settings/presentation/view/setting_view.dart';
 import 'package:power_gym/features/subscriptions/presentation/view/subscriptions_view.dart';

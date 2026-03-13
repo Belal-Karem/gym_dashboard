@@ -1,4 +1,4 @@
-import 'package:power_gym/features/plan_and_packages/data/models/plan_model/plan_model.dart';
+import 'package:power_gym/features/peivate/data/models/private_model/private_model.dart';
 
 abstract class PrivateAttendanceState {}
 
@@ -9,7 +9,7 @@ class PrivateAttendanceLoading extends PrivateAttendanceState {}
 class PrivateAttendanceEmpty extends PrivateAttendanceState {}
 
 class PrivateAttendanceLoaded extends PrivateAttendanceState {
-  final PlanModel plan;
+  final PrivateModel plan;
   PrivateAttendanceLoaded(this.plan);
 }
 

@@ -9,8 +9,8 @@ import 'package:power_gym/core/widget/field_label_and_input_add_widget.dart';
 import 'package:power_gym/core/widget/text_field_add_widget.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/payment/presentation/manger/cubit/payment_cubit.dart';
-import 'package:power_gym/features/plan_and_packages/data/models/plan_model/plan_model.dart';
-import 'package:power_gym/features/plan_and_packages/presentation/manger/cubit/plan_cubit.dart';
+import 'package:power_gym/features/peivate/data/models/private_model/private_model.dart';
+import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cubit.dart';
 import 'package:power_gym/features/trainers/data/models/trainer_model/trainer_model.dart';
 import 'package:power_gym/features/trainers/presentation/manger/cubit/trainer_cubit.dart';
 
@@ -135,7 +135,7 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
                           final paymentCubit = context.read<PaymentCubit>();
-                          final plan = PlanModel(
+                          final private = PrivateModel(
                             id: '',
                             member: widget.member,
                             trainer: selectedTrainer!,
@@ -147,7 +147,10 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
                             status: 'نشط',
                             private: 'private',
                           );
-                          context.read<PlanCubit>().addPlan(plan, paymentCubit);
+                          context.read<PrivateCubit>().addPrivate(
+                            private,
+                            paymentCubit,
+                          );
                         },
                       ),
                       const SizedBox(width: 10),
@@ -163,9 +166,9 @@ class _DialogAddPlanUiState extends State<DialogAddPlanUi> {
           ),
         ),
 
-        BlocBuilder<PlanCubit, PlanState>(
+        BlocBuilder<PrivateCubit, PrivateState>(
           builder: (context, state) {
-            if (state is AddPlanLoading) {
+            if (state is AddPrivateLoading) {
               return Container(
                 color: Colors.black.withOpacity(0.3),
                 child: const Center(child: CircularProgressIndicator()),
