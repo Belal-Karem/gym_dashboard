@@ -44,6 +44,7 @@ class MemberActions {
           final endDate = startDate.add(
             Duration(days: selectedSub.durationDays),
           );
+
           final remainingDays = endDate.difference(DateTime.now()).inDays;
           final status = remainingDays <= 0
               ? SubscriptionStatus.expired

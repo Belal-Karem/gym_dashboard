@@ -69,10 +69,6 @@ class _MemberDialogState extends State<MemberDialog> {
     nameController.dispose();
     phoneController.dispose();
     super.dispose();
-    starDateForAdd.text = DateFormat(
-      'yyyy-MM-dd',
-      'en_US',
-    ).format(DateTime.now());
   }
 
   void updateMember() {
@@ -216,121 +212,40 @@ class _MemberDialogState extends State<MemberDialog> {
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
-                                openAddPlanDialog(
-                                  context,
-                                  widget.member,
-                                ); // ✅ نبعت العضو
+                                openAddPlanDialog(context, widget.member);
                               },
                               child: const Text(
                                 'اشتراك بريفت',
                                 style: TextStyle(color: Colors.green),
                               ),
                             ),
-                            TextButton(
-                              onPressed: () async {
-                                final cubit = context
-                                    .read<MemberSubscriptionCubit>();
 
-                                // 📅 اختيار تاريخ البداية
-                                final DateTime? startDate =
-                                    await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(2020),
-                                      lastDate: DateTime(2100),
-                                      builder: (context, child) {
-                                        return Theme(
-                                          data: Theme.of(context).copyWith(
-                                            colorScheme: ColorScheme.dark(
-                                              primary: Color(0xff9D1D1E),
-                                              onPrimary: Colors.white,
-                                              surface: Color(0xff1D1E22),
-                                              onSurface: Colors.white,
-                                            ),
-                                          ),
-                                          child: child!,
-                                        );
-                                      },
-                                    );
-
-                                if (startDate == null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'يرجى اختيار تاريخ البداية',
-                                      ),
-                                    ),
-                                  );
-                                  return;
-                                }
-
-                                Navigator.pop(context);
-
-                                final selectedSub =
-                                    await Navigator.push<SubModel>(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => const SelectSupView(),
-                                      ),
-                                    );
-
-                                if (selectedSub == null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('يرجى اختيار مدة الاشتراك'),
-                                    ),
-                                  );
-                                  return;
-                                }
-
-                                final endDate = startDate.add(
-                                  Duration(days: selectedSub.durationDays),
-                                );
-
-                                final now = DateTime.now();
-
-                                if (widget
-                                    .subscription
-                                    .subscriptionId
-                                    .isEmpty) {
-                                  cubit.addSubscription(
-                                    MemberSubscriptionModel(
-                                      id: '',
-                                      memberId: widget.subscription.memberId,
-                                      subscriptionId: selectedSub.id,
-                                      startDate: startDate,
-                                      endDate: endDate,
-                                      actionDate: now,
-                                      isRenewal: true,
-                                      remainingDays: selectedSub.durationDays,
-                                      attendance: 0,
-                                      dateId: generateDateId(now),
-                                      status: SubscriptionStatus.active,
-                                      dateIdForReport: generateDateId(now),
-                                      freezeEndDate: now,
-                                      totalInvitations:
-                                          selectedSub.invitationCount,
-                                      usedInvitations: 0,
-                                      freeze: selectedSub.freezeDays,
-                                      maxAttendance: selectedSub.maxAttendance,
-                                    ),
-                                  );
-                                } else {
-                                  cubit.renewOrExtendSubscription(
-                                    currentSub: widget.subscription,
-                                    plan: selectedSub,
-                                  );
-                                }
-                              },
-
-                              child: Text(
-                                widget.subscription.status ==
-                                        SubscriptionStatus.expired
-                                    ? 'تجديد الاشتراك'
-                                    : 'تمديد الاشتراك',
+                            /// لو الاشتراك منتهي → تجديد
+                            if (widget.subscription.status ==
+                                SubscriptionStatus.expired)
+                              TextButton(
+                                onPressed: () => _handleRenew(context),
+                                child: const Text('تجديد الاشتراك'),
                               ),
-                            ),
 
+                            /// لو الاشتراك شغال → تمديد
+                            if (widget.subscription.status ==
+                                SubscriptionStatus.active)
+                              TextButton(
+                                onPressed: () => _handleExtend(context),
+                                child: const Text('تمديد الاشتراك'),
+                              ),
+
+                            /// زرار اشتراك جديد (يظهر في كل الحالات)
+                            if (widget.subscription.status !=
+                                SubscriptionStatus.expired)
+                              TextButton(
+                                onPressed: () =>
+                                    _handleNewSubscription(context),
+                                child: const Text('إضافة اشتراك جديد'),
+                              ),
+
+                            const Spacer(),
                             TextButton(
                               onPressed: () async {
                                 final confirm = await showConfirmDialog(
@@ -371,6 +286,106 @@ class _MemberDialogState extends State<MemberDialog> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _handleNewSubscription(BuildContext context) async {
+    final cubit = context.read<MemberSubscriptionCubit>();
+
+    DateTime minStartDate = DateTime.now();
+
+    if (widget.subscription.status == SubscriptionStatus.active) {
+      minStartDate = widget.subscription.endDate;
+    }
+
+    final DateTime? startDate = await showDatePicker(
+      context: context,
+      initialDate: minStartDate,
+      firstDate: minStartDate, // 👈 هنا المهم
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Color(0xff9D1D1E),
+              onPrimary: Colors.white,
+              surface: Color(0xff1D1E22),
+              onSurface: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (startDate == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('يرجى اختيار تاريخ البداية')),
+      );
+      return;
+    }
+
+    final selectedSub = await Navigator.push<SubModel>(
+      context,
+      MaterialPageRoute(builder: (_) => const SelectSupView()),
+    );
+
+    if (selectedSub == null) return;
+
+    final now = DateTime.now();
+
+    cubit.addSubscription(
+      MemberSubscriptionModel(
+        id: '',
+        memberId: widget.subscription.memberId,
+        subscriptionId: selectedSub.id,
+        startDate: startDate, // الكيوبت هيعدلها لو فيه Active
+        endDate: startDate.add(Duration(days: selectedSub.durationDays)),
+        actionDate: now,
+        isRenewal: false, // 👈 مهم جداً
+        remainingDays: selectedSub.durationDays,
+        attendance: 0,
+        dateId: generateDateId(now),
+        status: SubscriptionStatus.active,
+        dateIdForReport: generateDateId(now),
+        freezeEndDate: now,
+        totalInvitations: selectedSub.invitationCount,
+        usedInvitations: 0,
+        freeze: selectedSub.freezeDays,
+        maxAttendance: selectedSub.maxAttendance,
+      ),
+    );
+  }
+
+  Future<void> _handleExtend(BuildContext context) async {
+    final cubit = context.read<MemberSubscriptionCubit>();
+
+    final selectedSub = await Navigator.push<SubModel>(
+      context,
+      MaterialPageRoute(builder: (_) => const SelectSupView()),
+    );
+
+    if (selectedSub == null) return;
+
+    cubit.renewOrExtendSubscription(
+      currentSub: widget.subscription,
+      plan: selectedSub,
+    );
+  }
+
+  Future<void> _handleRenew(BuildContext context) async {
+    final cubit = context.read<MemberSubscriptionCubit>();
+
+    final selectedSub = await Navigator.push<SubModel>(
+      context,
+      MaterialPageRoute(builder: (_) => const SelectSupView()),
+    );
+
+    if (selectedSub == null) return;
+
+    cubit.renewOrExtendSubscription(
+      currentSub: widget.subscription,
+      plan: selectedSub,
     );
   }
 }

@@ -30,18 +30,65 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
   }
 
   Future<void> addSubscription(MemberSubscriptionModel model) async {
-    final updated = _recalculateSubscription(model);
+    final memberId = model.memberId;
+
+    final response = await repo.getSubscriptionsByMember(memberId);
+
+    DateTime startDate = model.startDate;
+    DateTime endDate = model.endDate;
+
+    await response.fold((_) async {}, (subs) async {
+      if (subs.isNotEmpty) {
+        final recalculated = subs.map(_recalculateSubscription).toList()
+          ..sort((a, b) => b.endDate.compareTo(a.endDate));
+
+        MemberSubscriptionModel? activeSub;
+
+        try {
+          activeSub = recalculated.firstWhere(
+            (s) => s.status == SubscriptionStatus.active,
+          );
+        } catch (_) {
+          activeSub = null;
+        }
+
+        if (activeSub != null) {
+          final duration = model.endDate.difference(model.startDate);
+
+          // لو اختار يوم قبل نهاية القديم → نعدله
+          if (startDate.isBefore(activeSub.endDate)) {
+            startDate = activeSub.endDate;
+          }
+
+          endDate = startDate.add(duration);
+        }
+      }
+    });
+
+    final newModel = model.copyWith(startDate: startDate, endDate: endDate);
+
+    final updated = _recalculateSubscription(newModel);
 
     final result = await repo.addMemberSubscription(updated);
 
     result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
-      _cachedSubscriptions[model.memberId] = updated;
-
-      emit(MembersSubscriptionLoaded(Map.from(_cachedSubscriptions)));
-
       emit(MemberSubscriptionAddSuccess());
     });
   }
+
+  // Future<void> addSubscription(MemberSubscriptionModel model) async {
+  //   final updated = _recalculateSubscription(model);
+
+  //   final result = await repo.addMemberSubscription(updated);
+
+  //   result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (_) {
+  //     _cachedSubscriptions[model.memberId] = updated;
+
+  //     emit(MembersSubscriptionLoaded(Map.from(_cachedSubscriptions)));
+
+  //     emit(MemberSubscriptionAddSuccess());
+  //   });
+  // }
 
   Future<void> renewOrExtendSubscription({
     required MemberSubscriptionModel currentSub,
@@ -87,7 +134,9 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
   Future<void> getMemberSubscriptions(String memberId) async {
     final result = await repo.getSubscriptionsByMember(memberId);
 
-    result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (list) {
+    result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (
+      list,
+    ) async {
       if (list.isEmpty) {
         _cachedSubscriptions.remove(memberId);
         _historyCache.remove(memberId);
@@ -98,12 +147,25 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       final recalculated = list.map(_recalculateSubscription).toList()
         ..sort((a, b) => b.endDate.compareTo(a.endDate));
 
-      final latest = recalculated.first;
-      _cachedSubscriptions[memberId] = latest;
+      MemberSubscriptionModel? activeSub;
+
+      try {
+        activeSub = recalculated.firstWhere(
+          (s) => s.status == SubscriptionStatus.active,
+        );
+      } catch (_) {
+        activeSub = null;
+      }
+
+      if (activeSub != null) {
+        activeSub = await checkFrozenSubscription(activeSub);
+        _cachedSubscriptions[memberId] = activeSub;
+      } else {
+        _cachedSubscriptions.remove(memberId);
+      }
 
       _historyCache[memberId] = recalculated;
 
-      checkFrozenSubscription(latest);
       emit(
         MembersSubscriptionLoadedWithHistory(
           active: Map.from(_cachedSubscriptions),
@@ -113,11 +175,103 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
     });
   }
 
+  // Future<void> getMemberSubscriptions(String memberId) async {
+  //   final result = await repo.getSubscriptionsByMember(memberId);
+
+  //   result.fold((f) => emit(MemberSubscriptionFailure(f.message)), (list) {
+  //     if (list.isEmpty) {
+  //       _cachedSubscriptions.remove(memberId);
+  //       _historyCache.remove(memberId);
+  //       _emitCache();
+  //       return;
+  //     }
+
+  //     final recalculated = list.map(_recalculateSubscription).toList()
+  //       ..sort((a, b) => b.endDate.compareTo(a.endDate));
+
+  //     MemberSubscriptionModel? activeSub;
+
+  //     try {
+  //       activeSub = recalculated.firstWhere(
+  //         (s) => s.status == SubscriptionStatus.active,
+  //       );
+  //     } catch (_) {
+  //       activeSub = null;
+  //     }
+
+  //     if (activeSub != null) {
+  //       _cachedSubscriptions[memberId] = activeSub;
+  //     } else {
+  //       _cachedSubscriptions.remove(memberId);
+  //     }
+
+  //     _historyCache[memberId] = recalculated;
+
+  //     checkFrozenSubscription(latest);
+  //     emit(
+  //       MembersSubscriptionLoadedWithHistory(
+  //         active: Map.from(_cachedSubscriptions),
+  //         history: Map.from(_historyCache),
+  //       ),
+  //     );
+  //   });
+  // }
+
+  // Future<void> loadMembersActiveSubscriptions(List<MemberModel> members) async {
+  //   for (final member in members) {
+  //     final response = await repo.getSubscriptionsByMember(member.id);
+
+  //     response.fold((_) {}, (subs) async {
+  //       if (subs.isEmpty) {
+  //         _historyCache.remove(member.id);
+  //         _cachedSubscriptions.remove(member.id);
+  //         return;
+  //       }
+
+  //       final recalculated = subs.map(_recalculateSubscription).toList()
+  //         ..sort((a, b) => b.endDate.compareTo(a.endDate));
+
+  //       _historyCache[member.id] = recalculated;
+
+  //       MemberSubscriptionModel? activeSub;
+
+  //       try {
+  //         activeSub = recalculated.firstWhere(
+  //           (s) => s.status == SubscriptionStatus.active,
+  //         );
+  //       } catch (_) {
+  //         activeSub = null;
+  //       }
+
+  //       if (activeSub != null) {
+  //         _cachedSubscriptions[member.id] = activeSub;
+  //       } else {
+  //         _cachedSubscriptions.remove(member.id);
+  //       }
+
+  //       latest = await checkFrozenSubscription(latest);
+
+  //       if (latest.status != SubscriptionStatus.expired) {
+  //         _cachedSubscriptions[member.id] = latest;
+  //       } else {
+  //         _cachedSubscriptions.remove(member.id);
+  //       }
+  //     });
+  //   }
+
+  //   emit(
+  //     MembersSubscriptionLoadedWithHistory(
+  //       active: Map.from(_cachedSubscriptions),
+  //       history: Map.from(_historyCache),
+  //     ),
+  //   );
+  // }
+
   Future<void> loadMembersActiveSubscriptions(List<MemberModel> members) async {
     for (final member in members) {
       final response = await repo.getSubscriptionsByMember(member.id);
 
-      response.fold((_) {}, (subs) async {
+      await response.fold((_) async {}, (subs) async {
         if (subs.isEmpty) {
           _historyCache.remove(member.id);
           _cachedSubscriptions.remove(member.id);
@@ -129,11 +283,24 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
         _historyCache[member.id] = recalculated;
 
-        var latest = recalculated.first;
-        latest = await checkFrozenSubscription(latest);
+        MemberSubscriptionModel? activeSub;
 
-        if (latest.status != SubscriptionStatus.expired) {
-          _cachedSubscriptions[member.id] = latest;
+        try {
+          activeSub = recalculated.firstWhere(
+            (s) => s.status == SubscriptionStatus.active,
+          );
+        } catch (_) {
+          activeSub = null;
+        }
+
+        if (activeSub != null) {
+          activeSub = await checkFrozenSubscription(activeSub);
+
+          if (activeSub.status != SubscriptionStatus.expired) {
+            _cachedSubscriptions[member.id] = activeSub;
+          } else {
+            _cachedSubscriptions.remove(member.id);
+          }
         } else {
           _cachedSubscriptions.remove(member.id);
         }
