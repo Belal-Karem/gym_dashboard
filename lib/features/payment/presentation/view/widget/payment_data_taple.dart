@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:power_gym/core/helper/date_helper.dart';
+import 'package:power_gym/core/helper/format_date_helper.dart';
 import 'package:power_gym/core/helper/table_helper.dart';
 import 'package:power_gym/core/widget/custom_container_statistics.dart';
 import 'package:power_gym/core/widget/table_cell_widget.dart';
@@ -48,7 +48,7 @@ class PaymentDataTaple extends StatelessWidget {
                   TableCellWidget(payment.plan),
                   TableCellWidget(payment.paid.toString()),
                   TableCellWidget(
-                    DateHelper.formatPaymentDate(payment.date.toString()),
+                    FormatDateHelper.formatPaymentDate(payment.date.toString()),
                   ),
                   TableCellWidget(
                     payment.paymentMethod,

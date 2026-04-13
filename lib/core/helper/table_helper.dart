@@ -19,7 +19,10 @@ class TableHelper {
             width: 140,
             child: Center(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.green.shade700,
                   borderRadius: BorderRadius.circular(8),

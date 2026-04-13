@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/constants.dart';
+import 'package:power_gym/core/widget/app_loading_widget.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/attendance_cubit.dart';
 import 'package:power_gym/features/home/presentation/view/widget/elevated_boutton_member_info.dart';
 import 'package:power_gym/features/member_subscriptions/data/models/model/member_sub_model.dart';
@@ -11,7 +12,6 @@ import 'package:power_gym/features/peivate/presentation/manger/cubit/private_cub
 
 import '../../../../../core/helper/build_error_bar.dart';
 import '../../../../../core/helper/show_message.dart';
-import '../../../../../core/widget/app_loading_widget.dart';
 import '../../../../members/presentation/manger/cubit/member_cubit.dart';
 import 'GuestInvitationDialog.dart';
 import 'text_boutton_member_info.dart';
@@ -60,7 +60,11 @@ class MemberActionButtons extends StatelessWidget {
             BlocBuilder<PrivateCubit, PrivateState>(
               builder: (context, privateState) {
                 if (privateState is PrivateLoading) {
-                  return AppLoadingWidget();
+                  return const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  );
                 }
 
                 if (privateState is PrivateError) {

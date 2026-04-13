@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:power_gym/core/widget/info_card.dart';
+import 'package:power_gym/features/home/presentation/view/widget/info_card.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/all_comments_cubit.dart';
 import 'package:power_gym/features/home/presentation/manger/cubit/all_comments_state.dart';
 

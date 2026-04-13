@@ -11,17 +11,7 @@ class GradientScaffold extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.red.shade900,
-              // Colors.red.shade700,
-              // Colors.red.shade500,
-              // Colors.red.shade400,
-              Colors.black,
-            ],
-            // begin: Alignment.topCenter,
-            // end: Alignment.bottomCenter,
-          ),
+          gradient: LinearGradient(colors: [Colors.red.shade900, Colors.black]),
         ),
         child: child,
       ),

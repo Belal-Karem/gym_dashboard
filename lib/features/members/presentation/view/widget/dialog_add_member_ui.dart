@@ -65,7 +65,7 @@ class _DialogAddMemberUiState extends State<DialogAddMemberUi> {
                 label: 'ملحوظات',
                 child: TextFieldAddWidget(
                   controller: controller.note,
-                  validator: (v) => null, // ✅ Fixed: Allow empty notes
+                  validator: (v) => null,
                 ),
               ),
 

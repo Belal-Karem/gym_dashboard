@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:power_gym/core/helper/format_date_helper.dart';
-import 'package:power_gym/core/widget/info_card.dart';
+import 'package:power_gym/features/home/presentation/view/widget/info_card.dart';
 import 'package:power_gym/features/members/data/models/member_model/member_model.dart';
 import 'package:power_gym/features/members/presentation/manger/cubit/member_cubit.dart';
 

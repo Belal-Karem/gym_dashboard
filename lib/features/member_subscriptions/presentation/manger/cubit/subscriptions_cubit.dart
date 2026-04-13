@@ -54,12 +54,9 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
 
         if (activeSub != null) {
           final duration = model.endDate.difference(model.startDate);
-
-          // لو اختار يوم قبل نهاية القديم → نعدله
           if (startDate.isBefore(activeSub.endDate)) {
             startDate = activeSub.endDate;
           }
-
           endDate = startDate.add(duration);
         }
       }
