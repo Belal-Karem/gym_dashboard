@@ -42,7 +42,7 @@ class DrawerItemModel {
     ),
     DrawerItemModel(
       icon: Icon(FontAwesomeIcons.cube),
-      title: Text(style: TextStyle(fontSize: 20), 'الاشتراكات Pt'),
+      title: Text(style: TextStyle(fontSize: 20), 'الاشتراكات Private'),
       routerPath: AppRouter.kplanview,
     ),
     DrawerItemModel(

@@ -32,32 +32,3 @@ class _CustomDrawerItemListViewState extends State<CustomDrawerItemListView> {
     );
   }
 }
-// class CustomDrawerItemListView extends StatefulWidget {
-//   const CustomDrawerItemListView({super.key});
-//   @override
-//   State<CustomDrawerItemListView> createState() =>
-//       _CustomDrawerItemListViewState();
-// }
-
-// class _CustomDrawerItemListViewState extends State<CustomDrawerItemListView> {
-//   int isActiveindex = 0;
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.builder(
-//       itemCount: DrawerItemModel.drawerItemList.length,
-//       itemBuilder: (context, index) {
-//         return GestureDetector(
-//           onTap: () {
-//             setState(() {
-//               isActiveindex = index;
-//             });
-//           },
-//           child: CustomDrawerItem(
-//             isActive: isActiveindex == index,
-//             drawerItemModel: DrawerItemModel.drawerItemList[index],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }

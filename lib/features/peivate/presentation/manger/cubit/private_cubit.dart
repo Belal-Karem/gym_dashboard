@@ -101,7 +101,7 @@ class PrivateCubit extends Cubit<PrivateState> {
             id: '',
             memberId: private.member.id,
             type: private.member.name,
-            plan: 'pt',
+            plan: 'Private',
             paymentMethod: private.method,
             date: DateTime.now(),
             status: 'income',

@@ -71,7 +71,7 @@ class RecentMemberHomeUi extends StatelessWidget {
                   TableHeaderCellWidget('id'),
                   TableHeaderCellWidget('الاسم'),
                   TableHeaderCellWidget('الايام'),
-                  TableHeaderCellWidget('الحاله'),
+                  TableHeaderCellWidget('التوقيت'),
                 ]),
 
                 ...members.map(
