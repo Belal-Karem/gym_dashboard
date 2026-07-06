@@ -263,8 +263,7 @@ class MemberSubscriptionCubit extends Cubit<MemberSubscriptionState> {
       if (subscription.status != SubscriptionStatus.active) {
         return Left('الاشتراك غير نشط');
       }
-
-      final availableFreeze = subscription.freeze; // الأيام المتبقية للفريز
+      final availableFreeze = subscription.freeze;
       if (freezeDays > availableFreeze) {
         return Left('عدد أيام الفريز أكبر من المتاح');
       }
