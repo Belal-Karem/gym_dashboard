@@ -29,7 +29,7 @@ import 'package:window_size/window_size.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows) {
-    setWindowTitle('MyApp');
+    setWindowTitle('House Power');
     // setWindowMinSize(const Size(1800, 770)); علشات اثبت حجم الشاشه
   }
 
@@ -37,11 +37,11 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   setupLocator();
 
-  runApp(const MyApp());
+  runApp(const HousePower());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class HousePower extends StatelessWidget {
+  const HousePower({super.key});
 
   @override
   Widget build(BuildContext context) {

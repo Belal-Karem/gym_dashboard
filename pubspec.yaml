@@ -97,3 +97,8 @@ flutter_assets:
   assets_path: assets/image/
   output_path: lib/core/utils/
   filename: assets.dart
+flutter_launcher_icons:
+ windows:
+    generate: true
+    image_path: "assets/image/logo.png"
+    icon_size: 48

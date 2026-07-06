@@ -52,7 +52,10 @@ class RepoView extends StatelessWidget {
                   ..loadSeparately(dateId),
           ),
         ],
-        child: Scaffold(body: RepoViewBody(selectedDate: selectedDate)),
+        child: Scaffold(
+          backgroundColor: const Color(0XFF0D0E11),
+          body: RepoViewBody(selectedDate: selectedDate),
+        ),
       ),
     );
   }

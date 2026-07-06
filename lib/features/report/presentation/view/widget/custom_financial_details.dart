@@ -13,7 +13,7 @@ class CustomFinancialDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('ملخص', style: AppStyle.style20W500),
+        Text('إحصائيات اليوم', style: AppStyle.style20W500),
         Expanded(
           child: CustomContainerStatistics(
             padding: 0,

@@ -17,7 +17,7 @@ class CustomOverview extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('ملخص', style: AppStyle.style20W500),
+        Text('نظرة عامة', style: AppStyle.style20W500),
         SizedBox(height: 10),
 
         BlocBuilder<DailyAttendanceCubit, DailyAttendanceState>(

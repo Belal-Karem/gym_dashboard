@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:power_gym/constants.dart';
 import 'package:power_gym/features/report/presentation/view/widget/repo_view.dart';
 
+import 'custom_button_date_card.dart';
+
 class DateCard extends StatelessWidget {
   const DateCard({super.key, required this.dayDate});
 
@@ -37,17 +39,7 @@ class DateCard extends StatelessWidget {
                   ),
                 );
               },
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 25, 25, 25),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: const Text(
-                  'عرض التقرير',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+              child: CustomButtonDateCard(),
             ),
           ),
         ],
